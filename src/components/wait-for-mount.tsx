@@ -1,4 +1,3 @@
-//src\components\ClientRender.tsx
 "use client";
 
 import { type ReactNode, useEffect, useState } from "react";
