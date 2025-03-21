@@ -4,11 +4,11 @@ on:
   push:
     branches:
       - main
-      - dev
   workflow_dispatch:
 
 jobs:
   migrate:
+    environment: production
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -25,4 +25,4 @@ jobs:
       - name: Run Drizzle Migrations
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        run: bun drizzle-kit push --url ${{ secrets.DATABASE_URL }}
+        run: bun drizzle-kit push
