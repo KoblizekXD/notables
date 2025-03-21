@@ -25,4 +25,4 @@ jobs:
       - name: Run Drizzle Migrations
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        run: bun drizzle-kit push
+        run: bun drizzle-kit push --url ${{ secrets.DATABASE_URL }}
