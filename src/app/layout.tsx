@@ -31,15 +31,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.className} ${jetbrainsMono.variable} antialiased`}
-      >
+        className={`${inter.className} ${jetbrainsMono.variable} antialiased`}>
         <WaitForMount>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
             enableSystem
-            disableTransitionOnChange
-          >
+            disableTransitionOnChange>
             {children}
           </ThemeProvider>
         </WaitForMount>
