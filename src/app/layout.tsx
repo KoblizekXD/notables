@@ -1,9 +1,9 @@
 import { ThemeProvider } from "@/components/theme-provider";
 import { WaitForMount } from "@/components/wait-for-mount";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const inter = Inter({
   weight: "variable",
@@ -38,10 +38,10 @@ export default function RootLayout({
             defaultTheme="system"
             enableSystem
             disableTransitionOnChange>
+            <SpeedInsights />
             {children}
           </ThemeProvider>
         </WaitForMount>
-        <SpeedInsights />
       </body>
     </html>
   );
