@@ -1,7 +1,7 @@
 import { ThemeProvider } from "@/components/theme-provider";
 import { WaitForMount } from "@/components/wait-for-mount";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
@@ -45,7 +45,11 @@ export default function RootLayout({
             <SpeedInsights />
             <QueryClientProvider client={client}>
               {children}
-              <Toaster richColors position="top-center" swipeDirections={["top"]} />
+              <Toaster
+                richColors
+                position="top-center"
+                swipeDirections={["top"]}
+              />
             </QueryClientProvider>
           </ThemeProvider>
         </WaitForMount>
