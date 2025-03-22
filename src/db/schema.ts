@@ -1,4 +1,12 @@
-import { boolean, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import {
+  boolean,
+  pgEnum,
+  pgTable,
+  primaryKey,
+  text,
+  timestamp,
+  uuid,
+} from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -49,3 +57,114 @@ export const verification = pgTable("verification", {
   createdAt: timestamp("created_at"),
   updatedAt: timestamp("updated_at"),
 });
+
+export const entityKind = pgEnum("entity_kind", ["work", "note", "author"]);
+
+export const tag = pgTable("tag", {
+  id: uuid("id").primaryKey(),
+  name: text("name").notNull(),
+  createdAt: timestamp("created_at")
+    .defaultNow()
+    .$onUpdateFn(() => new Date())
+    .notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdateFn(() => new Date())
+    .notNull(),
+});
+
+export const taggedEntity = pgTable(
+  "tagged_entity",
+  {
+    tagId: uuid("tag_id")
+      .notNull()
+      .references(() => tag.id, { onDelete: "cascade" }),
+
+    entityId: uuid("entity_id").notNull(),
+    entityType: entityKind("entity_type").notNull(),
+  },
+  (table) => [
+    primaryKey({ columns: [table.tagId, table.entityId, table.entityType] }),
+  ],
+);
+
+export const author = pgTable("author", {
+  id: uuid("id").primaryKey(),
+  name: text("name").notNull(),
+  createdAt: timestamp("created_at")
+    .defaultNow()
+    .$onUpdateFn(() => new Date())
+    .notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdateFn(() => new Date())
+    .notNull(),
+});
+
+export const work = pgTable("work", {
+  id: uuid("id").primaryKey(),
+  title: text("title").notNull(),
+  authorId: uuid("author_id")
+    .notNull()
+    .references(() => author.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at")
+    .defaultNow()
+    .$onUpdateFn(() => new Date())
+    .notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdateFn(() => new Date())
+    .notNull(),
+});
+
+export const note = pgTable("note", {
+  id: uuid("id").primaryKey(),
+  content: text("content").notNull(),
+  entityType: entityKind("entity_type").notNull(),
+  entityId: uuid("entity_id").notNull(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at")
+    .defaultNow()
+    .$onUpdateFn(() => new Date())
+    .notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdateFn(() => new Date())
+    .notNull(),
+});
+
+export const comment = pgTable("comment", {
+  id: uuid("id").primaryKey(),
+  content: text("content").notNull(),
+  noteId: uuid("note_id")
+    .notNull()
+    .references(() => note.id, { onDelete: "cascade" }),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at")
+    .defaultNow()
+    .$onUpdateFn(() => new Date())
+    .notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdateFn(() => new Date())
+    .notNull(),
+});
+
+export const favorite = pgTable(
+  "favorite",
+  {
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    entityId: uuid("entity_id").notNull(),
+    entityType: entityKind("entity_type").notNull(),
+    createdAt: timestamp("created_at").defaultNow(),
+  },
+  (table) => [
+    primaryKey({ columns: [table.userId, table.entityId, table.entityType] }),
+  ],
+);
