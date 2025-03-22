@@ -37,7 +37,7 @@ export default function RootLayout({
         <WaitForMount>
           <ThemeProvider
             attribute="class"
-            defaultTheme="system"
+            defaultTheme="dark"
             enableSystem
             disableTransitionOnChange>
             <QueryClientContextProvider>{children}</QueryClientContextProvider>
