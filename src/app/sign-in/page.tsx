@@ -2,6 +2,7 @@
 
 import "@/app/globals.css";
 import ThemeBasedRenderer from "@/components/theme-based-renderer";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -43,16 +44,26 @@ export default function SignInPage() {
           <div className="absolute inset-0 -z-10 h-full w-full items-center px-5 py-24 [background:radial-gradient(125%_125%_at_50%_10%,#0C0B0A_40%,#63e_100%)]" />
         }
       />
+      <motion.div 
+        initial={{ opacity: 0, x: 'calc(var(--spacing) * -2)' }}
+        animate={{ opacity: 1, x: 'calc(var(--spacing) * 2)' }}
+        transition={{ duration: 0.4, ease: "circInOut" }}
+        className="absolute left-2 top-2 text-2xl font-bold">
+        <Link href={"/"}>
+          Notables
+        </Link>
+      </motion.div>
+      <ThemeToggle className="absolute right-2 top-2" />
       <motion.div
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: "circInOut" }}
         className={
-          "w-[90%] h-[90%] md:w-[50%] md:h-[50%] p-5 flex flex-col gap-y-1 border border-border bg-background shadow-xl rounded-md"
+          "w-[90%] h-fit md:w-[50%] md:h-[50%] p-5 flex flex-col gap-y-1 border border-border bg-background shadow-xl rounded-md"
         }
       >
         <h1 className="text-2xl font-semibold">Sign in</h1>
-        <h2 className="text-muted-foreground flex items-center gap-x-1">
+        <h2 className="text-muted-foreground text-sm md:text-base flex items-center gap-x-1">
           Not a member yet?{" "}
           <Link
             className="underline flex items-center text-blue-500"
@@ -101,7 +112,7 @@ export default function SignInPage() {
           Or
           <hr className="border-t flex-auto border-border" />
         </div>
-        <div className="flex gap-y-4 flex-col md:mt-auto">
+        <div className="flex gap-y-4 flex-col mt-auto">
           <Button className="flex items-center" variant="secondary">
             <FontAwesomeIcon icon={faGoogle} className="mr-2" />
             Sign in with Google
