@@ -170,8 +170,20 @@ export default function SignInPage({ siteKey }: { siteKey: string }) {
             className="flex items-center"
             variant="secondary"
             onClick={async () => {
+              if (!token) {
+                toast.error("Please complete the captcha challenge!");
+                return;
+              }
               const res = await authClient.signIn.social({
-                provider: "google"
+                provider: "google",
+                fetchOptions: {
+                  headers: {
+                    "x-captcha-response": token,
+                  },
+                  onSuccess: () => {
+                    router.push("/home");
+                  }
+                },
               });
               res.error && toast.error(res.error.message);
             }}
@@ -184,8 +196,20 @@ export default function SignInPage({ siteKey }: { siteKey: string }) {
             className="flex items-center"
             variant="secondary"
             onClick={async () => {
+              if (!token) {
+                toast.error("Please complete the captcha challenge!");
+                return;
+              }
               const res = await authClient.signIn.social({
-                provider: "github"
+                provider: "github",
+                fetchOptions: {
+                  headers: {
+                    "x-captcha-response": token,
+                  },
+                  onSuccess: () => {
+                    router.push("/home");
+                  }
+                },
               });
               res.error && toast.error(res.error.message);
             }}

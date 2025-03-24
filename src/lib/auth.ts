@@ -1,13 +1,37 @@
 import db from "@/db/db";
+import { account, session, user, verification } from "@/db/schema";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
 import { captcha } from "better-auth/plugins";
+import logger from "./logging";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
+    schema: {
+      user,
+      session,
+      account,
+      verification
+    }
   }),
+  databaseHooks: {
+    session: {
+      create: {
+        after: async (session, context) => {
+          logger.info(`User ${session.userId} signed in`);
+        },
+      }
+    },
+    user: {
+      create: {
+        after: async (user, context) => {
+          logger.info(`User ${user.id} signed up`);
+        },
+      }
+    }
+  },
   plugins: [
     nextCookies(),
     captcha({
