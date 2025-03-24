@@ -11,16 +11,13 @@ export default function ThemeBasedRenderer({
   light?: React.ReactNode;
   system?: React.ReactNode;
 }) {
-  const { theme } = useTheme();
+  const { theme, resolvedTheme } = useTheme();
 
-  if (theme === "dark") {
+  if (theme === "dark" || (theme === "system" && resolvedTheme === "dark")) {
     return dark || null;
   }
-  if (theme === "light") {
+  if (theme === "light" || (theme === "system" && resolvedTheme === "light")) {
     return light || null;
-  }
-  if (theme === "system") {
-    return system || null;
   }
   return null;
 }
