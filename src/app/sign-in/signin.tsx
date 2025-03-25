@@ -1,6 +1,7 @@
 "use client";
 
 import "@/app/globals.css";
+import Logo from "@/components/logo";
 import ThemeBasedRenderer from "@/components/theme-based-renderer";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
@@ -82,7 +83,7 @@ export default function SignInPage({
           <div className="absolute inset-0 -z-10 h-full w-full items-center px-5 py-24 [background:radial-gradient(125%_125%_at_50%_10%,#0C0B0A_40%,#63e_100%)]" />
         }
       />
-
+      <Logo />
       <ThemeToggle className="absolute right-2 top-2" />
       <motion.div
         initial={{ opacity: 0, y: -50 }}
