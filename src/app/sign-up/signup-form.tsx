@@ -154,7 +154,7 @@ export default function SignupForm({
               )}
             />
             <div className="flex items-center gap-x-4 text-sm">
-              <Checkbox className="transition-colors" id="acceptTos" />
+              <Checkbox className="transition-colors border-gray-400" id="acceptTos" />
               <label htmlFor="acceptTos">
                 I accept{" "}
                 <Link target="_blank" className="underline font-semibold text-blue-500" href={"/terms"}>Terms of Conditions</Link>
