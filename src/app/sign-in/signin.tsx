@@ -173,7 +173,11 @@ export default function SignInPage({
                   },
                 },
               });
-              res.error && toast.error(res.error.message);
+              if (res.error) {
+                toast.error(res.error.message);
+                return;
+              }
+              router.push("/home");
             }}>
             <FontAwesomeIcon icon={faGoogle} className="mr-2" />
             Sign in with Google
@@ -196,7 +200,11 @@ export default function SignInPage({
                   },
                 },
               });
-              res.error && toast.error(res.error.message);
+              if (res.error) {
+                toast.error(res.error.message);
+                return;
+              }
+              router.push("/home");
             }}>
             <FontAwesomeIcon icon={faGithub} className="mr-2" />
             Sign in with GitHub
