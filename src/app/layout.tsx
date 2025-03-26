@@ -5,6 +5,7 @@ import { WaitForMount } from "@/components/wait-for-mount";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
 const inter = Inter({
@@ -12,6 +13,12 @@ const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
 });
+
+const calSans = localFont({
+  src: "./CalSans-SemiBold.woff",
+  display: "swap",
+  variable: "--font-cal-sans",
+})
 
 const jetbrainsMono = JetBrains_Mono({
   weight: "variable",
@@ -33,7 +40,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.className} ${jetbrainsMono.variable} antialiased`}>
+        className={`${inter.className} ${calSans.variable} ${jetbrainsMono.variable} antialiased`}>
         <WaitForMount>
           <ThemeProvider
             attribute="class"

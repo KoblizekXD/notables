@@ -8,6 +8,7 @@
   --color-foreground: hsl(var(--foreground));
   --font-sans: var(--font-inter);
   --font-mono: var(--font-jetbrains-mono);
+  --font-header: var(--font-cal-sans);
   --color-sidebar-ring: hsl(var(--sidebar-ring));
   --color-sidebar-border: hsl(var(--sidebar-border));
   --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
