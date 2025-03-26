@@ -16,6 +16,10 @@ export const auth = betterAuth({
       verification,
     },
   }),
+  onAPIError: {
+    throw: true,
+    errorURL: "/error",
+  },
   databaseHooks: {
     session: {
       create: {

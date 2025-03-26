@@ -166,12 +166,10 @@ export default function SignInPage({
               }
               const res = await authClient.signIn.social({
                 provider: "google",
+                callbackURL: `${websiteUrl}/api/auth/callback/github`,
                 fetchOptions: {
                   headers: {
                     "x-captcha-response": token,
-                  },
-                  onSuccess: () => {
-                    router.push("/home");
                   },
                 },
               });
@@ -195,9 +193,6 @@ export default function SignInPage({
                 fetchOptions: {
                   headers: {
                     "x-captcha-response": token,
-                  },
-                  onSuccess: () => {
-                    router.push("/home");
                   },
                 },
               });
