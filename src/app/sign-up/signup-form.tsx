@@ -1,11 +1,7 @@
 "use client";
 
-import { authClient } from "@/lib/auth-client";
-import { signupSchema } from "@/lib/schemas";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { motion } from "framer-motion";
-import { ArrowRightIcon, LoaderCircle } from "lucide-react";
-import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -14,15 +10,19 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { authClient } from "@/lib/auth-client";
+import { signupSchema } from "@/lib/schemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { motion } from "framer-motion";
+import { ArrowRightIcon, LoaderCircle } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import Turnstile, { useTurnstile } from "react-turnstile";
 import { toast } from "sonner";
 import type { z } from "zod";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 
 export default function SignupForm({
   siteKey,
@@ -90,89 +90,92 @@ export default function SignupForm({
         </Link>
       </h2>
       <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="pt-4 space-y-5">
-              <FormField
-              control={form.control}
-              name="username"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Username</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={isPending}
-                      placeholder="JohnDoe744"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+        <form onSubmit={form.handleSubmit(onSubmit)} className="pt-4 space-y-5">
+          <FormField
+            control={form.control}
+            name="username"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Username</FormLabel>
+                <FormControl>
+                  <Input
+                    disabled={isPending}
+                    placeholder="JohnDoe744"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>E-mail</FormLabel>
+                <FormControl>
+                  <Input
+                    disabled={isPending}
+                    placeholder="john.doe@example.com"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input disabled={isPending} type="password" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="confirmPassword"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Confirm password</FormLabel>
+                <FormControl>
+                  <Input disabled={isPending} type="password" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div className="flex items-center gap-x-4 text-sm">
+            <Checkbox
+              className="transition-colors border-gray-400"
+              id="acceptTos"
             />
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>E-mail</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={isPending}
-                      placeholder="john.doe@example.com"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input disabled={isPending} type="password" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="confirmPassword"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Confirm password</FormLabel>
-                  <FormControl>
-                    <Input disabled={isPending} type="password" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <div className="flex items-center gap-x-4 text-sm">
-              <Checkbox className="transition-colors border-gray-400" id="acceptTos" />
-              <label htmlFor="acceptTos">
-                I accept{" "}
-                <Link target="_blank" className="underline font-semibold text-blue-500" href={"/terms"}>Terms of Conditions</Link>
-              </label>
-            </div>
-            <Turnstile
-              sitekey={siteKey}
-              onVerify={(token) => setToken(token)}
-            />
-            <Button
-              type="submit"
-              className="flex items-center gap-x-2"
-              disabled={isPending}>
-              {isPending && <LoaderCircle className="animate-spin" />}
-              Sign up
-            </Button>
-          </form>
-        </Form>
+            <label htmlFor="acceptTos">
+              I accept{" "}
+              <Link
+                target="_blank"
+                className="underline font-semibold text-blue-500"
+                href={"/terms"}>
+                Terms of Conditions
+              </Link>
+            </label>
+          </div>
+          <Turnstile sitekey={siteKey} onVerify={(token) => setToken(token)} />
+          <Button
+            type="submit"
+            className="flex items-center gap-x-2"
+            disabled={isPending}>
+            {isPending && <LoaderCircle className="animate-spin" />}
+            Sign up
+          </Button>
+        </form>
+      </Form>
     </motion.div>
   );
 }
