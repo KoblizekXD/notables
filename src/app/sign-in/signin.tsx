@@ -5,15 +5,9 @@ import Logo from "@/components/logo";
 import ThemeBasedRenderer from "@/components/theme-based-renderer";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { authClient } from "@/lib/auth-client";
 import { signinSchema } from "@/lib/schemas";
 import { faGithub, faGoogle } from "@fortawesome/free-brands-svg-icons";
@@ -29,13 +23,7 @@ import Turnstile, { useTurnstile } from "react-turnstile";
 import { toast } from "sonner";
 import type { z } from "zod";
 
-export default function SignInPage({
-  siteKey,
-  websiteUrl,
-}: {
-  siteKey: string;
-  websiteUrl: string;
-}) {
+export default function SignInPage({ siteKey, websiteUrl }: { siteKey: string; websiteUrl: string }) {
   const turnstile = useTurnstile();
   const [token, setToken] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -76,12 +64,8 @@ export default function SignInPage({
   return (
     <div className="h-screen flex items-center justify-center">
       <ThemeBasedRenderer
-        light={
-          <div className="absolute inset-0 -z-10 h-full w-full bg-white [background:radial-gradient(105%_105%_at_50%_10%,#fff_40%,#63e_110%)]" />
-        }
-        dark={
-          <div className="absolute inset-0 -z-10 h-full w-full items-center px-5 py-24 [background:radial-gradient(125%_125%_at_50%_10%,#0C0B0A_40%,#63e_100%)]" />
-        }
+        light={<div className="absolute inset-0 -z-10 h-full w-full bg-white [background:radial-gradient(105%_105%_at_50%_10%,#fff_40%,#63e_110%)]" />}
+        dark={<div className="absolute inset-0 -z-10 h-full w-full items-center px-5 py-24 [background:radial-gradient(125%_125%_at_50%_10%,#0C0B0A_40%,#63e_100%)]" />}
       />
       <Logo />
       <ThemeToggle className="absolute right-2 top-2" />
@@ -89,23 +73,17 @@ export default function SignInPage({
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: "circInOut" }}
-        className={
-          "w-[90%] h-fit md:w-[50%] md:min-h-fit p-5 flex flex-col gap-y-1 border border-border bg-background shadow-xl rounded-md"
-        }>
+        className={"w-[90%] h-fit md:w-[50%] md:min-h-fit p-5 flex flex-col gap-y-1 border border-border bg-background shadow-xl rounded-md"}>
         <h1 className="text-2xl font-semibold">Sign in</h1>
         <h2 className="text-muted-foreground text-sm md:text-base flex items-center gap-x-1">
           Not a member yet?{" "}
-          <Link
-            className="underline flex items-center text-blue-500"
-            href={"/sign-up"}>
+          <Link className="underline flex items-center text-blue-500" href={"/sign-up"}>
             Join today
             <ArrowRightIcon size={18} />
           </Link>
         </h2>
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="pt-4 space-y-5">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="pt-4 space-y-5">
             <FormField
               control={form.control}
               name="email"
@@ -113,11 +91,7 @@ export default function SignInPage({
                 <FormItem>
                   <FormLabel>E-mail</FormLabel>
                   <FormControl>
-                    <Input
-                      disabled={isPending}
-                      placeholder="john.doe@example.com"
-                      {...field}
-                    />
+                    <Input disabled={isPending} placeholder="john.doe@example.com" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -136,14 +110,8 @@ export default function SignInPage({
                 </FormItem>
               )}
             />
-            <Turnstile
-              sitekey={siteKey}
-              onVerify={(token) => setToken(token)}
-            />
-            <Button
-              type="submit"
-              className="flex items-center gap-x-2"
-              disabled={isPending}>
+            <Turnstile sitekey={siteKey} onVerify={(token) => setToken(token)} />
+            <Button type="submit" className="flex items-center gap-x-2" disabled={isPending}>
               {isPending && <LoaderCircle className="animate-spin" />}
               Sign in
             </Button>
@@ -155,60 +123,79 @@ export default function SignInPage({
           <hr className="border-t flex-auto border-border" />
         </div>
         <div className="flex gap-y-4 flex-col mt-auto">
-          <Button
-            disabled={isPending}
-            className="flex items-center"
-            variant="secondary"
-            onClick={async () => {
-              if (!token) {
-                toast.error("Please complete the captcha challenge!");
-                return;
-              }
-              const res = await authClient.signIn.social({
-                provider: "google",
-                callbackURL: `${websiteUrl}/api/auth/callback/github`,
-                fetchOptions: {
-                  headers: {
-                    "x-captcha-response": token,
-                  },
-                },
-              });
-              if (res.error) {
-                toast.error(res.error.message);
-                return;
-              }
-              router.push("/home");
-            }}>
-            <FontAwesomeIcon icon={faGoogle} className="mr-2" />
-            Sign in with Google
-          </Button>
-          <Button
-            disabled={isPending}
-            className="flex items-center"
-            variant="secondary"
-            onClick={async () => {
-              if (!token) {
-                toast.error("Please complete the captcha challenge!");
-                return;
-              }
-              const res = await authClient.signIn.social({
-                provider: "github",
-                callbackURL: `${websiteUrl}/api/auth/callback/github`,
-                fetchOptions: {
-                  headers: {
-                    "x-captcha-response": token,
-                  },
-                },
-              });
-              if (res.error) {
-                toast.error(res.error.message);
-                return;
-              }
-              router.push("/home");
-            }}>
-            <FontAwesomeIcon icon={faGithub} className="mr-2" />
-            Sign in with GitHub
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div>
+                <Button
+                  disabled={/*isPending*/ true}
+                  className="flex items-center w-full"
+                  variant="secondary"
+                  onClick={async () => {
+                    if (!token) {
+                      toast.error("Please complete the captcha challenge!");
+                      return;
+                    }
+                    const res = await authClient.signIn.social({
+                      provider: "google",
+                      callbackURL: `${websiteUrl}/api/auth/callback/github`,
+                      fetchOptions: {
+                        headers: {
+                          "x-captcha-response": token,
+                        },
+                      },
+                    });
+                    if (res.error) {
+                      toast.error(res.error.message);
+                      return;
+                    }
+                    router.push("/home");
+                  }}>
+                  <FontAwesomeIcon icon={faGoogle} className="mr-2" />
+                  Sign in with Google
+                </Button>
+              </div>
+            </TooltipTrigger>
+            <TooltipContent side="top">
+              <p>The service is temporarily unavailable</p>
+            </TooltipContent>
+          </Tooltip>
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div>
+                <Button
+                  disabled={/*isPending*/ true}
+                  className="flex items-center w-full"
+                  variant="secondary"
+                  onClick={async () => {
+                    if (!token) {
+                      toast.error("Please complete the captcha challenge!");
+                      return;
+                    }
+                    const res = await authClient.signIn.social({
+                      provider: "github",
+                      callbackURL: `${websiteUrl}/api/auth/callback/github`,
+                      fetchOptions: {
+                        headers: {
+                          "x-captcha-response": token,
+                        },
+                      },
+                    });
+                    if (res.error) {
+                      toast.error(res.error.message);
+                      return;
+                    }
+                    router.push("/home");
+                  }}>
+                  <FontAwesomeIcon icon={faGithub} className="mr-2" />
+                  Sign in with GitHub
+                </Button>
+              </div>
+            </TooltipTrigger>
+            <TooltipContent side="bottom">
+              <p>The service is temporarily unavailable</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
       </motion.div>
     </div>

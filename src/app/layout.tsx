@@ -7,6 +7,7 @@ import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const inter = Inter({
   weight: "variable",
@@ -18,7 +19,7 @@ const calSans = localFont({
   src: "./CalSans-SemiBold.woff",
   display: "swap",
   variable: "--font-cal-sans",
-})
+});
 
 const jetbrainsMono = JetBrains_Mono({
   weight: "variable",
@@ -28,8 +29,7 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: "Notables",
-  description:
-    "Create stylish notes for your apps now. Completely for free, without limits. Start today!",
+  description: "Create stylish notes for your apps now. Completely for free, without limits. Start today!",
 };
 
 export default function RootLayout({
@@ -39,21 +39,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${inter.className} ${calSans.variable} ${jetbrainsMono.variable} antialiased`}>
+      <body className={`${inter.className} ${calSans.variable} ${jetbrainsMono.variable} antialiased`}>
         <WaitForMount>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="dark"
-            enableSystem
-            disableTransitionOnChange>
-            <QueryClientContextProvider>{children}</QueryClientContextProvider>
+          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+            <QueryClientContextProvider>
+              <TooltipProvider>{children}</TooltipProvider>
+            </QueryClientContextProvider>
 
-            <Toaster
-              richColors
-              position="top-center"
-              swipeDirections={["top"]}
-            />
+            <Toaster richColors position="top-center" swipeDirections={["top"]} />
             <SpeedInsights />
           </ThemeProvider>
         </WaitForMount>
