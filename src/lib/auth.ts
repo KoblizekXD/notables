@@ -13,24 +13,28 @@ export const auth = betterAuth({
       user,
       session,
       account,
-      verification
-    }
+      verification,
+    },
   }),
+  onAPIError: {
+    throw: true,
+    errorURL: "/error",
+  },
   databaseHooks: {
     session: {
       create: {
         after: async (session, context) => {
           logger.info(`User ${session.userId} signed in`);
         },
-      }
+      },
     },
     user: {
       create: {
         after: async (user, context) => {
           logger.info(`User ${user.id} signed up`);
         },
-      }
-    }
+      },
+    },
   },
   plugins: [
     nextCookies(),
