@@ -5,13 +5,16 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <main className="min-h-screen w-full border items-center flex flex-col">
+    <main className="min-h-screen w-screen border items-center flex flex-col">
       <ThemeBasedRenderer
         light={
           <div className="absolute inset-0 -z-10 h-full w-full bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]" />
         }
       />
-      <div className="text-center mt-[35vh] flex gap-y-3 flex-col items-center">
+      <div className="flex h-[7vh] mt-[5vh] border w-[70%] rounded-full items-center">
+        <h1>yes</h1>
+      </div>
+      <div className="text-center mt-[30vh] flex gap-y-3 flex-col items-center">
         <Link
           href={"/docs/api"}
           className="rounded-full shadow-xl text-xs bg-[#F5F5F5] gap-x-1 text-secondary-foreground border py-1 px-2 flex items-center"
@@ -28,7 +31,7 @@ export default function Home() {
         <div className="flex items-center gap-x-4">
           <LinkingButton
             href="/sign-in"
-            className="bg-primary text-white flex items-center"
+            className="bg-primary shadow-xl text-white flex items-center"
           >
             <ArrowRight />
             <span>Get started</span>
