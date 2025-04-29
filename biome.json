@@ -14,7 +14,7 @@
         "noUnusedImports": "error"
       }
     },
-    "ignore": [".next/**"]
+    "ignore": [".next/**", "src/components/ui/**"]
   },
   "organizeImports": {
     "enabled": true

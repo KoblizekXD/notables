@@ -17,8 +17,7 @@ export default function Home() {
       <div className="text-center mt-[30vh] flex gap-y-3 flex-col items-center">
         <Link
           href={"/docs/api"}
-          className="rounded-full shadow-xl text-xs bg-[#F5F5F5] gap-x-1 text-secondary-foreground border py-1 px-2 flex items-center"
-        >
+          className="rounded-full shadow-xl text-xs bg-[#F5F5F5] gap-x-1 text-secondary-foreground border py-1 px-2 flex items-center">
           🚀 Use our API
           <ChevronRight size={12} strokeWidth={3} />
         </Link>
@@ -31,8 +30,7 @@ export default function Home() {
         <div className="flex items-center gap-x-4">
           <LinkingButton
             href="/sign-in"
-            className="bg-primary shadow-xl text-white flex items-center"
-          >
+            className="bg-primary shadow-xl text-white flex items-center">
             <ArrowRight />
             <span>Get started</span>
           </LinkingButton>

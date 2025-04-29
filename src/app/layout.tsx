@@ -18,7 +18,7 @@ const calSans = localFont({
   src: "./CalSans-SemiBold.woff",
   display: "swap",
   variable: "--font-cal-sans",
-})
+});
 
 const jetbrainsMono = JetBrains_Mono({
   weight: "variable",
