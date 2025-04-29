@@ -2,7 +2,6 @@ import Logo from "@/components/logo";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
@@ -19,6 +18,8 @@ import { Cloud, ExternalLink, LogOut, Settings } from "lucide-react";
 import { headers } from "next/headers";
 import Link from "next/link";
 import { DropdownThemeToggle } from "./dropdown-theme-toggle";
+import Commander from "@/components/commander";
+import DynamicCommand from "@/components/dynamic-command";
 
 export default async function DashboardLayout({
   children,
@@ -31,14 +32,18 @@ export default async function DashboardLayout({
       <SidebarProvider className="flex flex-col">
         <div className="h-[var(--header-height)] border-b grid grid-cols-3 w-full items-center">
           <Logo />
-          <div className="border col-start-2 flex justify-center">Hello</div>
+          <div className="p-1 h-full col-start-2 flex justify-center">
+            <DynamicCommand trigger={<Commander />} />
+          </div>
           <div className="flex justify-end mr-[calc(var(--spacing)*2)]">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <div className="w-fit h-fit hover:bg-muted rounded-sm transition-all p-0.5 cursor-pointer">
                   <Avatar>
                     <AvatarImage src={session?.user.image || ""} />
-                    <AvatarFallback>{session?.user.name.substring(0, 2)}</AvatarFallback>
+                    <AvatarFallback>
+                      {session?.user.name.substring(0, 2)}
+                    </AvatarFallback>
                   </Avatar>
                 </div>
               </DropdownMenuTrigger>
@@ -48,14 +53,19 @@ export default async function DashboardLayout({
                     <div className="flex items-center justify-center">
                       <Avatar>
                         <AvatarImage src={session?.user.image || ""} />
-                        <AvatarFallback>{session?.user.name.substring(0, 2)}</AvatarFallback>
+                        <AvatarFallback>
+                          {session?.user.name.substring(0, 2)}
+                        </AvatarFallback>
                       </Avatar>
                     </div>
                     <div className="flex flex-col">
-                      <span className="text-sm font-medium">{session?.user.name}</span>
+                      <span className="text-sm font-medium">
+                        {session?.user.name}
+                      </span>
                       <Link
                         className="text-xs font-normal underline gap-x-1 flex items-center"
-                        href={`/profiles/${session?.user.id}`}>
+                        href={`/profiles/${session?.user.id}`}
+                      >
                         My profile
                         <ExternalLink size={14} />
                       </Link>
