@@ -2,6 +2,9 @@ import LinkingButton from "@/components/linking-button";
 import ThemeBasedRenderer from "@/components/theme-based-renderer";
 import { ArrowRight, ChevronRight } from "lucide-react";
 import Link from "next/link";
+import { ThemeToggle } from "@/components/theme-toggle";
+import Logo from "@/components/logo";
+
 
 export default function Home() {
   return (
@@ -11,13 +14,15 @@ export default function Home() {
           <div className="absolute inset-0 -z-10 h-full w-full bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]" />
         }
       />
-      <div className="flex h-[7vh] mt-[5vh] border w-[70%] rounded-full items-center">
-        <h1>yes</h1>
+      <Logo />
+      <div className="absolute top-2">
+        
       </div>
+      <ThemeToggle className="absolute right-2 top-2" />
       <div className="text-center mt-[30vh] flex gap-y-3 flex-col items-center">
         <Link
           href={"/docs/api"}
-          className="rounded-full shadow-xl text-xs bg-[#F5F5F5] gap-x-1 text-secondary-foreground border py-1 px-2 flex items-center"
+          className="rounded-full shadow-xl text-xs text-accent bg-accent-foreground gap-x-1 border py-1 px-2 flex items-center"
         >
           🚀 Use our API
           <ChevronRight size={12} strokeWidth={3} />
