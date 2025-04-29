@@ -4,6 +4,7 @@ import { ArrowRight, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
 import Logo from "@/components/logo";
+import NavMenu from "@/components/landing-page-nav";
 
 
 export default function Home() {
@@ -16,7 +17,7 @@ export default function Home() {
       />
       <Logo />
       <div className="absolute top-2">
-        
+        <NavMenu />
       </div>
       <ThemeToggle className="absolute right-2 top-2" />
       <div className="text-center mt-[30vh] flex gap-y-3 flex-col items-center">
