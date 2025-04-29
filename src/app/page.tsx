@@ -17,7 +17,7 @@ export default function Home() {
       />
       <Logo />
       <div className="absolute top-2">
-        <NavMenu />
+        <NavMenu className="navMenu transition-opacity duration-150 ease-in-out" />
       </div>
       <ThemeToggle className="absolute right-2 top-2" />
       <div className="text-center mt-[30vh] flex gap-y-3 flex-col items-center">
@@ -42,7 +42,7 @@ export default function Home() {
             <ArrowRight />
             <span>Get started</span>
           </LinkingButton>
-          <Link className="underline font-semibold" href={"/#more"} passHref>
+          <Link className="underline font-semibold hover:text-[#a086e7] duration-250 text-accent-foreground" href={"/#more"} passHref>
             Learn more
           </Link>
         </div>
