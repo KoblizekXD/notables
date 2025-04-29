@@ -2,7 +2,9 @@ import Logo from "@/components/logo";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
+  DropdownMenuCheckboxItem,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
@@ -12,14 +14,18 @@ import {
   SidebarInset,
   SidebarProvider,
 } from "@/components/ui/sidebar";
-import { ExternalLink } from "lucide-react";
+import { auth } from "@/lib/auth";
+import { Cloud, ExternalLink, LogOut, Settings } from "lucide-react";
+import { headers } from "next/headers";
 import Link from "next/link";
+import { DropdownThemeToggle } from "./dropdown-theme-toggle";
 
-export default function DashboardLayout({
+export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await auth.api.getSession({ headers: await headers() });
   return (
     <div className="h-screen w-full">
       <SidebarProvider className="flex flex-col">
@@ -31,25 +37,25 @@ export default function DashboardLayout({
               <DropdownMenuTrigger asChild>
                 <div className="w-fit h-fit hover:bg-muted rounded-sm transition-all p-0.5 cursor-pointer">
                   <Avatar>
-                    <AvatarImage src="" />
-                    <AvatarFallback>EX</AvatarFallback>
+                    <AvatarImage src={session?.user.image || ""} />
+                    <AvatarFallback>{session?.user.name.substring(0, 2)}</AvatarFallback>
                   </Avatar>
                 </div>
               </DropdownMenuTrigger>
-              <DropdownMenuContent>
+              <DropdownMenuContent className="w-56">
                 <DropdownMenuLabel>
                   <div className="flex items-center gap-2">
                     <div className="flex items-center justify-center">
                       <Avatar>
-                        <AvatarImage src="" />
-                        <AvatarFallback>EX</AvatarFallback>
+                        <AvatarImage src={session?.user.image || ""} />
+                        <AvatarFallback>{session?.user.name.substring(0, 2)}</AvatarFallback>
                       </Avatar>
                     </div>
                     <div className="flex flex-col">
-                      <span className="text-sm font-medium">Ethan Xu</span>
+                      <span className="text-sm font-medium">{session?.user.name}</span>
                       <Link
                         className="text-xs font-normal underline gap-x-1 flex items-center"
-                        href={"/profiles/"}>
+                        href={`/profiles/${session?.user.id}`}>
                         My profile
                         <ExternalLink size={14} />
                       </Link>
@@ -57,6 +63,20 @@ export default function DashboardLayout({
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
+                <DropdownThemeToggle />
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <Cloud />
+                  API
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Settings />
+                  Settings
+                </DropdownMenuItem>
+                <DropdownMenuItem className="text-red-500">
+                  <LogOut />
+                  Sign-out
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
