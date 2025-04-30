@@ -20,10 +20,10 @@ export default function Home() {
         <NavMenu className="navMenu transition-opacity duration-150 ease-in-out" />
       </div>
       <ThemeToggle className="absolute right-2 top-2" />
-      <div className="text-center mt-[30vh] flex gap-y-3 flex-col items-center">
+      <div className="text-center mt-[30vh] flex gap-y-3 flex-col items-center p-4 px-6">
         <Link
           href={"/docs/api"}
-          className="rounded-full shadow-xl text-xs text-accent bg-accent-foreground gap-x-1 border py-1 px-2 flex items-center"
+          className="rounded-full shadow-xl text-xs text-accent bg-accent-foreground hover:opacity-85 duration-250 ease-in-out gap-x-1 border py-1 px-2 flex items-center"
         >
           🚀 Use our API
           <ChevronRight size={12} strokeWidth={3} />
