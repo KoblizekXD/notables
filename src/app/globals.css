@@ -118,3 +118,9 @@
     @apply leading-7;
   }
 }
+
+@media (max-width: 648px) {
+  .navMenu {
+    opacity: 0;
+  }  
+}
