@@ -124,3 +124,14 @@
     opacity: 0;
   }  
 }
+
+.ArrowGap {
+  gap: 15rem;
+}
+
+@media (max-width: 812px) {
+  .ArrowGap {
+    gap: 14rem;
+    overflow-x: hidden;
+  }  
+}
