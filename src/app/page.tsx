@@ -2,6 +2,10 @@ import LinkingButton from "@/components/linking-button";
 import ThemeBasedRenderer from "@/components/theme-based-renderer";
 import { ArrowRight, ChevronRight } from "lucide-react";
 import Link from "next/link";
+import { ThemeToggle } from "@/components/theme-toggle";
+import Logo from "@/components/logo";
+import NavMenu from "@/components/landing-page-nav";
+
 
 export default function Home() {
   return (
@@ -11,13 +15,15 @@ export default function Home() {
           <div className="absolute inset-0 -z-10 h-full w-full bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]" />
         }
       />
-      <div className="flex h-[7vh] mt-[5vh] border w-[70%] rounded-full items-center">
-        <h1>yes</h1>
+      <Logo />
+      <div className="absolute top-2">
+        <NavMenu className="navMenu transition-opacity duration-150 ease-in-out" />
       </div>
-      <div className="text-center mt-[30vh] flex gap-y-3 flex-col items-center">
+      <ThemeToggle className="absolute right-2 top-2" />
+      <div className="text-center mt-[30vh] flex gap-y-3 flex-col items-center p-4 px-6">
         <Link
           href={"/docs/api"}
-          className="rounded-full shadow-xl text-xs bg-[#F5F5F5] gap-x-1 text-secondary-foreground border py-1 px-2 flex items-center"
+          className="rounded-full shadow-xl text-xs text-accent bg-accent-foreground hover:opacity-85 duration-250 ease-in-out gap-x-1 border py-1 px-2 flex items-center"
         >
           🚀 Use our API
           <ChevronRight size={12} strokeWidth={3} />
@@ -36,7 +42,7 @@ export default function Home() {
             <ArrowRight />
             <span>Get started</span>
           </LinkingButton>
-          <Link className="underline font-semibold" href={"/#more"} passHref>
+          <Link className="underline font-semibold hover:text-[#a086e7] duration-250 text-accent-foreground" href={"/#more"} passHref>
             Learn more
           </Link>
         </div>
