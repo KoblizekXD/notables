@@ -30,12 +30,12 @@ export default async function DashboardLayout({
   return (
     <div className="h-screen w-full">
       <SidebarProvider className="flex flex-col">
-        <div className="h-[var(--header-height)] border-b grid grid-cols-3 w-full items-center">
+        <div className="h-[var(--header-height)] flex gap-x-2 md:gap-0 border-b md:grid grid-cols-3 w-full items-center">
           <Logo />
-          <div className="p-1 h-full col-start-2 flex justify-center">
+          <div className="p-1 items-center md:items-stretch h-full flex-1 col-start-2 flex justify-end">
             <DynamicCommand trigger={<Commander />} />
           </div>
-          <div className="flex justify-end mr-[calc(var(--spacing)*2)]">
+          <div className="flex ml-auto justify-end mr-[calc(var(--spacing)*2)]">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <div className="w-fit h-fit hover:bg-muted rounded-sm transition-all p-0.5 cursor-pointer">
