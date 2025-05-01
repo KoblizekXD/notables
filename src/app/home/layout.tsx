@@ -1,18 +1,7 @@
 import Logo from "@/components/logo";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  Sidebar,
-  SidebarInset,
-  SidebarProvider,
-} from "@/components/ui/sidebar";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { auth } from "@/lib/auth";
 import { Cloud, ExternalLink, LogOut, Settings } from "lucide-react";
 import { headers } from "next/headers";
@@ -20,16 +9,15 @@ import Link from "next/link";
 import { DropdownThemeToggle } from "./dropdown-theme-toggle";
 import Commander from "@/components/commander";
 import DynamicCommand from "@/components/dynamic-command";
+import Sidebar from "@/components/sidebar";
+import { Session } from "better-auth";
+import { SidebarStateToggler } from "@/components/sidebar_state-toggler";
 
-export default async function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const session = await auth.api.getSession({ headers: await headers() });
   return (
     <div className="h-screen w-full">
-      <SidebarProvider className="flex flex-col">
+      <SidebarProvider className="flex flex-col" defaultOpen={false}>
         <div className="h-[var(--header-height)] flex gap-x-2 md:gap-0 border-b md:grid grid-cols-3 w-full items-center">
           <Logo />
           <div className="p-1 items-center md:items-stretch h-full flex-1 col-start-2 flex justify-end">
@@ -41,9 +29,7 @@ export default async function DashboardLayout({
                 <div className="w-fit h-fit hover:bg-muted rounded-sm transition-all p-0.5 cursor-pointer">
                   <Avatar>
                     <AvatarImage src={session?.user.image || ""} />
-                    <AvatarFallback>
-                      {session?.user.name.substring(0, 2)}
-                    </AvatarFallback>
+                    <AvatarFallback>{session?.user.name.substring(0, 2)}</AvatarFallback>
                   </Avatar>
                 </div>
               </DropdownMenuTrigger>
@@ -53,19 +39,12 @@ export default async function DashboardLayout({
                     <div className="flex items-center justify-center">
                       <Avatar>
                         <AvatarImage src={session?.user.image || ""} />
-                        <AvatarFallback>
-                          {session?.user.name.substring(0, 2)}
-                        </AvatarFallback>
+                        <AvatarFallback>{session?.user.name.substring(0, 2)}</AvatarFallback>
                       </Avatar>
                     </div>
                     <div className="flex flex-col">
-                      <span className="text-sm font-medium">
-                        {session?.user.name}
-                      </span>
-                      <Link
-                        className="text-xs font-normal underline gap-x-1 flex items-center"
-                        href={`/profiles/${session?.user.id}`}
-                      >
+                      <span className="text-sm font-medium">{session?.user.name}</span>
+                      <Link className="text-xs font-normal underline gap-x-1 flex items-center" href={`/profiles/${session?.user.id}`}>
                         My profile
                         <ExternalLink size={14} />
                       </Link>
@@ -74,6 +53,8 @@ export default async function DashboardLayout({
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownThemeToggle />
+                <DropdownMenuSeparator />
+                <SidebarStateToggler />
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
                   <Cloud />
@@ -92,9 +73,7 @@ export default async function DashboardLayout({
           </div>
         </div>
         <div className="flex flex-1">
-          <Sidebar className="top-[var(--header-height)] bg-sidebar-primary">
-            {}
-          </Sidebar>
+          <Sidebar userPath={`/profiles/${session?.user.id}`} />
           <SidebarInset>{children}</SidebarInset>
         </div>
       </SidebarProvider>
