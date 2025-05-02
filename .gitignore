@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+drizzle/meta/
+# Ignore because we use bun
+package-lock.json
