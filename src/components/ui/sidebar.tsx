@@ -43,6 +43,8 @@ type SidebarContextProps = {
   sidebarType: "icon" | "toggle";
   setSidebarType: (type: "icon" | "toggle") => void;
   toggleSidebarType: (type: boolean) => void;
+  sidebarPosition: "left" | "right";
+  toggleSidebarPosition: () => void;
 };
 
 const SidebarContext = React.createContext<SidebarContextProps | null>(null);
@@ -74,11 +76,9 @@ function SidebarProvider({
   const [sidebarType, setSidebarType] = React.useState<"icon" | "toggle">(
     "icon",
   );
-
-  const toggleSidebarType = () => {
-    if (sidebarType === "icon") return setSidebarType("toggle");
-    return setSidebarType("icon");
-  };
+  const [sidebarPosition, setSidebarPosition] = React.useState<
+    "left" | "right"
+  >("left");
 
   // This is the internal state of the sidebar.
   // We use openProp and setOpenProp for control from outside the component.
@@ -124,6 +124,18 @@ function SidebarProvider({
   // This makes it easier to style the sidebar with Tailwind classes.
   const state = open ? "expanded" : "collapsed";
 
+  const toggleSidebarPosition = React.useCallback(() => {
+    sidebarPosition === "left"
+      ? setSidebarPosition("right")
+      : setSidebarPosition("left");
+    return toggleSidebar();
+  }, [sidebarPosition, setSidebarPosition, toggleSidebar]);
+
+  const toggleSidebarType = React.useCallback(() => {
+    sidebarType === "icon" ? setSidebarType("toggle") : setSidebarType("icon");
+    return toggleSidebar();
+  }, [sidebarType, setSidebarType, toggleSidebar]);
+
   const contextValue = React.useMemo<SidebarContextProps>(
     () => ({
       state,
@@ -136,6 +148,8 @@ function SidebarProvider({
       sidebarType,
       setSidebarType,
       toggleSidebarType,
+      sidebarPosition,
+      toggleSidebarPosition,
     }),
     [state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar],
   );
@@ -266,7 +280,7 @@ function SidebarTrigger({
   onClick,
   ...props
 }: React.ComponentProps<typeof Button>) {
-  const { toggleSidebar, sidebarType } = useSidebar();
+  const { toggleSidebar } = useSidebar();
 
   return (
     <Button
@@ -274,7 +288,6 @@ function SidebarTrigger({
       data-slot="sidebar-trigger"
       variant="ghost"
       size="icon"
-      hidden={sidebarType === "icon"}
       className={cn("size-7", className)}
       onClick={(event) => {
         onClick?.(event);

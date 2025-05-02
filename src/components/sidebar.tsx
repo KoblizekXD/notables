@@ -4,6 +4,7 @@ import {
   LibraryBig,
   type LucideIcon,
   NotepadText,
+  PanelLeftClose,
   PanelRightClose,
   Settings,
   Star,
@@ -37,7 +38,8 @@ interface SidebarItemType {
 }
 
 export default function Sidebar({ userPath }: { userPath: string }) {
-  const { setOpen, open, sidebarType, toggleSidebar } = useSidebar();
+  const { setOpen, open, sidebarType, toggleSidebar, sidebarPosition } =
+    useSidebar();
 
   const platformItems: SidebarItemType[] = [
     {
@@ -75,19 +77,22 @@ export default function Sidebar({ userPath }: { userPath: string }) {
 
   return (
     <Sbar
+      side={sidebarPosition}
       className="top-[var(--header-height)] bg-sidebar-primary"
       collapsible={sidebarType === "icon" ? "icon" : "offcanvas"}
       onMouseOver={() => sidebarType === "icon" && setOpen(true)}
       onMouseLeave={() => sidebarType === "icon" && setOpen(false)}>
       <SidebarHeader className="overflow-x-auto md:overflow-visible ">
-        <SidebarGroupLabel className={`${open && "-ml-2 -mb-2 "}`}>
-          Platform
-        </SidebarGroupLabel>
+        <SidebarGroupLabel className="-ml-2 -mb-2">Platform</SidebarGroupLabel>
         <SidebarGroupAction
           title="Toggle navbar"
           onClick={toggleSidebar}
           hidden={sidebarType === "icon"}>
-          <PanelRightClose className="rotate-180" />
+          {sidebarPosition === "left" ? (
+            <PanelLeftClose />
+          ) : (
+            <PanelRightClose />
+          )}
         </SidebarGroupAction>
         <SidebarGroupContent>
           <SidebarMenu>

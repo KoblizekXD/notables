@@ -1,8 +1,8 @@
 import Commander from "@/components/commander";
 import DynamicCommand from "@/components/dynamic-command";
 import Logo from "@/components/logo";
-import Sidebar from "@/components/sidebar";
-import { SidebarStateToggler } from "@/components/sidebar_state-toggler";
+import { SidebarStateToggler } from "@/components/sidebar-state-toggler";
+import SidebarExec from "@/components/sidebar_inset";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -12,7 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import { auth } from "@/lib/auth";
 import { Cloud, ExternalLink, LogOut, Settings } from "lucide-react";
 import { headers } from "next/headers";
@@ -89,8 +89,9 @@ export default async function DashboardLayout({
           </div>
         </div>
         <div className="flex flex-1">
-          <Sidebar userPath={`/profiles/${session?.user.id}`} />
-          <SidebarInset>{children}</SidebarInset>
+          <SidebarExec userPath={`/profiles/${session?.user.id}`}>
+            {children}
+          </SidebarExec>
         </div>
       </SidebarProvider>
     </div>
