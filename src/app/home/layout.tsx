@@ -2,7 +2,7 @@ import Commander from "@/components/commander";
 import DynamicCommand from "@/components/dynamic-command";
 import Logo from "@/components/logo";
 import { SidebarStateToggler } from "@/components/sidebar-state-toggler";
-import SidebarExec from "@/components/sidebar_inset";
+import SidebarExec from "@/components/sidebar-inset";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,

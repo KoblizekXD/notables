@@ -1,6 +1,10 @@
 "use client";
 
-import { DropdownMenuCheckboxItem } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenuCheckboxItem,
+  DropdownMenuLabel,
+} from "@/components/ui/dropdown-menu";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { useSidebar } from "./ui/sidebar";
 
 export function SidebarStateToggler() {
@@ -10,17 +14,24 @@ export function SidebarStateToggler() {
     sidebarPosition,
     toggleSidebarPosition,
   } = useSidebar();
+  const isMobile = useIsMobile();
 
-  return (
+  return isMobile ? (
+    <DropdownMenuLabel className="font-normal text-xs text-muted-foreground">
+      Sidebar options are available only on PC!
+    </DropdownMenuLabel>
+  ) : (
     <>
       <DropdownMenuCheckboxItem
         checked={sidebarType === "icon"}
-        onCheckedChange={toggleSidebarType}>
+        onCheckedChange={toggleSidebarType}
+      >
         Collapsible sidebar
       </DropdownMenuCheckboxItem>
       <DropdownMenuCheckboxItem
         checked={sidebarPosition === "right"}
-        onCheckedChange={toggleSidebarPosition}>
+        onCheckedChange={toggleSidebarPosition}
+      >
         Move sidebar to right
       </DropdownMenuCheckboxItem>
     </>
