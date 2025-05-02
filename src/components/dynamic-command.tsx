@@ -14,7 +14,10 @@ interface DynamicCommandProps {
   trigger: React.ReactNode;
 }
 
-export default function DynamicCommand({ key = "k", trigger }: DynamicCommandProps) {
+export default function DynamicCommand({
+  key = "k",
+  trigger,
+}: DynamicCommandProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
 
@@ -30,14 +33,16 @@ export default function DynamicCommand({ key = "k", trigger }: DynamicCommandPro
     return () => document.removeEventListener("keydown", down);
   }, [key]);
 
-  const triggered = React.isValidElement(trigger) ? React.cloneElement(trigger, {
-    onClick: (e: React.MouseEvent) => {
-      e.preventDefault();
-      startTransition(() => {
-        setIsOpen((open: boolean) => !open);
-      });
-    },
-  } as React.HTMLProps<HTMLDivElement>) : trigger;
+  const triggered = React.isValidElement(trigger)
+    ? React.cloneElement(trigger, {
+        onClick: (e: React.MouseEvent) => {
+          e.preventDefault();
+          startTransition(() => {
+            setIsOpen((open: boolean) => !open);
+          });
+        },
+      } as React.HTMLProps<HTMLDivElement>)
+    : trigger;
 
   return (
     <>

@@ -71,12 +71,14 @@ function SidebarProvider({
 }) {
   const isMobile = useIsMobile();
   const [openMobile, setOpenMobile] = React.useState(false);
-  const [sidebarType, setSidebarType] = React.useState<"icon" | "toggle">("icon");
+  const [sidebarType, setSidebarType] = React.useState<"icon" | "toggle">(
+    "icon",
+  );
 
   const toggleSidebarType = () => {
-    if(sidebarType === "icon") return setSidebarType("toggle");
+    if (sidebarType === "icon") return setSidebarType("toggle");
     return setSidebarType("icon");
-  }
+  };
 
   // This is the internal state of the sidebar.
   // We use openProp and setOpenProp for control from outside the component.

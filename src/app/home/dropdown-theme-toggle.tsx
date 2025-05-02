@@ -13,14 +13,16 @@ export function DropdownThemeToggle() {
   }, []);
 
   if (!mounted) {
-    return null
+    return null;
   }
 
   return (
-    <DropdownMenuCheckboxItem checked={theme.theme === "dark"} onCheckedChange={() => {
-      theme.setTheme(theme.theme === "dark" ? "light" : "dark");
-    }}>
+    <DropdownMenuCheckboxItem
+      checked={theme.theme === "dark"}
+      onCheckedChange={() => {
+        theme.setTheme(theme.theme === "dark" ? "light" : "dark");
+      }}>
       Dark mode
     </DropdownMenuCheckboxItem>
-  )
+  );
 }

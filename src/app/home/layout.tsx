@@ -1,19 +1,27 @@
+import Commander from "@/components/commander";
+import DynamicCommand from "@/components/dynamic-command";
 import Logo from "@/components/logo";
+import Sidebar from "@/components/sidebar";
+import { SidebarStateToggler } from "@/components/sidebar_state-toggler";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { auth } from "@/lib/auth";
 import { Cloud, ExternalLink, LogOut, Settings } from "lucide-react";
 import { headers } from "next/headers";
 import Link from "next/link";
 import { DropdownThemeToggle } from "./dropdown-theme-toggle";
-import Commander from "@/components/commander";
-import DynamicCommand from "@/components/dynamic-command";
-import Sidebar from "@/components/sidebar";
-import { Session } from "better-auth";
-import { SidebarStateToggler } from "@/components/sidebar_state-toggler";
 
-export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
+export default async function DashboardLayout({
+  children,
+}: { children: React.ReactNode }) {
   const session = await auth.api.getSession({ headers: await headers() });
   return (
     <div className="h-screen w-full">
@@ -29,7 +37,9 @@ export default async function DashboardLayout({ children }: { children: React.Re
                 <div className="w-fit h-fit hover:bg-muted rounded-sm transition-all p-0.5 cursor-pointer">
                   <Avatar>
                     <AvatarImage src={session?.user.image || ""} />
-                    <AvatarFallback>{session?.user.name.substring(0, 2)}</AvatarFallback>
+                    <AvatarFallback>
+                      {session?.user.name.substring(0, 2)}
+                    </AvatarFallback>
                   </Avatar>
                 </div>
               </DropdownMenuTrigger>
@@ -39,12 +49,18 @@ export default async function DashboardLayout({ children }: { children: React.Re
                     <div className="flex items-center justify-center">
                       <Avatar>
                         <AvatarImage src={session?.user.image || ""} />
-                        <AvatarFallback>{session?.user.name.substring(0, 2)}</AvatarFallback>
+                        <AvatarFallback>
+                          {session?.user.name.substring(0, 2)}
+                        </AvatarFallback>
                       </Avatar>
                     </div>
                     <div className="flex flex-col">
-                      <span className="text-sm font-medium">{session?.user.name}</span>
-                      <Link className="text-xs font-normal underline gap-x-1 flex items-center" href={`/profiles/${session?.user.id}`}>
+                      <span className="text-sm font-medium">
+                        {session?.user.name}
+                      </span>
+                      <Link
+                        className="text-xs font-normal underline gap-x-1 flex items-center"
+                        href={`/profiles/${session?.user.id}`}>
                         My profile
                         <ExternalLink size={14} />
                       </Link>

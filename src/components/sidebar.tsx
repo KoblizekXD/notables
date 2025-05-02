@@ -1,5 +1,20 @@
 "use client";
-import { Star, LucideIcon, TrendingUp, NotepadText, LibraryBig, Settings, ChevronDown, PanelRightClose } from "lucide-react";
+import {
+  ChevronDown,
+  LibraryBig,
+  type LucideIcon,
+  NotepadText,
+  PanelRightClose,
+  Settings,
+  Star,
+  TrendingUp,
+} from "lucide-react";
+import Link from "next/link";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "./ui/collapsible";
 import {
   Sidebar as Sbar,
   SidebarContent,
@@ -14,8 +29,6 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "./ui/sidebar";
-import Link from "next/link";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./ui/collapsible";
 
 interface SidebarItemType {
   title: string;
@@ -67,8 +80,13 @@ export default function Sidebar({ userPath }: { userPath: string }) {
       onMouseOver={() => sidebarType === "icon" && setOpen(true)}
       onMouseLeave={() => sidebarType === "icon" && setOpen(false)}>
       <SidebarHeader className="overflow-x-auto md:overflow-visible ">
-        <SidebarGroupLabel className={`${open && "-ml-2 -mb-2 "}`}>Platform</SidebarGroupLabel>
-        <SidebarGroupAction title="Toggle navbar" onClick={toggleSidebar} hidden={sidebarType === "icon"}>
+        <SidebarGroupLabel className={`${open && "-ml-2 -mb-2 "}`}>
+          Platform
+        </SidebarGroupLabel>
+        <SidebarGroupAction
+          title="Toggle navbar"
+          onClick={toggleSidebar}
+          hidden={sidebarType === "icon"}>
           <PanelRightClose className="rotate-180" />
         </SidebarGroupAction>
         <SidebarGroupContent>
