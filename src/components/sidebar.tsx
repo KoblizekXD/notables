@@ -44,22 +44,22 @@ export default function Sidebar({ userPath }: { userPath: string }) {
   const platformItems: SidebarItemType[] = [
     {
       title: "Favorites",
-      url: "#",
+      url: "/favorites",
       icon: Star,
     },
     {
       title: "Trending",
-      url: "#",
+      url: "/trends",
       icon: TrendingUp,
     },
     {
       title: "My notes",
-      url: "#",
+      url: `/profiles/${userPath}#notes`,
       icon: NotepadText,
     },
     {
       title: "Collections",
-      url: "#",
+      url: "/collections",
       icon: LibraryBig,
     },
   ];
@@ -87,6 +87,7 @@ export default function Sidebar({ userPath }: { userPath: string }) {
         <SidebarGroupAction
           title="Toggle navbar"
           onClick={toggleSidebar}
+          className="hover:bg-muted transition-colors"
           hidden={sidebarType === "icon"}>
           {sidebarPosition === "left" ? (
             <PanelLeftClose />
@@ -98,7 +99,7 @@ export default function Sidebar({ userPath }: { userPath: string }) {
           <SidebarMenu>
             {platformItems.map((item) => (
               <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton asChild>
+                <SidebarMenuButton className="hover:bg-muted transition-colors" asChild>
                   <Link href={item.url}>
                     <item.icon />
                     <span>{item.title}</span>
@@ -123,7 +124,7 @@ export default function Sidebar({ userPath }: { userPath: string }) {
               <SidebarGroupContent>
                 <SidebarMenu>
                   {groupsItems.map((item) => (
-                    <SidebarMenuButton asChild key={item.title} hidden={!open}>
+                    <SidebarMenuButton asChild key={item.title} className="hover:bg-muted transition-colors" hidden={!open}>
                       <Link href={item.url}>
                         <p>{item.title}</p>
                       </Link>
@@ -138,8 +139,8 @@ export default function Sidebar({ userPath }: { userPath: string }) {
 
       <SidebarFooter className="mb-[var(--header-height)]">
         <SidebarGroupContent>
-          <SidebarMenuButton asChild>
-            <Link href={userPath}>
+          <SidebarMenuButton className="hover:bg-muted transition-colors" asChild>
+            <Link href="/settings">
               <Settings />
               <span>Settings</span>
             </Link>
