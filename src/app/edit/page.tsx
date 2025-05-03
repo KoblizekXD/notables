@@ -1,3 +1,4 @@
+import SegmentEditor from "@/components/segment-editor";
 import { ThemeToggle } from "@/components/theme-toggle";
 import TooltipWrapper from "@/components/tooltip-wrapper";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -6,69 +7,16 @@ import { auth } from "@/lib/auth";
 import { Bold, Import, Italic, Settings, Underline } from "lucide-react";
 import { headers } from "next/headers";
 
-export type NoteSegment =
-  | {
-      type: "text";
-      content: {
-        heading?: string;
-        text: string;
-      };
-    }
-  | {
-      type: "image";
-      content: {
-        src: string;
-        alt?: string;
-      };
-    }
-  | {
-      type: "list";
-      content: {
-        items: string[];
-        ordered?: boolean;
-      };
-    }
-  | {
-      type: "code";
-      content: {
-        heading?: string;
-        language: string;
-        code: string;
-      };
-    }
-  | {
-      type: "quote";
-      content: {
-        text: string;
-        author?: string;
-        source?: string;
-      };
-    }
-  | {
-      type: "formula";
-      content: {
-        formula: string;
-        description?: string;
-      };
-    }
-  | {
-      type: "table";
-      content: {
-        rows: string[][];
-        headers?: string[];
-      };
-    };
-
 export default async function EditorPage() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
 
   return (
-    <div className="min-h-screen w-full flex flex-col">
+    <div className="min-h-screen items-center w-full flex flex-col">
       <div className="sticky backdrop-blur-md top-0 w-full z-50 grid grid-cols-3">
-        <div className="w-fit pl-1 pt-1 flex flex-col">
-          <h1 className="text-2xl font-bold">Lorem ipsum dolor sit amet</h1>
+        <div className="w-fit font-[Poppins] pl-1 pt-1 flex flex-col">
+          <h1 className="text-2xl font-[600]">Lorem ipsum dolor sit amet</h1>
           <h2 className="text-muted-foreground font-semibold">
             John Doe's work
           </h2>
@@ -119,6 +67,7 @@ export default async function EditorPage() {
           </Avatar>
         </div>
       </div>
+      <SegmentEditor />
       <div className="fixed border p-2 bottom-0 w-full z-50 bg-background backdrop-blur-md flex items-center">
         <h1 className="flex select-none font-[Poppins] items-center gap-x-1">
           <span className="">Made with </span>
