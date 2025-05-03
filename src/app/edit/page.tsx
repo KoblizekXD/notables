@@ -1,9 +1,63 @@
 import { ThemeToggle } from "@/components/theme-toggle";
+import TooltipWrapper from "@/components/tooltip-wrapper";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { auth } from "@/lib/auth";
 import { Bold, Import, Italic, Settings, Underline } from "lucide-react";
 import { headers } from "next/headers";
+
+export type NoteSegment =
+  | {
+      type: "text";
+      content: {
+        heading?: string;
+        text: string;
+      };
+    }
+  | {
+      type: "image";
+      content: {
+        src: string;
+        alt?: string;
+      };
+    }
+  | {
+      type: "list";
+      content: {
+        items: string[];
+        ordered?: boolean;
+      };
+    }
+  | {
+      type: "code";
+      content: {
+        heading?: string;
+        language: string;
+        code: string;
+      };
+    }
+  | {
+      type: "quote";
+      content: {
+        text: string;
+        author?: string;
+        source?: string;
+      };
+    }
+  | {
+      type: "formula";
+      content: {
+        formula: string;
+        description?: string;
+      };
+    }
+  | {
+      type: "table";
+      content: {
+        rows: string[][];
+        headers?: string[];
+      };
+    };
 
 export default async function EditorPage() {
   const session = await auth.api.getSession({
@@ -12,7 +66,7 @@ export default async function EditorPage() {
 
   return (
     <div className="min-h-screen w-full flex flex-col">
-      <div className="sticky w-full z-50 grid grid-cols-3">
+      <div className="sticky backdrop-blur-md top-0 w-full z-50 grid grid-cols-3">
         <div className="w-fit pl-1 pt-1 flex flex-col">
           <h1 className="text-2xl font-bold">Lorem ipsum dolor sit amet</h1>
           <h2 className="text-muted-foreground font-semibold">
@@ -21,21 +75,31 @@ export default async function EditorPage() {
         </div>
         <div className="flex items-center justify-center">
           <div className="border rounded-lg shadow-md p-1 flex items-center gap-x-2">
-            <Button variant="outline" size={"icon"}>
-              <Bold />
-            </Button>
-            <Button variant="outline" size={"icon"}>
-              <Italic />
-            </Button>
-            <Button variant="outline" size={"icon"}>
-              <Underline />
-            </Button>
-            <Button variant="outline" size={"icon"}>
-              <Settings />
-            </Button>
-            <Button variant="outline" size={"icon"}>
-              <Import />
-            </Button>
+            <TooltipWrapper content="Bold ⌘+B">
+              <Button variant="outline" size={"icon"}>
+                <Bold />
+              </Button>
+            </TooltipWrapper>
+            <TooltipWrapper content="Italic ⌘+I">
+              <Button variant="outline" size={"icon"}>
+                <Italic />
+              </Button>
+            </TooltipWrapper>
+            <TooltipWrapper content="Underline ⌘+U">
+              <Button variant="outline" size={"icon"}>
+                <Underline />
+              </Button>
+            </TooltipWrapper>
+            <TooltipWrapper content="Settings">
+              <Button variant="outline" size={"icon"}>
+                <Settings />
+              </Button>
+            </TooltipWrapper>
+            <TooltipWrapper content="Import segments from JSON">
+              <Button variant="outline" size={"icon"}>
+                <Import />
+              </Button>
+            </TooltipWrapper>
           </div>
         </div>
         <div className="flex items-start gap-x-3 justify-end p-2">
@@ -53,6 +117,16 @@ export default async function EditorPage() {
               {session?.user.name.substring(0, 2)}
             </AvatarFallback>
           </Avatar>
+        </div>
+      </div>
+      <div className="fixed border p-2 bottom-0 w-full z-50 bg-background backdrop-blur-md flex items-center">
+        <h1 className="flex select-none font-[Poppins] items-center gap-x-1">
+          <span className="">Made with </span>
+          <span className="font-bold">え Notables</span>
+        </h1>
+        <div className="ml-auto flex items-center gap-x-2">
+          <Button variant="outline">Show preview</Button>
+          <Button>Save</Button>
         </div>
       </div>
     </div>
