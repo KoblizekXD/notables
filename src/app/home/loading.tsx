@@ -8,8 +8,10 @@ export default function Loading() {
           <LoaderCircle className="animate-spin" />
           Loading...
         </h1>
-        <h2 className="text-muted-foreground text-xs">Thanks for considering Notables, we are still in Beta!</h2>
+        <h2 className="text-muted-foreground text-xs">
+          Thanks for considering Notables, we are still in Beta!
+        </h2>
       </div>
     </main>
-  )
+  );
 }

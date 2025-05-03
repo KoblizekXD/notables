@@ -1,12 +1,11 @@
-import LinkingButton from "@/components/linking-button";
-import ThemeBasedRenderer from "@/components/theme-based-renderer";
-import { ArrowRight, ChevronRight } from "lucide-react";
-import Link from "next/link";
-import { ThemeToggle } from "@/components/theme-toggle";
-import Logo from "@/components/logo";
 import NavMenu from "@/components/landing-page-nav";
+import LinkingButton from "@/components/linking-button";
+import Logo from "@/components/logo";
+import ThemeBasedRenderer from "@/components/theme-based-renderer";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { ArrowRight, ChevronRight } from "lucide-react";
 import { ChevronDown } from "lucide-react";
-
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -24,8 +23,7 @@ export default function Home() {
       <div className="text-center mt-[30vh] flex gap-y-3 flex-col items-center p-4 px-6">
         <Link
           href={"/docs/api"}
-          className="rounded-full shadow-xl text-xs text-accent bg-accent-foreground hover:opacity-85 duration-250 ease-in-out gap-x-1 border py-1 px-2 flex items-center"
-          >
+          className="rounded-full shadow-xl text-xs text-accent bg-accent-foreground hover:opacity-85 duration-250 ease-in-out gap-x-1 border py-1 px-2 flex items-center">
           🚀 Use our API
           <ChevronRight size={12} strokeWidth={3} />
         </Link>
@@ -42,20 +40,29 @@ export default function Home() {
             <ArrowRight />
             <span>Get started</span>
           </LinkingButton>
-          <Link className="underline font-semibold hover:text-[#a086e7] duration-250 text-accent-foreground" href={"/#more"} passHref>
+          <Link
+            className="underline font-semibold hover:text-[#a086e7] duration-250 text-accent-foreground"
+            href={"/#more"}
+            passHref>
             Learn more
           </Link>
         </div>
       </div>
       <div className="flex flex-col items-center justify-center gap-16">
-        <Link href="#whyUs" className="flex items-center justify-center px-2 border-2 border-solid border-transparent hover:border-[#d7d7da] dark:hover:border-[#27272a] transition-colors duration-200 rounded-xl cursor-pointer max-w-screen">
+        <Link
+          href="#whyUs"
+          className="flex items-center justify-center px-2 border-2 border-solid border-transparent hover:border-[#d7d7da] dark:hover:border-[#27272a] transition-colors duration-200 rounded-xl cursor-pointer max-w-screen">
           <ChevronDown size={40} />
         </Link>
-        <section id="whyUs" className="flex flex-col items-center justify-center">
+        <section
+          id="whyUs"
+          className="flex flex-col items-center justify-center">
           <h1 className="font-extrabold text-4xl">Why us?</h1>
           <div className="flex flex-row justify-between px-6 max-w-[90%] flex-wrap">
             <div className="flex flex-col justify-between px-4 py-6 border-2 border-solid border-[#d7d7da] dark:border-[#27272a] rounded-xl">
-              <h4 className="flex justify-center items-center text-xl font-bold">Create your own notes and games!</h4>
+              <h4 className="flex justify-center items-center text-xl font-bold">
+                Create your own notes and games!
+              </h4>
             </div>
           </div>
         </section>

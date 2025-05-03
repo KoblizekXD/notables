@@ -1,9 +1,8 @@
-"use client"
- 
-import * as React from "react"
-import Link from "next/link"
- 
-import { cn } from "@/lib/utils"
+"use client";
+
+import Link from "next/link";
+import * as React from "react";
+
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -12,17 +11,18 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu"
- 
-type props ={
-  className?: string
-}
+} from "@/components/ui/navigation-menu";
+import { cn } from "@/lib/utils";
+
+type props = {
+  className?: string;
+};
 
 const components: { title: string; href: string; description: string }[] = [
   {
     title: "Trending theme 1",
     href: "#",
-    description:  "Description 1",
+    description: "Description 1",
   },
   {
     title: "Trending theme 2",
@@ -49,7 +49,7 @@ const components: { title: string; href: string; description: string }[] = [
     href: "#",
     description: "Description 6",
   },
-]
+];
 
 const ListItem = React.forwardRef<
   React.ElementRef<"a">,
@@ -62,10 +62,9 @@ const ListItem = React.forwardRef<
           ref={ref}
           className={cn(
             "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-            className
+            className,
           )}
-          {...props}
-        >
+          {...props}>
           <div className="text-sm font-medium leading-none">{title}</div>
           <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
             {children}
@@ -73,10 +72,10 @@ const ListItem = React.forwardRef<
         </a>
       </NavigationMenuLink>
     </li>
-  )
-})
-ListItem.displayName = "ListItem"
- 
+  );
+});
+ListItem.displayName = "ListItem";
+
 export default function NavMenu(props: props) {
   return (
     <NavigationMenu className={`${props.className}`}>
@@ -108,8 +107,7 @@ export default function NavMenu(props: props) {
                 <ListItem
                   key={component.title}
                   title={component.title}
-                  href={component.href}
-                >
+                  href={component.href}>
                   {component.description}
                 </ListItem>
               ))}
@@ -117,12 +115,15 @@ export default function NavMenu(props: props) {
           </NavigationMenuContent>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <Link href="/docs" suppressHydrationWarning passHref className={navigationMenuTriggerStyle()}>
+          <Link
+            href="/docs"
+            suppressHydrationWarning
+            passHref
+            className={navigationMenuTriggerStyle()}>
             Discussion
           </Link>
         </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>
-  )
+  );
 }
- 

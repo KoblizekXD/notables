@@ -145,7 +145,7 @@
 @media (max-width: 648px) {
   .navMenu {
     opacity: 0;
-  }  
+  }
 }
 
 .ArrowGap {
@@ -156,5 +156,5 @@
   .ArrowGap {
     gap: 14rem;
     overflow-x: hidden;
-  }  
+  }
 }
