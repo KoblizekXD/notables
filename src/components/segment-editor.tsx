@@ -1,9 +1,14 @@
 "use client";
 
 import { motion } from "framer-motion";
+import "katex/dist/katex.min.css";
 import { Settings2 } from "lucide-react";
+import Image from "next/image";
 import { useState } from "react";
+import { BlockMath } from "react-katex";
+import { type BundledLanguage, bundledLanguages } from "shiki";
 import { toast } from "sonner";
+import { CodeBlock } from "./codeblock";
 import TooltipWrapper from "./tooltip-wrapper";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -15,7 +20,6 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Textarea } from "./ui/textarea";
-import Image from "next/image";
 
 function TextSegment({
   value,
@@ -58,19 +62,75 @@ function ImageSegment() {
       <Input type="file" accept="image/*" onChange={handleFileChange} />
       {imageUrl && (
         <Image
-        src={imageUrl}
+          src={imageUrl}
           alt="Uploaded image"
           width="0"
           height="0"
           sizes="100vw"
           className="w-full h-auto max-w-[620px] rounded-md"
-      />
+        />
       )}
       <Textarea
         placeholder="Description"
         rows={1}
-        style={{ overflow: 'hidden', resize: 'none' }}
+        style={{ overflow: "hidden", resize: "none" }}
       />
+    </div>
+  );
+}
+
+function MathSegment() {
+  const [formula, setFormula] = useState<string>("");
+
+  return (
+    <div className="flex relative flex-col gap-y-2">
+      <Textarea
+        placeholder="Math expression"
+        className="resize-none"
+        onInput={(e) => {
+          setFormula(e.currentTarget.value || "");
+          e.currentTarget.style.height = "auto";
+          e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`;
+        }}
+      />
+      <h1 className="font-semibold text-muted-foreground">Preview:</h1>
+      <BlockMath math={formula} />
+      <Input placeholder="Description" />
+    </div>
+  );
+}
+
+const items = Object.keys(bundledLanguages).map((lang) => (
+  <SelectItem value={lang} key={lang}>
+    {lang}
+  </SelectItem>
+))
+
+function CodeSegment() {
+  const [code, setCode] = useState<string>("");
+  const [language, setLanguage] = useState<BundledLanguage>("typescript");
+
+  return (
+    <div className="flex relative flex-col gap-y-2">
+      <Textarea
+        placeholder="Your code here..."
+        className="resize-none overflow-y-hidden"
+        onInput={(e) => {
+          setCode(e.currentTarget.value || "");
+          e.currentTarget.style.height = "auto";
+          e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`;
+        }}
+      />
+      <Select value={language} onValueChange={x => setLanguage(x as BundledLanguage)} name="language">
+        <SelectTrigger className="w-[180px]">
+          <SelectValue placeholder="Language" />
+        </SelectTrigger>
+        <SelectContent>
+          {items}
+        </SelectContent>
+      </Select>
+      <h1 className="font-semibold text-muted-foreground">Preview:</h1>
+      <CodeBlock lang={language}>{code}</CodeBlock>
     </div>
   );
 }
@@ -150,10 +210,17 @@ export default function SegmentEditor() {
                 <Settings2 />
               </Button>
             </TooltipWrapper>
-            {segment.type === "text" ? <TextSegment />
-            : segment.type === "image" ? (
+            {segment.type === "text" ? (
+              <TextSegment />
+            ) : segment.type === "image" ? (
               <ImageSegment />
-            ) : segment.type === "list"}
+            ) : segment.type === "formula" ? (
+              <MathSegment />
+            ) : segment.type === "code" ? (
+              <CodeSegment />
+            ) : (
+              ""
+            )}
           </motion.div>
         ))
       ) : (
@@ -162,7 +229,9 @@ export default function SegmentEditor() {
         </div>
       )}
       <form
-        action={(fd) => {
+        onSubmit={(e) => {
+          e.preventDefault();
+          const fd = new FormData(e.currentTarget);
           if (!fd.get("type") || fd.get("type") === undefined) {
             toast.error("Please select a segment type");
             return;
@@ -175,7 +244,7 @@ export default function SegmentEditor() {
             return [...prev, newSegment];
           });
         }}
-        className="flex mt-4 gap-x-2"
+        className="flex w-full mt-4 gap-x-2"
       >
         <Select name="type">
           <SelectTrigger className="w-[180px]">
@@ -191,7 +260,7 @@ export default function SegmentEditor() {
             <SelectItem value="table">Table</SelectItem>
           </SelectContent>
         </Select>
-        <Button type="submit" variant={"outline"}>
+        <Button type="submit" className="ml-auto" variant={"outline"}>
           Insert
         </Button>
       </form>
