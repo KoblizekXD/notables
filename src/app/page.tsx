@@ -25,7 +25,7 @@ export default function Home() {
         <Link
           href={"/docs/api"}
           className="rounded-full shadow-xl text-xs text-accent bg-accent-foreground hover:opacity-85 duration-250 ease-in-out gap-x-1 border py-1 px-2 flex items-center"
-        >
+          >
           🚀 Use our API
           <ChevronRight size={12} strokeWidth={3} />
         </Link>
@@ -38,8 +38,7 @@ export default function Home() {
         <div className="flex items-center gap-x-4">
           <LinkingButton
             href="/sign-in"
-            className="bg-primary shadow-xl text-white flex items-center"
-          >
+            className="bg-primary shadow-xl text-white flex items-center">
             <ArrowRight />
             <span>Get started</span>
           </LinkingButton>
