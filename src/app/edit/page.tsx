@@ -68,7 +68,7 @@ export default async function EditorPage() {
         </div>
       </div>
       <SegmentEditor />
-      <div className="fixed border p-2 bottom-0 w-full z-50 bg-background backdrop-blur-md flex items-center">
+      <div className="fixed p-2 bottom-0 w-full z-50 bg-background backdrop-blur-md flex items-center">
         <h1 className="flex select-none font-[Poppins] items-center gap-x-1">
           <span className="">Made with </span>
           <span className="font-bold">え Notables</span>
