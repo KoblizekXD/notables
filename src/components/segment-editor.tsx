@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import "katex/dist/katex.min.css";
 import { Settings2 } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { createContext, useContext, useState } from "react";
 import { BlockMath } from "react-katex";
 import { type BundledLanguage, bundledLanguages } from "shiki";
 import { toast } from "sonner";
@@ -21,26 +21,48 @@ import {
 } from "./ui/select";
 import { Textarea } from "./ui/textarea";
 
-function TextSegment({
-  value,
-  onChange,
-  ...props
-}: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
+interface GenericSegmentProps {
+  segment: NoteSegment;
+  onUpdate: (updatedSegment: NoteSegment) => void;
+}
+
+function TextSegment({ segment, onUpdate }: GenericSegmentProps) {
+  const sgmnt = segment as Extract<NoteSegment, { type: "text" }>;
   return (
     <>
-      <Input placeholder="Title" />
+      <Input
+        placeholder="Title"
+        onChange={(e) => {
+          onUpdate({
+            ...sgmnt,
+            content: {
+              ...sgmnt.content,
+              heading: e.currentTarget.value,
+            },
+          });
+        }}
+        defaultValue={sgmnt.content.heading}
+      />
       <Textarea
-        value={value}
+        value={sgmnt.content.text}
         onInput={(e) => {
           e.currentTarget.style.height = "auto";
           e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`;
         }}
         placeholder="Write your text here..."
-        onChange={onChange}
+        onChange={(e) => {
+          onUpdate({
+            ...sgmnt,
+            content: {
+              ...sgmnt.content,
+              text: e.currentTarget.value,
+            },
+          });
+        }}
         rows={1}
         style={{ overflow: "hidden", resize: "none" }}
-        {...props}
       />
+      <p className="text-xs text-muted-foreground font-semibold">We support Markdown!</p>
     </>
   );
 }
@@ -79,7 +101,8 @@ function ImageSegment() {
   );
 }
 
-function MathSegment() {
+function MathSegment({ segment, onUpdate }: GenericSegmentProps) {
+  const sgmnt = segment as Extract<NoteSegment, { type: "formula" }>;
   const [formula, setFormula] = useState<string>("");
 
   return (
@@ -91,11 +114,29 @@ function MathSegment() {
           setFormula(e.currentTarget.value || "");
           e.currentTarget.style.height = "auto";
           e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`;
+          onUpdate({
+            ...sgmnt,
+            content: {
+              ...sgmnt.content,
+              formula: e.currentTarget.value,
+            },
+          });
         }}
       />
       <h1 className="font-semibold text-muted-foreground">Preview:</h1>
       <BlockMath math={formula} />
-      <Input placeholder="Description" />
+      <Input
+        placeholder="Description"
+        onChange={(e) => {
+          onUpdate({
+            ...sgmnt,
+            content: {
+              ...sgmnt.content,
+              description: e.currentTarget.value,
+            },
+          });
+        }}
+      />
     </div>
   );
 }
@@ -104,9 +145,10 @@ const items = Object.keys(bundledLanguages).map((lang) => (
   <SelectItem value={lang} key={lang}>
     {lang}
   </SelectItem>
-))
+));
 
-function CodeSegment() {
+function CodeSegment({ segment, onUpdate }: GenericSegmentProps) {
+  const sgmnt = segment as Extract<NoteSegment, { type: "code" }>;
   const [code, setCode] = useState<string>("");
   const [language, setLanguage] = useState<BundledLanguage>("typescript");
 
@@ -119,15 +161,33 @@ function CodeSegment() {
           setCode(e.currentTarget.value || "");
           e.currentTarget.style.height = "auto";
           e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`;
+          onUpdate({
+            ...sgmnt,
+            content: {
+              ...sgmnt.content,
+              code: e.currentTarget.value,
+            },
+          });
         }}
       />
-      <Select value={language} onValueChange={x => setLanguage(x as BundledLanguage)} name="language">
+      <Select
+        value={language}
+        onValueChange={(x) => {
+          setLanguage(x as BundledLanguage);
+          onUpdate({
+            ...sgmnt,
+            content: {
+              ...sgmnt.content,
+              language: x,
+            },
+          });
+        }}
+        name="language"
+      >
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="Language" />
         </SelectTrigger>
-        <SelectContent>
-          {items}
-        </SelectContent>
+        <SelectContent>{items}</SelectContent>
       </Select>
       <h1 className="font-semibold text-muted-foreground">Preview:</h1>
       <CodeBlock lang={language}>{code}</CodeBlock>
@@ -188,8 +248,37 @@ export type NoteSegment =
       };
     };
 
-export default function SegmentEditor() {
+interface EditorContextType {
+  segments: NoteSegment[];
+  setSegments: React.Dispatch<React.SetStateAction<NoteSegment[]>>;
+}
+
+const EditorContext = createContext<EditorContextType | null>(null);
+
+export function EditorContextProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [segments, setSegments] = useState<NoteSegment[]>([]);
+
+  return (
+    <EditorContext.Provider value={{ segments, setSegments }}>
+      {children}
+    </EditorContext.Provider>
+  );
+}
+
+export default function SegmentEditor() {
+  const { segments, setSegments } = useContext(EditorContext) as EditorContextType;
+
+  const handleSegmentUpdate = (index: number, updatedSegment: NoteSegment) => {
+    setSegments((prev) => {
+      const newSegments = [...prev];
+      newSegments[index] = updatedSegment;
+      return newSegments;
+    });
+  };
 
   return (
     <div className="flex mt-6 items-center flex-col mb-36 gap-y-2">
@@ -211,13 +300,28 @@ export default function SegmentEditor() {
               </Button>
             </TooltipWrapper>
             {segment.type === "text" ? (
-              <TextSegment />
+              <TextSegment
+                segment={segment}
+                onUpdate={(s) => {
+                  handleSegmentUpdate(index, s);
+                }}
+              />
             ) : segment.type === "image" ? (
               <ImageSegment />
             ) : segment.type === "formula" ? (
-              <MathSegment />
+              <MathSegment
+                segment={segment}
+                onUpdate={(s) => {
+                  handleSegmentUpdate(index, s);
+                }}
+              />
             ) : segment.type === "code" ? (
-              <CodeSegment />
+              <CodeSegment
+                segment={segment}
+                onUpdate={(s) => {
+                  handleSegmentUpdate(index, s);
+                }}
+              />
             ) : (
               ""
             )}
