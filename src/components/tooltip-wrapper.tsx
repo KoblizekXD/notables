@@ -4,15 +4,13 @@ export default function TooltipWrapper({
   children,
   content,
   ...props
-}: React.ComponentPropsWithoutRef<typeof Tooltip> & { content: React.ReactNode }) {
+}: React.ComponentPropsWithoutRef<typeof Tooltip> & {
+  content: React.ReactNode;
+}) {
   return (
     <Tooltip {...props}>
-      <TooltipTrigger asChild>
-        {children}
-      </TooltipTrigger>
-      <TooltipContent className="bg-foreground">
-        {content}
-      </TooltipContent>
+      <TooltipTrigger asChild>{children}</TooltipTrigger>
+      <TooltipContent className="bg-foreground">{content}</TooltipContent>
     </Tooltip>
   );
 }

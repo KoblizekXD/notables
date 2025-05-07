@@ -1,14 +1,21 @@
 "use client";
 
-import { Bold, Import, Italic, LoaderCircle, Settings, Underline } from "lucide-react";
-import { useEditorContext } from "./editor-context";
-import TooltipWrapper from "./tooltip-wrapper";
-import { Button } from "./ui/button";
 import { saveNote } from "@/lib/actions";
-import { toast } from "sonner";
+import {
+  Bold,
+  Import,
+  Italic,
+  LoaderCircle,
+  Settings,
+  Underline,
+} from "lucide-react";
 import { useTransition } from "react";
+import { toast } from "sonner";
+import { useEditorContext } from "./editor-context";
 import SegmentEditor from "./segment-editor";
 import SegmentPreviewer from "./segment-previewer";
+import TooltipWrapper from "./tooltip-wrapper";
+import { Button } from "./ui/button";
 
 export function FloatingEditorMenu() {
   return (
@@ -48,21 +55,25 @@ export function BottomFloatingButtons() {
 
   return (
     <div className="ml-auto flex items-center gap-x-2">
-      <Button onClick={() => {
-        if (context.mode === "edit") context.setMode("preview");
-        else context.setMode("edit");
-      }} disabled={isPending} variant="outline">{context.mode === "edit" ? "Show preview" : "Show editor"}</Button>
+      <Button
+        onClick={() => {
+          if (context.mode === "edit") context.setMode("preview");
+          else context.setMode("edit");
+        }}
+        disabled={isPending}
+        variant="outline">
+        {context.mode === "edit" ? "Show preview" : "Show editor"}
+      </Button>
       <Button
         onClick={() => {
           startTransition(async () => {
             const result = await saveNote(context.id, context.segments);
             if (result === undefined) toast.success("Saved");
             else toast.error(result);
-          })
+          });
         }}
         className="flex items-center gap-x-2"
-        disabled={isPending}
-      >
+        disabled={isPending}>
         {isPending && <LoaderCircle className="animate-spin" />}
         Save
       </Button>

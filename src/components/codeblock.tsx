@@ -34,14 +34,16 @@ export function CodeBlock({ children, lang }: Props) {
   const [worker, setWorker] = useState<Worker | null>(null);
 
   useEffect(() => {
-    const worker = new Worker(new URL('./highlight-worker.ts', import.meta.url));
-  
+    const worker = new Worker(
+      new URL("./highlight-worker.ts", import.meta.url),
+    );
+
     worker.onmessage = (e) => {
       setNodes(toJsxRuntime(e.data, { Fragment, jsx, jsxs }));
     };
 
     setWorker(worker);
-  
+
     return () => worker.terminate();
   }, []);
 
@@ -50,7 +52,6 @@ export function CodeBlock({ children, lang }: Props) {
       worker.postMessage({ code: children, lang });
     }
   }, [worker, children, lang]);
-  
 
   return nodes ?? <p>Loading...</p>;
 }

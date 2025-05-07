@@ -16,7 +16,7 @@ export const EditorContext = createContext<EditorContextType | null>(null);
 export function EditorContextProvider({
   children,
   existingSegments = [],
-  id
+  id,
 }: {
   children: React.ReactNode;
   existingSegments?: NoteSegment[];
@@ -26,7 +26,8 @@ export function EditorContextProvider({
   const [mode, setMode] = useState<"edit" | "preview">("edit");
 
   return (
-    <EditorContext.Provider value={{ segments, setSegments, mode, id, setMode }}>
+    <EditorContext.Provider
+      value={{ segments, setSegments, mode, id, setMode }}>
       {children}
     </EditorContext.Provider>
   );
@@ -35,7 +36,9 @@ export function EditorContextProvider({
 export function useEditorContext() {
   const context = useContext(EditorContext);
   if (!context) {
-    throw new Error("useEditorContext must be used within an EditorContextProvider");
+    throw new Error(
+      "useEditorContext must be used within an EditorContextProvider",
+    );
   }
   return context;
 }

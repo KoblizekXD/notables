@@ -12,6 +12,9 @@
       "recommended": true,
       "correctness": {
         "noUnusedImports": "error"
+      },
+      "suspicious": {
+        "noArrayIndexKey": "off"
       }
     },
     "ignore": [".next/**", "src/components/ui/**"]

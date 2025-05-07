@@ -1,8 +1,8 @@
 "use client";
 
-import { motion } from "framer-motion";
 import "katex/dist/katex.min.css";
-import { Minus, Plus, Settings2 } from "lucide-react";
+import { motion } from "framer-motion";
+import { Plus, Settings2 } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { BlockMath } from "react-katex";
@@ -185,8 +185,7 @@ function CodeSegment({ segment, onUpdate }: GenericSegmentProps) {
             },
           });
         }}
-        name="language"
-      >
+        name="language">
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="Language" />
         </SelectTrigger>
@@ -267,7 +266,6 @@ function ListSegment({ segment, onUpdate }: GenericSegmentProps) {
     <div className="flex relative flex-col gap-y-2">
       {items.map((item, index) => (
         <Input
-          // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
           key={index}
           value={item}
           onChange={(e) => handleItemChange(index, e.currentTarget.value)}
@@ -278,8 +276,7 @@ function ListSegment({ segment, onUpdate }: GenericSegmentProps) {
         <Button
           variant="outline"
           className="mr-auto"
-          onClick={() => setItems((prev) => [...prev, ""])}
-        >
+          onClick={() => setItems((prev) => [...prev, ""])}>
           Add Item
         </Button>
         <Button
@@ -294,8 +291,7 @@ function ListSegment({ segment, onUpdate }: GenericSegmentProps) {
                 items: items.slice(0, -1),
               },
             });
-          }}
-        >
+          }}>
           Remove
         </Button>
       </div>
@@ -315,7 +311,6 @@ function TableSegment({ segment, onUpdate }: GenericSegmentProps) {
           <thead>
             <tr>
               {headers.map((header, index) => (
-                // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
                 <th key={index}>
                   <Input
                     className="rounded-none text-center focus-visible:ring-0 border-0"
@@ -339,10 +334,8 @@ function TableSegment({ segment, onUpdate }: GenericSegmentProps) {
           </thead>
           <tbody className="[&_tr]:border-y [&_td]:border-x [&_tr]:border-border">
             {rows.map((row, rowIndex) => (
-              // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
               <tr key={rowIndex}>
                 {row.map((cell, cellIndex) => (
-                  // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
                   <td key={cellIndex}>
                     <Input
                       className="rounded-none text-center focus-visible:ring-0 border-0"
@@ -382,8 +375,7 @@ function TableSegment({ segment, onUpdate }: GenericSegmentProps) {
                 });
               }}
               variant={"outline"}
-              size={"icon"}
-            >
+              size={"icon"}>
               <Plus />
             </Button>
           </TooltipWrapper>
@@ -402,8 +394,7 @@ function TableSegment({ segment, onUpdate }: GenericSegmentProps) {
                 });
               }}
               variant={"destructive"}
-              size={"icon"}
-            >
+              size={"icon"}>
               <Minus />
             </Button>
           </TooltipWrapper>
@@ -423,8 +414,7 @@ function TableSegment({ segment, onUpdate }: GenericSegmentProps) {
               });
             }}
             variant={"outline"}
-            size={"icon"}
-          >
+            size={"icon"}>
             <Plus />
           </Button>
         </TooltipWrapper>
@@ -441,8 +431,7 @@ function TableSegment({ segment, onUpdate }: GenericSegmentProps) {
               });
             }}
             variant={"destructive"}
-            size={"icon"}
-          >
+            size={"icon"}>
             <Minus />
           </Button>
         </TooltipWrapper>
@@ -523,14 +512,12 @@ export default function SegmentEditor() {
             key={`${segment.type}-${index}`}
             initial={{ opacity: 0, y: "calc(var(--spacing) * -2)" }}
             animate={{ opacity: 1, y: "calc(var(--spacing) * 2)" }}
-            className="border w-[620px] p-4 rounded-md flex flex-col gap-y-2"
-          >
+            className="border w-[620px] p-4 rounded-md flex flex-col gap-y-2">
             <TooltipWrapper content="Segment options">
               <Button
                 className="absolute -translate-x-full -left-2 top-4"
                 variant="outline"
-                size="icon"
-              >
+                size="icon">
                 <Settings2 />
               </Button>
             </TooltipWrapper>
@@ -602,8 +589,7 @@ export default function SegmentEditor() {
             return [...prev, newSegment];
           });
         }}
-        className="flex w-full mt-4 gap-x-2"
-      >
+        className="flex w-full mt-4 gap-x-2">
         <Select name="type">
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Segment type" />
