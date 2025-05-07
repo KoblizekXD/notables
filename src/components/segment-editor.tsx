@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import "katex/dist/katex.min.css";
-import { Settings2 } from "lucide-react";
+import { Minus, Plus, Settings2 } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { BlockMath } from "react-katex";
@@ -203,9 +203,9 @@ function QuoteSegment({ segment, onUpdate }: GenericSegmentProps) {
 
   return (
     <div className="flex relative flex-col gap-y-2">
-      <Textarea
-        placeholder="Quote"
-        className="resize-none"
+      <div
+        contentEditable
+        className="resize-none border-l-3 outline-none pl-2 py-0.5 italic rounded-none border-y-0 border-r-0 border-border"
         onInput={(e) => {
           e.currentTarget.style.height = "auto";
           e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`;
@@ -213,11 +213,240 @@ function QuoteSegment({ segment, onUpdate }: GenericSegmentProps) {
             ...sgmnt,
             content: {
               ...sgmnt.content,
-              text: e.currentTarget.value,
+              text: e.currentTarget.textContent || "",
             },
           });
         }}
       />
+      <Input
+        placeholder="Author"
+        onChange={(e) => {
+          onUpdate({
+            ...sgmnt,
+            content: {
+              ...sgmnt.content,
+              author: e.currentTarget.value,
+            },
+          });
+        }}
+      />
+      <Input
+        placeholder="Source"
+        onChange={(e) => {
+          onUpdate({
+            ...sgmnt,
+            content: {
+              ...sgmnt.content,
+              source: e.currentTarget.value,
+            },
+          });
+        }}
+      />
+    </div>
+  );
+}
+
+function ListSegment({ segment, onUpdate }: GenericSegmentProps) {
+  const sgmnt = segment as Extract<NoteSegment, { type: "list" }>;
+  const [items, setItems] = useState<string[]>(sgmnt.content.items || [""]);
+
+  const handleItemChange = (index: number, value: string) => {
+    const newItems = [...items];
+    newItems[index] = value;
+    setItems(newItems);
+    onUpdate({
+      ...sgmnt,
+      content: {
+        ...sgmnt.content,
+        items: newItems,
+      },
+    });
+  };
+
+  return (
+    <div className="flex relative flex-col gap-y-2">
+      {items.map((item, index) => (
+        <Input
+          // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+          key={index}
+          value={item}
+          onChange={(e) => handleItemChange(index, e.currentTarget.value)}
+          placeholder={`Item ${index + 1}`}
+        />
+      ))}
+      <div className="flex items-center">
+        <Button
+          variant="outline"
+          className="mr-auto"
+          onClick={() => setItems((prev) => [...prev, ""])}
+        >
+          Add Item
+        </Button>
+        <Button
+          variant="destructive"
+          className="ml-auto"
+          onClick={() => {
+            setItems((prev) => prev.slice(0, -1));
+            onUpdate({
+              ...sgmnt,
+              content: {
+                ...sgmnt.content,
+                items: items.slice(0, -1),
+              },
+            });
+          }}
+        >
+          Remove
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+function TableSegment({ segment, onUpdate }: GenericSegmentProps) {
+  const sgmnt = segment as Extract<NoteSegment, { type: "table" }>;
+  const [rows, setRows] = useState<string[][]>(sgmnt.content.rows || []);
+  const [headers, setHeaders] = useState<string[]>(sgmnt.content.headers || []);
+
+  return (
+    <div className="flex flex-col gap-y-2">
+      <div className="flex gap-x-2 w-full">
+        <table className="flex-1">
+          <thead>
+            <tr>
+              {headers.map((header, index) => (
+                // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                <th key={index}>
+                  <Input
+                    className="rounded-none text-center focus-visible:ring-0 border-0"
+                    value={header}
+                    onChange={(e) => {
+                      const newHeaders = [...headers];
+                      newHeaders[index] = e.currentTarget.value;
+                      setHeaders(newHeaders);
+                      onUpdate({
+                        ...sgmnt,
+                        content: {
+                          ...sgmnt.content,
+                          headers: newHeaders,
+                        },
+                      });
+                    }}
+                  />
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody className="[&_tr]:border-y [&_td]:border-x [&_tr]:border-border">
+            {rows.map((row, rowIndex) => (
+              // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+              <tr key={rowIndex}>
+                {row.map((cell, cellIndex) => (
+                  // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                  <td key={cellIndex}>
+                    <Input
+                      className="rounded-none text-center focus-visible:ring-0 border-0"
+                      value={cell}
+                      onChange={(e) => {
+                        const newRows = [...rows];
+                        newRows[rowIndex][cellIndex] = e.currentTarget.value;
+                        setRows(newRows);
+                        onUpdate({
+                          ...sgmnt,
+                          content: {
+                            ...sgmnt.content,
+                            rows: newRows,
+                          },
+                        });
+                      }}
+                    />
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <div className="flex flex-col gap-y-2">
+          <TooltipWrapper content="Add Column">
+            <Button
+              onClick={() => {
+                setRows((prev) => prev.map((row) => [...row, ""]));
+                setHeaders((prev) => [...prev, ""]);
+                onUpdate({
+                  ...sgmnt,
+                  content: {
+                    ...sgmnt.content,
+                    rows: rows.map((row) => [...row, ""]),
+                    headers: [...headers, ""],
+                  },
+                });
+              }}
+              variant={"outline"}
+              size={"icon"}
+            >
+              <Plus />
+            </Button>
+          </TooltipWrapper>
+          <TooltipWrapper content="Remove Column">
+            <Button
+              onClick={() => {
+                setRows((prev) => prev.map((row) => row.slice(0, -1)));
+                setHeaders((prev) => prev.slice(0, -1));
+                onUpdate({
+                  ...sgmnt,
+                  content: {
+                    ...sgmnt.content,
+                    rows: rows.map((row) => row.slice(0, -1)),
+                    headers: headers.slice(0, -1),
+                  },
+                });
+              }}
+              variant={"destructive"}
+              size={"icon"}
+            >
+              <Minus />
+            </Button>
+          </TooltipWrapper>
+        </div>
+      </div>
+      <div className="flex gap-x-2">
+        <TooltipWrapper content="Add Row">
+          <Button
+            onClick={() => {
+              setRows((prev) => [...prev, Array(headers.length).fill("")]);
+              onUpdate({
+                ...sgmnt,
+                content: {
+                  ...sgmnt.content,
+                  rows: [...rows, Array(headers.length).fill("")],
+                },
+              });
+            }}
+            variant={"outline"}
+            size={"icon"}
+          >
+            <Plus />
+          </Button>
+        </TooltipWrapper>
+        <TooltipWrapper content="Remove Row">
+          <Button
+            onClick={() => {
+              setRows((prev) => prev.slice(0, -1));
+              onUpdate({
+                ...sgmnt,
+                content: {
+                  ...sgmnt.content,
+                  rows: rows.slice(0, -1),
+                },
+              });
+            }}
+            variant={"destructive"}
+            size={"icon"}
+          >
+            <Minus />
+          </Button>
+        </TooltipWrapper>
+      </div>
     </div>
   );
 }
@@ -328,8 +557,27 @@ export default function SegmentEditor() {
                   handleSegmentUpdate(index, s);
                 }}
               />
+            ) : segment.type === "quote" ? (
+              <QuoteSegment
+                segment={segment}
+                onUpdate={(s) => {
+                  handleSegmentUpdate(index, s);
+                }}
+              />
+            ) : segment.type === "list" ? (
+              <ListSegment
+                segment={segment}
+                onUpdate={(s) => {
+                  handleSegmentUpdate(index, s);
+                }}
+              />
             ) : (
-              ""
+              <TableSegment
+                segment={segment}
+                onUpdate={(s) => {
+                  handleSegmentUpdate(index, s);
+                }}
+              />
             )}
           </motion.div>
         ))
