@@ -7,6 +7,8 @@ import { Button } from "./ui/button";
 import { saveNote } from "@/lib/actions";
 import { toast } from "sonner";
 import { useTransition } from "react";
+import SegmentEditor from "./segment-editor";
+import SegmentPreviewer from "./segment-previewer";
 
 export function FloatingEditorMenu() {
   return (
@@ -46,7 +48,10 @@ export function BottomFloatingButtons() {
 
   return (
     <div className="ml-auto flex items-center gap-x-2">
-      <Button disabled={isPending} variant="outline">Show preview</Button>
+      <Button onClick={() => {
+        if (context.mode === "edit") context.setMode("preview");
+        else context.setMode("edit");
+      }} disabled={isPending} variant="outline">{context.mode === "edit" ? "Show preview" : "Show editor"}</Button>
       <Button
         onClick={() => {
           startTransition(async () => {
@@ -63,4 +68,10 @@ export function BottomFloatingButtons() {
       </Button>
     </div>
   );
+}
+
+export function DecisionBasedSegmentRenderer() {
+  const context = useEditorContext();
+
+  return context.mode === "edit" ? <SegmentEditor /> : <SegmentPreviewer />;
 }

@@ -1,9 +1,9 @@
 import {
   BottomFloatingButtons,
+  DecisionBasedSegmentRenderer,
   FloatingEditorMenu,
 } from "@/components/editor-components";
 import { EditorContextProvider } from "@/components/editor-context";
-import SegmentEditor from "@/components/segment-editor";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import db from "@/db/db";
@@ -62,7 +62,10 @@ export default async function EditorPage({
   }
 
   return (
-    <EditorContextProvider id={id} existingSegments={JSON.parse(result.content)}>
+    <EditorContextProvider
+      id={id}
+      existingSegments={JSON.parse(result.content)}
+    >
       <div className="min-h-screen items-center w-full flex flex-col">
         <div className="sticky backdrop-blur-md top-0 w-full z-50 grid grid-cols-3">
           <div className="w-fit font-[Poppins] pl-1 pt-1 flex flex-col">
@@ -91,7 +94,7 @@ export default async function EditorPage({
             </Avatar>
           </div>
         </div>
-        <SegmentEditor />
+        <DecisionBasedSegmentRenderer />
         <div className="fixed p-2 bottom-0 w-full z-50 bg-background backdrop-blur-md flex items-center">
           <h1 className="flex select-none font-[Poppins] items-center gap-x-1">
             <span className="">Made with </span>

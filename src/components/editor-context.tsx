@@ -5,6 +5,7 @@ import type { NoteSegment } from "./segment-editor";
 
 export interface EditorContextType {
   mode: "edit" | "preview";
+  setMode: React.Dispatch<React.SetStateAction<"edit" | "preview">>;
   id: string;
   segments: NoteSegment[];
   setSegments: React.Dispatch<React.SetStateAction<NoteSegment[]>>;
@@ -22,9 +23,10 @@ export function EditorContextProvider({
   id: string;
 }) {
   const [segments, setSegments] = useState<NoteSegment[]>(existingSegments);
+  const [mode, setMode] = useState<"edit" | "preview">("edit");
 
   return (
-    <EditorContext.Provider value={{ segments, setSegments, mode: "edit", id }}>
+    <EditorContext.Provider value={{ segments, setSegments, mode, id, setMode }}>
       {children}
     </EditorContext.Provider>
   );
