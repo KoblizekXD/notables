@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import ThemeBasedRenderer from "./theme-based-renderer";
+import { cn } from "@/lib/utils";
 
 export default function Logo({
   animate = true,
@@ -14,7 +15,7 @@ export default function Logo({
       initial={animate ? { opacity: 0, x: "calc(var(--spacing) * -2)" } : {}}
       animate={animate ? { opacity: 1, x: "calc(var(--spacing) * 2)" } : {}}
       transition={{ duration: 0.4, ease: "circInOut" }}
-      className={className}>
+      className={cn("absolute left-1 top-3", className)}>
       <Link href={"/"}>
         <ThemeBasedRenderer
           light={

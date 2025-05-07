@@ -17,7 +17,7 @@ export default function Home() {
           <div className="absolute inset-0 -z-10 h-full w-full bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]" />
         }
       />
-      <Logo className="absolute left-1 top-3" />
+      <Logo />
       <div className="absolute top-2">
         <NavMenu className="navMenu transition-opacity duration-150 ease-in-out" />
       </div>
