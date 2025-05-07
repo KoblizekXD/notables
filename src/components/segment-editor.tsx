@@ -198,6 +198,30 @@ function CodeSegment({ segment, onUpdate }: GenericSegmentProps) {
   );
 }
 
+function QuoteSegment({ segment, onUpdate }: GenericSegmentProps) {
+  const sgmnt = segment as Extract<NoteSegment, { type: "quote" }>;
+
+  return (
+    <div className="flex relative flex-col gap-y-2">
+      <Textarea
+        placeholder="Quote"
+        className="resize-none"
+        onInput={(e) => {
+          e.currentTarget.style.height = "auto";
+          e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`;
+          onUpdate({
+            ...sgmnt,
+            content: {
+              ...sgmnt.content,
+              text: e.currentTarget.value,
+            },
+          });
+        }}
+      />
+    </div>
+  );
+}
+
 export type NoteSegment =
   | {
       type: "text";

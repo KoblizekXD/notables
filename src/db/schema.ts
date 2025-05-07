@@ -61,7 +61,7 @@ export const verification = pgTable("verification", {
 export const entityKind = pgEnum("entity_kind", ["work", "note", "author"]);
 
 export const tag = pgTable("tag", {
-  id: uuid("id").primaryKey(),
+  id: uuid("id").primaryKey().defaultRandom(),
   name: text("name").notNull(),
   createdAt: timestamp("created_at")
     .defaultNow()
@@ -89,7 +89,7 @@ export const taggedEntity = pgTable(
 );
 
 export const author = pgTable("author", {
-  id: uuid("id").primaryKey(),
+  id: uuid("id").primaryKey().defaultRandom(),
   name: text("name").notNull(),
   createdAt: timestamp("created_at")
     .defaultNow()
@@ -102,7 +102,7 @@ export const author = pgTable("author", {
 });
 
 export const work = pgTable("work", {
-  id: uuid("id").primaryKey(),
+  id: uuid("id").primaryKey().defaultRandom(),
   title: text("title").notNull(),
   authorId: uuid("author_id")
     .notNull()
@@ -118,7 +118,7 @@ export const work = pgTable("work", {
 });
 
 export const note = pgTable("note", {
-  id: uuid("id").primaryKey(),
+  id: uuid("id").primaryKey().defaultRandom(),
   content: text("content").notNull(),
   entityType: entityKind("entity_type").notNull(),
   entityId: uuid("entity_id").notNull(),
@@ -136,7 +136,7 @@ export const note = pgTable("note", {
 });
 
 export const comment = pgTable("comment", {
-  id: uuid("id").primaryKey(),
+  id: uuid("id").primaryKey().defaultRandom(),
   content: text("content").notNull(),
   noteId: uuid("note_id")
     .notNull()

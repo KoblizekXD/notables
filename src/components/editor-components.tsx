@@ -1,9 +1,12 @@
 "use client";
 
-import { Bold, Import, Italic, Settings, Underline } from "lucide-react";
+import { Bold, Import, Italic, LoaderCircle, Settings, Underline } from "lucide-react";
 import { useEditorContext } from "./editor-context";
 import TooltipWrapper from "./tooltip-wrapper";
 import { Button } from "./ui/button";
+import { saveNote } from "@/lib/actions";
+import { toast } from "sonner";
+import { useTransition } from "react";
 
 export function FloatingEditorMenu() {
   return (
@@ -39,15 +42,23 @@ export function FloatingEditorMenu() {
 
 export function BottomFloatingButtons() {
   const context = useEditorContext();
+  const [isPending, startTransition] = useTransition();
 
   return (
     <div className="ml-auto flex items-center gap-x-2">
-      <Button variant="outline">Show preview</Button>
+      <Button disabled={isPending} variant="outline">Show preview</Button>
       <Button
         onClick={() => {
-          console.log(context.segments);
+          startTransition(async () => {
+            const result = await saveNote(context.id, context.segments);
+            if (result === undefined) toast.success("Saved");
+            else toast.error(result);
+          })
         }}
+        className="flex items-center gap-x-2"
+        disabled={isPending}
       >
+        {isPending && <LoaderCircle className="animate-spin" />}
         Save
       </Button>
     </div>

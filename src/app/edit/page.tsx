@@ -2,9 +2,8 @@ import {
   BottomFloatingButtons,
   FloatingEditorMenu,
 } from "@/components/editor-components";
-import SegmentEditor, {
-  EditorContextProvider,
-} from "@/components/segment-editor";
+import { EditorContextProvider } from "@/components/editor-context";
+import SegmentEditor from "@/components/segment-editor";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import db from "@/db/db";
@@ -63,7 +62,7 @@ export default async function EditorPage({
   }
 
   return (
-    <EditorContextProvider existingSegments={JSON.parse(result.content)}>
+    <EditorContextProvider id={id} existingSegments={JSON.parse(result.content)}>
       <div className="min-h-screen items-center w-full flex flex-col">
         <div className="sticky backdrop-blur-md top-0 w-full z-50 grid grid-cols-3">
           <div className="w-fit font-[Poppins] pl-1 pt-1 flex flex-col">
