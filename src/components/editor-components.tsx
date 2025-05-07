@@ -1,10 +1,11 @@
 "use client";
 
 import { Bold, Import, Italic, Settings, Underline } from "lucide-react";
+import { useEditorContext } from "./editor-context";
 import TooltipWrapper from "./tooltip-wrapper";
 import { Button } from "./ui/button";
 
-export default function FloatingEditorMenu() {
+export function FloatingEditorMenu() {
   return (
     <div className="border rounded-lg shadow-md p-1 flex items-center gap-x-2">
       <TooltipWrapper content="Bold ⌘+B">
@@ -32,6 +33,23 @@ export default function FloatingEditorMenu() {
           <Import />
         </Button>
       </TooltipWrapper>
+    </div>
+  );
+}
+
+export function BottomFloatingButtons() {
+  const context = useEditorContext();
+
+  return (
+    <div className="ml-auto flex items-center gap-x-2">
+      <Button variant="outline">Show preview</Button>
+      <Button
+        onClick={() => {
+          console.log(context.segments);
+        }}
+      >
+        Save
+      </Button>
     </div>
   );
 }

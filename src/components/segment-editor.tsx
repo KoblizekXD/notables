@@ -4,11 +4,12 @@ import { motion } from "framer-motion";
 import "katex/dist/katex.min.css";
 import { Settings2 } from "lucide-react";
 import Image from "next/image";
-import { createContext, useContext, useState } from "react";
+import { useState } from "react";
 import { BlockMath } from "react-katex";
 import { type BundledLanguage, bundledLanguages } from "shiki";
 import { toast } from "sonner";
 import { CodeBlock } from "./codeblock";
+import { useEditorContext } from "./editor-context";
 import TooltipWrapper from "./tooltip-wrapper";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -62,7 +63,9 @@ function TextSegment({ segment, onUpdate }: GenericSegmentProps) {
         rows={1}
         style={{ overflow: "hidden", resize: "none" }}
       />
-      <p className="text-xs text-muted-foreground font-semibold">We support Markdown!</p>
+      <p className="text-xs text-muted-foreground font-semibold">
+        We support Markdown!
+      </p>
     </>
   );
 }
@@ -248,29 +251,8 @@ export type NoteSegment =
       };
     };
 
-interface EditorContextType {
-  segments: NoteSegment[];
-  setSegments: React.Dispatch<React.SetStateAction<NoteSegment[]>>;
-}
-
-const EditorContext = createContext<EditorContextType | null>(null);
-
-export function EditorContextProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const [segments, setSegments] = useState<NoteSegment[]>([]);
-
-  return (
-    <EditorContext.Provider value={{ segments, setSegments }}>
-      {children}
-    </EditorContext.Provider>
-  );
-}
-
 export default function SegmentEditor() {
-  const { segments, setSegments } = useContext(EditorContext) as EditorContextType;
+  const { segments, setSegments } = useEditorContext();
 
   const handleSegmentUpdate = (index: number, updatedSegment: NoteSegment) => {
     setSegments((prev) => {

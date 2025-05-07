@@ -1,10 +1,12 @@
-import FloatingEditorMenu from "@/components/floating-editor-menu";
+import {
+  BottomFloatingButtons,
+  FloatingEditorMenu,
+} from "@/components/editor-components";
 import SegmentEditor, {
   EditorContextProvider,
 } from "@/components/segment-editor";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import db from "@/db/db";
 import { author, note, work } from "@/db/schema";
 import { auth } from "@/lib/auth";
@@ -22,29 +24,46 @@ export default async function EditorPage({
   });
   const { id } = await searchParams;
   if (!id || !session?.user.id) redirect("/home?error=note-not-found");
-  const result = (await db.select().from(note).where(and(eq(note.id, id), eq(note.userId, session?.user.id)))
-    .limit(1)
-    .execute())[0];
+  const result = (
+    await db
+      .select()
+      .from(note)
+      .where(and(eq(note.id, id), eq(note.userId, session?.user.id)))
+      .limit(1)
+      .execute()
+  )[0];
   if (!result) redirect("/home?error=note-not-found");
-  
+
   let description = "";
   let name = undefined;
-  description = (await db.select({
-    id: author.id,
-    name: author.name
-  }).from(author).where(eq(author.id, result.entityId)).execute())[0]?.name;
+  description = (
+    await db
+      .select({
+        id: author.id,
+        name: author.name,
+      })
+      .from(author)
+      .where(eq(author.id, result.entityId))
+      .execute()
+  )[0]?.name;
   if (result.entityType === "author") {
     name = description;
     description = "author";
   } else if (result.entityType === "work") {
     description += "'s work";
-    name = (await db.select({
-      title: work.title
-    }).from(work).where(eq(work.authorId, result.entityId)).execute())[0].title;
+    name = (
+      await db
+        .select({
+          title: work.title,
+        })
+        .from(work)
+        .where(eq(work.authorId, result.entityId))
+        .execute()
+    )[0].title;
   }
 
   return (
-    <EditorContextProvider>
+    <EditorContextProvider existingSegments={JSON.parse(result.content)}>
       <div className="min-h-screen items-center w-full flex flex-col">
         <div className="sticky backdrop-blur-md top-0 w-full z-50 grid grid-cols-3">
           <div className="w-fit font-[Poppins] pl-1 pt-1 flex flex-col">
@@ -79,10 +98,7 @@ export default async function EditorPage({
             <span className="">Made with </span>
             <span className="font-bold">え Notables</span>
           </h1>
-          <div className="ml-auto flex items-center gap-x-2">
-            <Button variant="outline">Show preview</Button>
-            <Button>Save</Button>
-          </div>
+          <BottomFloatingButtons />
         </div>
       </div>
     </EditorContextProvider>
