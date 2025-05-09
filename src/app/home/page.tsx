@@ -1,5 +1,5 @@
 import RecentNotes from "@/components/home-recent-notes";
-import PopularThreads from "@/components/poular-threads";
+import PopularCollections from "@/components/poular-collections";
 
 export default function Home() {
   return (
@@ -29,19 +29,20 @@ export default function Home() {
           Popular collections
         </h1>
         <div className="md:ml-2 lg:ml-4 xl:ml-6">
-          <div className="h-96 w-full md:grid md:grid-cols-[1fr_3fr] m-2 items-center border border-border shadow-md rounded-xl p-6">
-            <div className="group relative shadow-md hover:shadow-lg select-none hidden md:flex flex-col w-full h-full bg-gradient-to-t from-green-800/90 via-green-600/80 to-purple-600 bg-[length:100%_200%] bg-[position:0%_10%] hover:bg-[position:0%_90%] transition-all duration-1000 ease-out rounded-lg max-w-[256px] p-4">
-              <div className="mt-auto transform transition-transform duration-[1200ms] group-hover:-translate-y-48 ease-out">
+          <div className="h-96 w-full md:flex flex-row m-2 items-center border border-border shadow-md rounded-xl p-6 gap-2">
+            <div className="group relative shadow-md hover:shadow-lg select-none hidden md:flex flex-col w-full h-84 bg-gradient-to-t from-green-800/90 via-green-400 to-purple-600 bg-[length:100%_200%] bg-[position:0%_10%] hover:bg-[position:0%_90%] transition-all duration-1000 ease-out rounded-lg max-w-[256px] p-4">
+              <div className="mt-auto transform transition-transform duration-[1200ms] group-hover:-translate-y-48 ease-out h-auto overflow-hidden">
                 <h1 className="text-2xl text-white font-bold">
                   Create collection
                 </h1>
                 <div className="my-2 flex flex-col">
-                  <p className="text-white">Want to make your own?</p>
-                  <p className="text-white -mt-1.5">Let's get right to it!</p>
+                  <p className="text-white leading-tight">
+                    Want to make your own? Let's get right to it
+                  </p>
                 </div>
               </div>
             </div>
-            <PopularThreads />
+            <PopularCollections />
           </div>
         </div>
       </div>

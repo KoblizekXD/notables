@@ -25,11 +25,11 @@ const CollectionCard = ({
         </div>
       </div>
 
-      <div className="flex flex-row items-center justify-end ">
-        <ChevronRight className="size-2 text-muted-foreground/60 -mr-2.5 transition-transform duration-300 ease-out group-hover:-translate-x-6" />
-        <ChevronRight className="size-4 text-muted-foreground/80 -mr-6 transition-transform duration-300 ease-out group-hover:-translate-x-5" />
+      <div className="flex flex-row items-center justify-end transition-transform duration-300 ease-out group-hover:-translate-x-2">
+        <ChevronRight className="size-2 text-muted-foreground/60 -mr-2.5 transition-transform duration-300 ease-out group-hover:-translate-x-[20px]" />
+        <ChevronRight className="size-4 text-muted-foreground/80 -mr-6 transition-transform duration-300 ease-out group-hover:-translate-x-[18px]" />
         <ChevronRight className="text-muted-foreground -mr-2 transition-transform duration-300 ease-out group-hover:-translate-x-2" />
-        <ChevronRight className="text-foreground -ml-4 scale-150" />
+        <ChevronRight className="z-50 text-foreground -ml-4 scale-150" />
       </div>
     </Link>
   );
