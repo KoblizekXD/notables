@@ -18,9 +18,8 @@ const DraggableScroll = ({ children, className }: props) => {
 
   const onMouseMove = (e: React.MouseEvent) => {
     if (!isDragging || !scrollRef.current) return;
-    const x = e.pageX - scrollRef.current.offsetLeft;
-    const walk = (x - startX) * 1.5;
-    scrollRef.current.scrollLeft = scrollLeft - walk;
+    const temp = (e.pageX - scrollRef.current.offsetLeft - startX) * 1.5;
+    scrollRef.current.scrollLeft = scrollLeft - temp;
   };
 
   const stopDrag = () => setIsDragging(false);
