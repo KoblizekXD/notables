@@ -26,7 +26,7 @@ export default async function DashboardLayout({
   return (
     <div className="h-screen w-full">
       <SidebarProvider className="flex flex-col" defaultOpen={false}>
-        <div className="h-[var(--header-height)] flex gap-x-2 md:gap-0 border-b md:grid grid-cols-3 w-full items-center sticky top-0 z-50">
+        <div className="bg-background h-[var(--header-height)] flex gap-x-2 md:gap-0 border-b md:grid grid-cols-3 w-full items-center sticky top-0 z-50">
           <Logo className="md:ml-1.5" />
           <div className="p-1 items-center md:items-stretch h-full flex-1 col-start-2 flex justify-end">
             <DynamicCommand trigger={<Commander />} />
