@@ -8,7 +8,7 @@ const CollectionCard = ({
   return (
     <Link
       href={`/collection/${props.collection.id}`}
-      className="flex flex-row justify-between items-center p-2 w-full h-full rounded-lg group select-none hover:bg-input/40 group">
+      className="flex flex-row justify-between items-center p-2 w-full h-full rounded-lg group select-none hover:bg-input/40">
       <div className="pl-2">
         <h1 className="text-lg font-semibold ">{props.collection.name}</h1>
 
