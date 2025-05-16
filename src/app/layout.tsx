@@ -40,7 +40,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.className} ${calSans.variable} ${jetbrainsMono.variable} antialiased`}>
+        className={`${inter.className} ${calSans.variable} ${jetbrainsMono.variable} antialiased max-w-screen overflow-x-hidden`}>
         <WaitForMount>
           <ThemeProvider
             attribute="class"
