@@ -71,6 +71,7 @@
   },
   "trustedDependencies": [
     "@biomejs/biome",
+    "@tailwindcss/oxide",
     "@vercel/speed-insights",
     "esbuild",
     "sharp"
