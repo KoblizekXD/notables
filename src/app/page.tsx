@@ -3,7 +3,6 @@ import LinkingButton from "@/components/linking-button";
 import Logo from "@/components/logo";
 import ThemeBasedRenderer from "@/components/theme-based-renderer";
 import { ThemeToggle } from "@/components/theme-toggle";
-
 import Logo from "@/components/logo";
 import NavMenu from "@/components/landing-page-nav";
 import { ChevronDown, ArrowUpRight, TextCursor } from "lucide-react";
