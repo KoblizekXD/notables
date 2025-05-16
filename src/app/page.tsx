@@ -1,7 +1,7 @@
+import NavMenu from "@/components/landing-page-nav";
 import LinkingButton from "@/components/linking-button";
+import Logo from "@/components/logo";
 import ThemeBasedRenderer from "@/components/theme-based-renderer";
-import { ArrowRight, ChevronRight } from "lucide-react";
-import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
 import Logo from "@/components/logo";
 import NavMenu from "@/components/landing-page-nav";

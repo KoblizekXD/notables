@@ -4,7 +4,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { WaitForMount } from "@/components/wait-for-mount";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { Inter, JetBrains_Mono, Poppins } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 
@@ -12,6 +12,12 @@ const inter = Inter({
   weight: "variable",
   subsets: ["latin"],
   variable: "--font-inter",
+});
+
+const poppins = Poppins({
+  weight: ["400", "500", "600", "700"],
+  subsets: ["latin"],
+  variable: "--font-poppins",
 });
 
 const calSans = localFont({

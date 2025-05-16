@@ -99,7 +99,9 @@ export default function Sidebar({ userPath }: { userPath: string }) {
           <SidebarMenu>
             {platformItems.map((item) => (
               <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton className="hover:bg-muted transition-colors" asChild>
+                <SidebarMenuButton
+                  className="hover:bg-muted transition-colors"
+                  asChild>
                   <Link href={item.url}>
                     <item.icon />
                     <span>{item.title}</span>
@@ -124,7 +126,11 @@ export default function Sidebar({ userPath }: { userPath: string }) {
               <SidebarGroupContent>
                 <SidebarMenu>
                   {groupsItems.map((item) => (
-                    <SidebarMenuButton asChild key={item.title} className="hover:bg-muted transition-colors" hidden={!open}>
+                    <SidebarMenuButton
+                      asChild
+                      key={item.title}
+                      className="hover:bg-muted transition-colors"
+                      hidden={!open}>
                       <Link href={item.url}>
                         <p>{item.title}</p>
                       </Link>
@@ -139,7 +145,9 @@ export default function Sidebar({ userPath }: { userPath: string }) {
 
       <SidebarFooter className="mb-[var(--header-height)]">
         <SidebarGroupContent>
-          <SidebarMenuButton className="hover:bg-muted transition-colors" asChild>
+          <SidebarMenuButton
+            className="hover:bg-muted transition-colors"
+            asChild>
             <Link href="/settings">
               <Settings />
               <span>Settings</span>

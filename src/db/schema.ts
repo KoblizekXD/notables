@@ -1,5 +1,6 @@
 import {
   boolean,
+  integer,
   pgEnum,
   pgTable,
   primaryKey,
@@ -61,7 +62,7 @@ export const verification = pgTable("verification", {
 export const entityKind = pgEnum("entity_kind", ["work", "note", "author"]);
 
 export const tag = pgTable("tag", {
-  id: uuid("id").primaryKey(),
+  id: uuid("id").primaryKey().defaultRandom(),
   name: text("name").notNull(),
   createdAt: timestamp("created_at")
     .defaultNow()
@@ -89,7 +90,7 @@ export const taggedEntity = pgTable(
 );
 
 export const author = pgTable("author", {
-  id: uuid("id").primaryKey(),
+  id: uuid("id").primaryKey().defaultRandom(),
   name: text("name").notNull(),
   createdAt: timestamp("created_at")
     .defaultNow()
@@ -102,7 +103,7 @@ export const author = pgTable("author", {
 });
 
 export const work = pgTable("work", {
-  id: uuid("id").primaryKey(),
+  id: uuid("id").primaryKey().defaultRandom(),
   title: text("title").notNull(),
   authorId: uuid("author_id")
     .notNull()
@@ -118,8 +119,9 @@ export const work = pgTable("work", {
 });
 
 export const note = pgTable("note", {
-  id: uuid("id").primaryKey(),
+  id: uuid("id").primaryKey().defaultRandom(),
   content: text("content").notNull(),
+  title: text("title").notNull(),
   entityType: entityKind("entity_type").notNull(),
   entityId: uuid("entity_id").notNull(),
   userId: text("user_id")
@@ -136,7 +138,7 @@ export const note = pgTable("note", {
 });
 
 export const comment = pgTable("comment", {
-  id: uuid("id").primaryKey(),
+  id: uuid("id").primaryKey().defaultRandom(),
   content: text("content").notNull(),
   noteId: uuid("note_id")
     .notNull()
@@ -168,3 +170,25 @@ export const favorite = pgTable(
     primaryKey({ columns: [table.userId, table.entityId, table.entityType] }),
   ],
 );
+
+export const collectionNote = pgTable("collection_note", {
+  collectionId: uuid("collection_id")
+    .notNull()
+    .references(() => collection.id, { onDelete: "cascade" }),
+  noteId: uuid("note_id")
+    .notNull()
+    .references(() => note.id, { onDelete: "cascade" }),
+});
+
+export const collection = pgTable("collection", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  authorId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  public: boolean("public").notNull().default(false),
+  name: text("name").notNull(),
+  description: text("description"),
+  likes: integer("likes").notNull().default(0),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});

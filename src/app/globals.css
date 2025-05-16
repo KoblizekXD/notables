@@ -145,5 +145,27 @@
 @media (max-width: 648px) {
   .navMenu {
     opacity: 0;
-  }  
+  }
+}
+
+.ArrowGap {
+  gap: 15rem;
+}
+
+@media (max-width: 812px) {
+  .ArrowGap {
+    gap: 14rem;
+    overflow-x: hidden;
+  }
+}
+
+.shiki {
+  border-radius: var(--radius-md);
+  padding-left: calc(var(--spacing) * 2);
+  padding-top: calc(var(--spacing) * 1.5);
+}
+
+.shiki code {
+  background-color: transparent !important;
+  padding: 0 !important;
 }
