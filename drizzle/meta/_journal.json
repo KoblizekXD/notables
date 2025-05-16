@@ -15,6 +15,13 @@
       "when": 1746600290261,
       "tag": "0001_tiny_cable",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1747390307650,
+      "tag": "0002_parallel_pestilence",
+      "breakpoints": true
     }
   ]
 }

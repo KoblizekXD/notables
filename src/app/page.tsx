@@ -3,11 +3,10 @@ import LinkingButton from "@/components/linking-button";
 import Logo from "@/components/logo";
 import ThemeBasedRenderer from "@/components/theme-based-renderer";
 import { ThemeToggle } from "@/components/theme-toggle";
-import Logo from "@/components/logo";
-import NavMenu from "@/components/landing-page-nav";
-import { CornerLeftDown } from "lucide-react";
+import { ArrowRight, ChevronRight, CornerLeftDown } from "lucide-react";
 import WhyUsCards from "@/components/why-us-cards";
 import DashFooter from "@/components/dashboard-footer";
+import Link from "next/link";
 
 export default function Home() {
   return (
