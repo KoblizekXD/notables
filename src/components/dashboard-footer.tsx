@@ -54,7 +54,7 @@ export default function DashFooter() {
                 <div className="w-full flex items-center justify-center">
                     <p className="flex flex-row gap-3 items-center text-lg">
                         <Copyright size={20} />
-                        Chigga solutions
+                        Notables
                     </p>
                 </div>
             </footer >
