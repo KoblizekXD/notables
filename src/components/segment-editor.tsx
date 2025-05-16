@@ -2,7 +2,7 @@
 
 import "katex/dist/katex.min.css";
 import { motion } from "framer-motion";
-import { Plus, Settings2 } from "lucide-react";
+import { Minus, Plus, Settings2 } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { BlockMath } from "react-katex";
