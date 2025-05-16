@@ -121,7 +121,7 @@ export const work = pgTable("work", {
 export const note = pgTable("note", {
   id: uuid("id").primaryKey().defaultRandom(),
   content: text("content").notNull(),
-  title: text("title").notNull(),
+  title: text("title"),
   entityType: entityKind("entity_type").notNull(),
   entityId: uuid("entity_id").notNull(),
   userId: text("user_id")

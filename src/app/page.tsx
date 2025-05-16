@@ -3,11 +3,9 @@ import LinkingButton from "@/components/linking-button";
 import Logo from "@/components/logo";
 import ThemeBasedRenderer from "@/components/theme-based-renderer";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { CornerLeftDown } from "lucide-react";
+import { CornerLeftDown, ChevronRight, ArrowRight } from "lucide-react";
 import WhyUsCards from "@/components/why-us-cards";
 import DashFooter from "@/components/dashboard-footer";
-import { ChevronRight } from "lucide-react";
-import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 export default function Home() {

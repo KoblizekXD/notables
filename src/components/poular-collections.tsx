@@ -1,14 +1,17 @@
-import { type Collection, type User, getPopularCollections } from "@/db/fetch";
+import type { Collection, User } from "@/db/fetch";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
 const CollectionCard = ({
   props,
-}: { props: { collection: Collection; user: User } }) => {
+}: {
+  props: { collection: Collection; user: User };
+}) => {
   return (
     <Link
       href={`/collection/${props.collection.id}`}
-      className="flex flex-row justify-between items-center p-2 w-full h-full rounded-lg group select-none hover:bg-input/40">
+      className="flex flex-row justify-between items-center p-2 w-full h-full rounded-lg group select-none hover:bg-input/40"
+    >
       <div className="pl-2">
         <h1 className="text-lg font-semibold ">{props.collection.name}</h1>
 
@@ -36,7 +39,8 @@ const CollectionCard = ({
 };
 
 const PopularCollections = async () => {
-  const popular = await getPopularCollections(4);
+  // const popular = await getPopularCollections(4);
+  const popular: any = [];
   return (
     <div className="grid grid-rows-4 w-full h-full gap-1">
       {popular.map((i, index) => (
