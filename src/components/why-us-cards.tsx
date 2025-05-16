@@ -6,7 +6,7 @@ export default function WhyUsCards() {
     
     return (
         <div className="flex lg:flex-row flex-col md:px-6 max-w-[90%] gap-4 md:gap-6 lg:gap-12">
-            <div className="flex flex-col justify-between px-4 py-6 border-2 border-solid border-[#d7d7da] dark:border-zinc-800 rounded-xl gap-6 md:max-w-84 min-w-[18.79rem]">
+            <div className="flex flex-col justify-between px-4 py-6 border-2 border-solid border-[#d7d7da] dark:border-zinc-800 bg-white dark:bg-[#0c0a09] rounded-xl gap-6 md:max-w-84 min-w-[18.79rem]">
                 <h1 className="text-4xl font-bold pl-2">1.</h1>
                 <h4 className="flex justify-center items-center text-xl font-bold">Create your own notes and games</h4>
                 <div className="border-2 border-solid border-gray-200 dark:border-zinc-800 rounded-xl flex flex-col justify-between items-center shadow-md min-w-[265px] min-h-[202px]">
@@ -41,7 +41,7 @@ export default function WhyUsCards() {
                     </div>
                 </div>
             </div>
-            <div className="flex flex-col justify-between px-4 py-6 border-2 border-solid border-[#d7d7da] dark:border-zinc-800 rounded-xl md:max-w-84 gap-6 min-w-[18.79rem]">
+            <div className="flex flex-col justify-between px-4 py-6 border-2 border-solid border-[#d7d7da] dark:border-zinc-800 bg-white dark:bg-[#0c0a09] rounded-xl md:max-w-84 gap-6 min-w-[18.79rem]">
                 <div className="flex flex-col gap-6">
                     <h1 className="text-4xl font-bold pl-2">2.</h1>
                     <h4 className="flex justify-center items-center text-xl font-bold">Share knowledge with others</h4>
@@ -63,7 +63,7 @@ export default function WhyUsCards() {
                     </div>
                 </div>
             </div>
-            <div className="flex flex-col justify-between px-4 py-6 border-2 border-solid border-[#d7d7da] dark:border-zinc-800 rounded-xl gap-6 md:max-w-84 min-w-[18.79rem]">
+            <div className="flex flex-col justify-between px-4 py-6 border-2 border-solid border-[#d7d7da] dark:border-zinc-800  bg-white dark:bg-[#0c0a09] rounded-xl gap-6 md:max-w-84 min-w-[18.79rem]">
                 <h1 className="text-4xl font-bold pl-2">3.</h1>
                 <h4 className="flex justify-center items-center text-xl font-bold">Play games and learn efficiently</h4>
                 <div className="border-2 border-solid border-gray-200 dark:border-zinc-800 rounded-xl items-center shadow-md min-w-[265px] min-h-[202px] justify-center grid grid-cols-2 grid-rows-2 gap-2 p-1 px-2">

@@ -9,8 +9,8 @@ import Link from "next/link";
 export default function DashFooter() {
     return (
         <div className="w-full flex bg-[#e5e7eb] dark:bg-[#141414] items-center justify-center p-2 pt-6 pl-5">
-            <footer className="relative flex flex-col md:px-12 px-2 w-[88%] items-center justify-between gap-6 mb-5">
-                <div className="w-full flex items-center justify-between">
+            <footer className="relative flex flex-col md:px-12 px-2 w-[88%] items-center justify-between md:gap-6 gap-10 mb-5">
+                <div className="w-full flex flex-col md:flex-row md:gap-0 gap-8 items-center justify-between">
                     <div className="flex flex-col items-start gap-2">
                         <b>Subscribe to our newsletter!</b>
                         <div className="flex items-center gap-2">
