@@ -13,7 +13,7 @@ export default function SegmentPreviewer() {
     <motion.div
       initial={{ opacity: 0, y: "calc(var(--spacing) * -2)" }}
       animate={{ opacity: 1, y: "calc(var(--spacing) * 2)" }}
-      className="flex mt-6 w-1/2 flex-col mb-36 gap-y-2">
+      className="flex mt-6 w-full px-4 md:w-1/2 flex-col mb-36 gap-y-2">
       {segments.map((segment, index) =>
         segment.type === "text" ? (
           <div key={index}>

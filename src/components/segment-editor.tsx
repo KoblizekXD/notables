@@ -177,6 +177,7 @@ function CodeSegment({ segment, onUpdate }: GenericSegmentProps) {
             },
           });
         }}
+        defaultValue={code}
       />
       <Select
         defaultValue={language}
@@ -543,18 +544,18 @@ export default function SegmentEditor() {
   };
 
   return (
-    <div className="flex mt-6 items-center flex-col mb-36 gap-y-2">
+    <div className="flex mt-6 p-2 items-center flex-col mb-36 gap-y-2">
       {segments.length > 0 ? (
         segments.map((segment, index) => (
           <motion.div
             key={`${segment.type}-${index}`}
             initial={{ opacity: 0, y: "calc(var(--spacing) * -2)" }}
             animate={{ opacity: 1, y: "calc(var(--spacing) * 2)" }}
-            className="border w-[620px] p-4 rounded-md flex flex-col gap-y-2"
+            className="border w-full xl:w-[620px] p-4 rounded-md flex flex-col gap-y-2"
           >
             <TooltipWrapper content="Segment options">
               <Button
-                className="absolute -translate-x-full -left-2 top-4"
+                className="absolute hidden xl:flex items-center justify-center -translate-x-full -left-2 top-4"
                 variant="outline"
                 size="icon"
               >
