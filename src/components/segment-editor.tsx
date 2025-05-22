@@ -1,7 +1,7 @@
 "use client";
 
-import "katex/dist/katex.min.css";
 import { motion } from "framer-motion";
+import "katex/dist/katex.min.css";
 import { Minus, Plus, Settings2 } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
@@ -152,8 +152,13 @@ const items = Object.keys(bundledLanguages).map((lang) => (
 
 function CodeSegment({ segment, onUpdate }: GenericSegmentProps) {
   const sgmnt = segment as Extract<NoteSegment, { type: "code" }>;
-  const [code, setCode] = useState<string>("");
-  const [language, setLanguage] = useState<BundledLanguage>("typescript");
+  const [code, setCode] = useState<string>(sgmnt.content.code);
+  const [heading, setHeading] = useState<string | undefined>(
+    sgmnt.content.heading
+  );
+  const [language, setLanguage] = useState<BundledLanguage>(
+    sgmnt.content.language as BundledLanguage
+  );
 
   return (
     <div className="flex relative flex-col gap-y-2">
@@ -174,7 +179,7 @@ function CodeSegment({ segment, onUpdate }: GenericSegmentProps) {
         }}
       />
       <Select
-        value={language}
+        defaultValue={language}
         onValueChange={(x) => {
           setLanguage(x as BundledLanguage);
           onUpdate({
@@ -185,7 +190,8 @@ function CodeSegment({ segment, onUpdate }: GenericSegmentProps) {
             },
           });
         }}
-        name="language">
+        name="language"
+      >
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="Language" />
         </SelectTrigger>
@@ -193,33 +199,57 @@ function CodeSegment({ segment, onUpdate }: GenericSegmentProps) {
       </Select>
       <h1 className="font-semibold text-muted-foreground">Preview:</h1>
       <CodeBlock lang={language}>{code}</CodeBlock>
+      <Input
+        placeholder="Title"
+        onChange={(e) => {
+          setHeading(e.currentTarget.value);
+          onUpdate({
+            ...sgmnt,
+            content: {
+              ...sgmnt.content,
+              heading: e.currentTarget.value,
+            },
+          });
+        }}
+        defaultValue={heading}
+      />
     </div>
   );
 }
 
 function QuoteSegment({ segment, onUpdate }: GenericSegmentProps) {
   const sgmnt = segment as Extract<NoteSegment, { type: "quote" }>;
+  const [quote, setQuote] = useState<string>(sgmnt.content.text);
+  const [author, setAuthor] = useState<string | undefined>(
+    sgmnt.content.author
+  );
+  const [source, setSource] = useState<string | undefined>(
+    sgmnt.content.source
+  );
 
   return (
     <div className="flex relative flex-col gap-y-2">
-      <div
-        contentEditable
-        className="resize-none border-l-3 outline-none pl-2 py-0.5 italic rounded-none border-y-0 border-r-0 border-border"
+      <Textarea
+        className="resize-none border-l-3 focus-visible:outline-hidden dark:bg-transparent focus-visible:ring-0 pl-2 py-0.5 italic rounded-none border-y-0 border-r-0 border-border focus-visible:border-border"
+        defaultValue={quote}
         onInput={(e) => {
           e.currentTarget.style.height = "auto";
           e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`;
+          setQuote(e.currentTarget.value || "");
           onUpdate({
             ...sgmnt,
             content: {
               ...sgmnt.content,
-              text: e.currentTarget.textContent || "",
+              text: e.currentTarget.value || "",
             },
           });
         }}
       />
       <Input
         placeholder="Author"
+        defaultValue={author}
         onChange={(e) => {
+          setAuthor(e.currentTarget.value);
           onUpdate({
             ...sgmnt,
             content: {
@@ -231,7 +261,9 @@ function QuoteSegment({ segment, onUpdate }: GenericSegmentProps) {
       />
       <Input
         placeholder="Source"
+        defaultValue={source}
         onChange={(e) => {
+          setSource(e.currentTarget.value);
           onUpdate({
             ...sgmnt,
             content: {
@@ -276,7 +308,8 @@ function ListSegment({ segment, onUpdate }: GenericSegmentProps) {
         <Button
           variant="outline"
           className="mr-auto"
-          onClick={() => setItems((prev) => [...prev, ""])}>
+          onClick={() => setItems((prev) => [...prev, ""])}
+        >
           Add Item
         </Button>
         <Button
@@ -291,7 +324,8 @@ function ListSegment({ segment, onUpdate }: GenericSegmentProps) {
                 items: items.slice(0, -1),
               },
             });
-          }}>
+          }}
+        >
           Remove
         </Button>
       </div>
@@ -375,7 +409,8 @@ function TableSegment({ segment, onUpdate }: GenericSegmentProps) {
                 });
               }}
               variant={"outline"}
-              size={"icon"}>
+              size={"icon"}
+            >
               <Plus />
             </Button>
           </TooltipWrapper>
@@ -394,7 +429,8 @@ function TableSegment({ segment, onUpdate }: GenericSegmentProps) {
                 });
               }}
               variant={"destructive"}
-              size={"icon"}>
+              size={"icon"}
+            >
               <Minus />
             </Button>
           </TooltipWrapper>
@@ -414,7 +450,8 @@ function TableSegment({ segment, onUpdate }: GenericSegmentProps) {
               });
             }}
             variant={"outline"}
-            size={"icon"}>
+            size={"icon"}
+          >
             <Plus />
           </Button>
         </TooltipWrapper>
@@ -431,7 +468,8 @@ function TableSegment({ segment, onUpdate }: GenericSegmentProps) {
               });
             }}
             variant={"destructive"}
-            size={"icon"}>
+            size={"icon"}
+          >
             <Minus />
           </Button>
         </TooltipWrapper>
@@ -512,12 +550,14 @@ export default function SegmentEditor() {
             key={`${segment.type}-${index}`}
             initial={{ opacity: 0, y: "calc(var(--spacing) * -2)" }}
             animate={{ opacity: 1, y: "calc(var(--spacing) * 2)" }}
-            className="border w-[620px] p-4 rounded-md flex flex-col gap-y-2">
+            className="border w-[620px] p-4 rounded-md flex flex-col gap-y-2"
+          >
             <TooltipWrapper content="Segment options">
               <Button
                 className="absolute -translate-x-full -left-2 top-4"
                 variant="outline"
-                size="icon">
+                size="icon"
+              >
                 <Settings2 />
               </Button>
             </TooltipWrapper>
@@ -589,7 +629,8 @@ export default function SegmentEditor() {
             return [...prev, newSegment];
           });
         }}
-        className="flex w-full mt-4 gap-x-2">
+        className="flex w-full mt-4 gap-x-2"
+      >
         <Select name="type">
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Segment type" />

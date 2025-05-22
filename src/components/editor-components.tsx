@@ -9,7 +9,7 @@ import {
   Settings,
   Underline,
 } from "lucide-react";
-import { useTransition } from "react";
+import { useEffect, useTransition } from "react";
 import { toast } from "sonner";
 import { useEditorContext } from "./editor-context";
 import SegmentEditor from "./segment-editor";
@@ -52,6 +52,23 @@ export function FloatingEditorMenu() {
 export function BottomFloatingButtons() {
   const context = useEditorContext();
   const [isPending, startTransition] = useTransition();
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "s" && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault();
+        startTransition(async () => {
+          const result = await saveNote(context.id, context.segments);
+          if (result === undefined) toast.success("Saved");
+          else toast.error(result);
+        });
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    }
+  }, [context.id, context.segments]);
 
   return (
     <div className="ml-auto flex items-center gap-x-2">
