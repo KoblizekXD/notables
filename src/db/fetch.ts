@@ -1,12 +1,8 @@
 "use server";
 
 import { collection, note, user } from "@/db/schema";
-import { type InferSelectModel, desc, eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import db from "./db";
-
-type Note = InferSelectModel<typeof note>;
-type Collection = InferSelectModel<typeof collection>;
-type User = InferSelectModel<typeof user>;
 
 const getMostLikedNotes = async (userId: typeof user.id, limit: number) =>
   await db
@@ -28,4 +24,3 @@ const getUser = async (userId: typeof user.id) =>
   await db.select().from(user).where(eq(user.id, userId)).limit(1);
 
 export { getMostLikedNotes, getPopularCollections };
-export type { Note, Collection, User };

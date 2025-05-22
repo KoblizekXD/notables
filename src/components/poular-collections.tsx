@@ -1,4 +1,4 @@
-import type { Collection, User } from "@/db/fetch";
+import type { Collection, User } from "@/db/types";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
@@ -38,7 +38,7 @@ const CollectionCard = ({
   );
 };
 
-const PopularCollections = async () => {
+const  PopularCollections = async () => {
   // const popular = await getPopularCollections(4);
   const popular: any = [];
   return (
