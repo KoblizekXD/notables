@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import YearBadge from "@/components/year-badge";
 import UserDescription from "@/components/user-description";
+import UserNote from "@/components/user-note";
 import { UserPen } from "lucide-react";
 import Link from "next/link";
 
@@ -33,6 +34,12 @@ export default async function Profile() {
           </div>
         </div>
         <UserDescription />
+      </div>
+      <div className="px-15">
+        <h1 className="text-2xl font-bold">My notes:</h1>
+        <div>
+          <UserNote title="Munich agreement" description="lol popisek" createdAt={session?.user.createdAt} />
+        </div>
       </div>
     </div>
   )
