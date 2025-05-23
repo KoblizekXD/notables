@@ -106,12 +106,14 @@ function ImageSegment() {
 
 function MathSegment({ segment, onUpdate }: GenericSegmentProps) {
   const sgmnt = segment as Extract<NoteSegment, { type: "formula" }>;
-  const [formula, setFormula] = useState<string>("");
+  const [formula, setFormula] = useState<string>(sgmnt.content.formula);
+  const [description, setDescription] = useState<string | undefined>(sgmnt.content.description);
 
   return (
     <div className="flex relative flex-col gap-y-2">
       <Textarea
         placeholder="Math expression"
+        defaultValue={formula}
         className="resize-none"
         onInput={(e) => {
           setFormula(e.currentTarget.value || "");
@@ -130,7 +132,9 @@ function MathSegment({ segment, onUpdate }: GenericSegmentProps) {
       <BlockMath math={formula} />
       <Input
         placeholder="Description"
+        defaultValue={description}
         onChange={(e) => {
+          setDescription(e.currentTarget.value);
           onUpdate({
             ...sgmnt,
             content: {

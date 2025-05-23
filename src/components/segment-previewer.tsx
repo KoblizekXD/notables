@@ -34,7 +34,7 @@ export default function SegmentPreviewer() {
         ) : segment.type === "formula" ? (
           <div key={index}>
             <BlockMath math={segment.content.formula} />
-            <p className="text-center">{segment.content.description}</p>
+            <p className="text-center text-muted-foreground mt-2">{segment.content.description}</p>
           </div>
         ) : segment.type === "list" ? (
           <div key={index}>
