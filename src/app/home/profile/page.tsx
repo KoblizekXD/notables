@@ -2,7 +2,8 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import YearBadge from "@/components/year-badge";
-import { Upload, UserPen } from "lucide-react";
+import UserDescription from "@/components/user-description";
+import { UserPen } from "lucide-react";
 import Link from "next/link";
 
 export default async function Profile() {
@@ -27,18 +28,11 @@ export default async function Profile() {
               <p className="text-sm text-gray-500">{session?.user.email}</p>
             </div>
           </div>
-          <div className="flex items-center justify-between gap-2 px-4 py-5">
+          <div className="w-full flex items-center justify-center">
             <YearBadge />
-            <p className="flex flex-col items-center">Account created <br /> {session?.user?.createdAt.toString().substring(4, 15)}</p>
           </div>
         </div>
-        <div className="flex flex-col gap-y-6 items-center justify-center border-2 border-dashed border-red-500 rounded-lg w-full h-full text-red-700 dark:text-red-500">
-          <p>User has no description</p>
-          <Link href={`/upload/${session?.user.id}`} className="p-2 border-2 border-solid border-transparent hover:border-accent transition-colors duration-150 rounded-xl" >
-            <Upload className="text-red-700 dark:text-red-500" />
-          </Link>
-
-        </div>
+        <UserDescription />
       </div>
     </div>
   )
