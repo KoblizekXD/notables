@@ -81,7 +81,7 @@ export default function NavMenu(props: props) {
     <NavigationMenu className={`${props.className}`}>
       <NavigationMenuList>
         <NavigationMenuItem>
-          <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>
+          <NavigationMenuTrigger className="bg-[#ffffff8e] dark:bg-transparent">Getting started</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
               <ListItem href="#" title="Introduction">
@@ -100,7 +100,7 @@ export default function NavMenu(props: props) {
           </NavigationMenuContent>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <NavigationMenuTrigger>Popular</NavigationMenuTrigger>
+          <NavigationMenuTrigger className="bg-[#ffffff8e] dark:bg-transparent">Popular</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
               {components.map((component) => (
@@ -114,12 +114,12 @@ export default function NavMenu(props: props) {
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
-        <NavigationMenuItem>
+        <NavigationMenuItem className="bg-[#ffffff8e] dark:bg-transparent">
           <Link
             href="/docs"
             suppressHydrationWarning
             passHref
-            className={navigationMenuTriggerStyle()}>
+            className={cn(navigationMenuTriggerStyle(), "bg-[#ffffff33] dark:bg-transparent")}>
             Discussion
           </Link>
         </NavigationMenuItem>

@@ -142,11 +142,6 @@
   --sidebar-ring: hsl(217.2 91.2% 59.8%);
 }
 
-@media (max-width: 648px) {
-  .navMenu {
-    opacity: 0;
-  }
-}
 
 .ArrowGap {
   gap: 15rem;
