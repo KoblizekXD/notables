@@ -17,8 +17,8 @@ import { auth } from "@/lib/auth";
 import { Cloud, ExternalLink, LogOut, Settings } from "lucide-react";
 import { headers } from "next/headers";
 import Link from "next/link";
-import { DropdownThemeToggle } from "../../components/ui/dropdown-theme-toggle";
 import { getSignedAvatarUrl } from "@/lib/minio";
+import { DropdownThemeToggle } from "@/components/ui/dropdown-theme-toggle";
 
 export default async function DashboardLayout({
   children,
@@ -39,7 +39,13 @@ export default async function DashboardLayout({
               <DropdownMenuTrigger asChild>
                 <div className="w-fit h-fit hover:bg-muted rounded-sm transition-all p-0.5 cursor-pointer">
                   <Avatar>
-                    <AvatarImage src={await getSignedAvatarUrl(session?.user.image || "") as string} />
+                    <AvatarImage
+                      src={
+                        (await getSignedAvatarUrl(
+                          session?.user.image || ""
+                        )) as string
+                      }
+                    />
                     <AvatarFallback>
                       {session?.user.name.substring(0, 2)}
                     </AvatarFallback>

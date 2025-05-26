@@ -1,4 +1,4 @@
-import { getPopularCollections } from "@/db/action";
+import { getPopularCollections } from "@/lib/actions";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 

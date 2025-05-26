@@ -1,5 +1,5 @@
-import { getMostLikedNotes } from "@/db/action";
 import type { user } from "@/db/schema";
+import { getMostLikedNotes } from "@/lib/actions";
 import { auth } from "@/lib/auth";
 import { Plus } from "lucide-react";
 import { headers } from "next/headers";
