@@ -19,6 +19,7 @@ import { headers } from "next/headers";
 import Link from "next/link";
 import { DropdownThemeToggle } from "../../components/ui/dropdown-theme-toggle";
 import { getSignedAvatarUrl } from "@/lib/minio";
+import SidebarToggle from "@/components/sidebar-trigger";
 
 export default async function DashboardLayout({
   children,
@@ -94,6 +95,7 @@ export default async function DashboardLayout({
         </div>
         <div className="flex flex-1">
           <SidebarExec userPath={`/profiles/${session?.user.id}`}>
+            <SidebarToggle />
             {children}
           </SidebarExec>
         </div>
