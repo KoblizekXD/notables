@@ -1,11 +1,11 @@
+import DashFooter from "@/components/dashboard-footer";
 import NavMenu from "@/components/landing-page-nav";
 import LinkingButton from "@/components/linking-button";
 import Logo from "@/components/logo";
 import ThemeBasedRenderer from "@/components/theme-based-renderer";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { CornerLeftDown, ChevronRight, ArrowRight } from "lucide-react";
 import WhyUsCards from "@/components/why-us-cards";
-import DashFooter from "@/components/dashboard-footer";
+import { ArrowRight, ChevronRight, CornerLeftDown } from "lucide-react";
 import Link from "next/link";
 
 export default function Home() {
@@ -26,8 +26,7 @@ export default function Home() {
           <div className="flex flex-col items-center gap-2">
             <Link
               href={"/docs/api"}
-              className="rounded-full shadow-xl max-w-[7.6rem] text-xs text-accent bg-accent-foreground hover:opacity-85 duration-250 ease-in-out gap-x-1 border py-1 px-2 flex items-center"
-            >
+              className="rounded-full shadow-xl max-w-[7.6rem] text-xs text-accent bg-accent-foreground hover:opacity-85 duration-250 ease-in-out gap-x-1 border py-1 px-2 flex items-center">
               🚀 Use our API
               <ChevronRight size={12} strokeWidth={3} />
             </Link>
@@ -45,8 +44,10 @@ export default function Home() {
               <ArrowRight />
               <span>Get started</span>
             </LinkingButton>
-            <Link className=" underline font-semibold hover:text-[#a086e7] duration-250 text-accent-foreground"
-              href={"/#more"} passHref>
+            <Link
+              className=" underline font-semibold hover:text-[#a086e7] duration-250 text-accent-foreground"
+              href={"/#more"}
+              passHref>
               Learn more
             </Link>
           </div>
