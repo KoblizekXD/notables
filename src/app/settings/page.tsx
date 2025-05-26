@@ -1,4 +1,11 @@
-import { AvatarUploader } from "@/components/avatar-uploader";
+import SidebarSettings from "@/components/sidebar-setting";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { UserSettings } from "@/components/user-settings";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 
@@ -6,8 +13,37 @@ export default async function Settings() {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) return null;
   return (
-    <div>
-      <AvatarUploader userId={session.user.id} />
+    <div className="m-3 sm:m-4 md:m-5">
+      <div className="flex flex-col w-full lg:max-w-4xl xl:max-w-7xl mx-auto gap-8">
+        <Accordion type="single" collapsible className="space-y-4">
+          <AccordionItem value="avatar-upload">
+            <AccordionTrigger className="text-lg font-semibold text-muted-foreground">
+              Upload and Crop Avatar
+            </AccordionTrigger>
+            <AccordionContent className="space-y-4">
+              <p className="text-sm text-muted-foreground">
+                Choose a profile picture and adjust the crop area to your
+                liking. A square aspect ratio is recommended for optimal
+                display.
+              </p>
+              <UserSettings userId={session.user.id} />
+            </AccordionContent>
+          </AccordionItem>
+
+          <AccordionItem value="sidebar-settings">
+            <AccordionTrigger className="text-lg font-semibold text-muted-foreground">
+              Sidebar Settings
+            </AccordionTrigger>
+            <AccordionContent className="space-y-4">
+              <p className="text-sm text-muted-foreground">
+                Customize the position and type of the sidebar to suit your
+                preferences.
+              </p>
+              <SidebarSettings />
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </div>
     </div>
   );
 }

@@ -43,7 +43,7 @@ export const getPopularCollections = async (limit: number) =>
     .orderBy(desc(collection.likes))
     .limit(limit);
 
-export const getUser = async (userId: typeof user.id) =>
+export const getUser = async (userId: string) =>
   await db.select().from(user).where(eq(user.id, userId)).limit(1);
 
 export async function uploadAvatar(
@@ -70,3 +70,21 @@ export async function uploadAvatar(
   }
 }
 
+export const updateEmail = async (userId: string, email: string) => {
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return false;
+  try {
+    await db.update(user).set({ email }).where(eq(user.id, userId));
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+export const updateUsername = async (userId: string, name: string) => {
+  try {
+    await db.update(user).set({ name }).where(eq(user.id, userId));
+    return true;
+  } catch {
+    return false;
+  }
+};
