@@ -82,7 +82,7 @@ export function UserSettings({ userId }: { userId: string }) {
   };
 
   return (
-    <div className="flex flex-row gap-2">
+    <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-2">
       <Dialog>
         <DialogTrigger asChild>
           <Button>Upload Profile Picture</Button>

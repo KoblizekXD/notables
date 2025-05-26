@@ -18,7 +18,7 @@ export default async function Settings() {
         <Accordion type="single" collapsible className="space-y-4">
           <AccordionItem value="avatar-upload">
             <AccordionTrigger className="text-lg font-semibold text-muted-foreground">
-              Upload and Crop Avatar
+              User settings
             </AccordionTrigger>
             <AccordionContent className="space-y-4">
               <p className="text-sm text-muted-foreground">

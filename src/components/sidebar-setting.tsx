@@ -17,7 +17,7 @@ export default function SidebarSettings() {
   } = useSidebar();
 
   return (
-    <div className="flex gap-2 flex-col md:flex-row justify-center md:justify-start items-center">
+    <div className="grid gap-2 sm:grid-cols-2">
       <div>
         <label
           htmlFor="sidebar-position"
@@ -29,7 +29,7 @@ export default function SidebarSettings() {
           defaultValue={sidebarPosition}
           onValueChange={toggleSidebarPosition}
         >
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-full">
             <SelectValue id="sidebar-position" placeholder="Select Position" />
           </SelectTrigger>
           <SelectContent>
@@ -46,7 +46,7 @@ export default function SidebarSettings() {
           Sidebar Type
         </label>
         <Select defaultValue={sidebarType} onValueChange={toggleSidebarType}>
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-full">
             <SelectValue id="sidebar-type" placeholder="Select Type" />
           </SelectTrigger>
           <SelectContent>
