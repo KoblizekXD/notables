@@ -20,7 +20,13 @@ const getPopularCollections = async (limit: number) =>
     .orderBy(desc(collection.likes))
     .limit(limit);
 
-const getUser = async (userId: typeof user.id) =>
-  await db.select().from(user).where(eq(user.id, userId)).limit(1);
+const getUser = async (userId: string) =>
+  (await db.select().from(user).where(eq(user.id, userId)).limit(1))[0];
 
-export { getMostLikedNotes, getPopularCollections };
+const getUserNotes = async (userId: string, limit: number) => {
+  return await db.select({ title: note.title, createdAt: note.createdAt, entityType: note.entityType, id: note.id }).from(note).where(eq(note.userId, userId))
+    .limit(limit)
+    .orderBy(desc(note.updatedAt));
+}
+
+export { getMostLikedNotes, getPopularCollections, getUserNotes, getUser };

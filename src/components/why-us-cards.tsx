@@ -2,8 +2,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { ArrowUpRight, TextCursor, Check, CalendarDays } from "lucide-react";
 
 export default function WhyUsCards() {
-    
-    
+
+
     return (
         <div className="flex lg:flex-row flex-col md:px-6 max-w-[90%] gap-4 md:gap-6 lg:gap-12">
             <div className="flex flex-col justify-between px-4 py-6 border-2 border-solid border-[#d7d7da] dark:border-zinc-800 bg-white dark:bg-[#0c0a09] rounded-xl gap-6 max-w-84 min-w-[18.79rem] shadow-[3px_2px_20px_rgba(0,0,0,0.1)]">
@@ -65,18 +65,18 @@ export default function WhyUsCards() {
             </div>
             <div className="flex flex-col justify-between px-4 py-6 border-2 border-solid border-[#d7d7da] dark:border-zinc-800  bg-white dark:bg-[#0c0a09] rounded-xl gap-6 max-w-84 min-w-[18.79rem] shadow-[3px_2px_20px_rgba(0,0,0,0.1)]">
                 <h1 className="text-4xl font-bold pl-2">3.</h1>
-                <h4 className="flex justify-center items-center text-xl font-bold">Play games and learn efficiently</h4>
+                <h4 className="flex justify-baseline items-center text-xl font-bold">Play games and learn efficiently</h4>
                 <div className="border-2 border-solid border-gray-200 dark:border-zinc-800 rounded-xl items-center shadow-xs min-w-[265px] min-h-[202px] justify-center grid grid-cols-2 grid-rows-2 gap-2 p-1 px-2">
-                    <div className="bg-[#c5c5c5] dark:bg-[#a0a0a0] font-semibold h-20  items-center justify-center flex border-2 border-solid border-[#777777] rounded-xl">
+                    <div className="bg-[#c5c5c5] dark:bg-[#a0a0a0] font-semibold h-20  items-center justify-center flex border-2 border-solid border-[#777777] rounded-lg">
                         Albert Einstein
                     </div>
-                    <div className="bg-[#5DEE83] h-20  items-center justify-center flex border-2 border-solid border-[#47a660] rounded-xl">
+                    <div className="bg-[#5DEE83] h-20  items-center justify-center flex border-2 border-solid border-[#47a660] rounded-lg">
                         <Check color="#47a660" size={30} />
                     </div>
-                    <div className="bg-[#5DEE83] h-20  items-center justify-center flex border-2 border-solid border-[#47a660] rounded-xl">
+                    <div className="bg-[#5DEE83] h-20  items-center justify-center flex border-2 border-solid border-[#47a660] rounded-lg">
                         <Check color="#47a660" size={30} />
                     </div>
-                    <div className="bg-[#c5c5c5] dark:bg-[#a0a0a0] font-semibold h-20  items-center justify-center flex border-2 border-solid border-[#777777] rounded-xl">
+                    <div className="bg-[#c5c5c5] dark:bg-[#a0a0a0] font-semibold h-20  items-center justify-center flex border-2 border-solid border-[#777777] rounded-lg">
                         Albert Einstein
                     </div>
                 </div>
