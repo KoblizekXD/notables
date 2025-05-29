@@ -13,11 +13,11 @@ export default function SegmentPreviewer() {
     <motion.div
       initial={{ opacity: 0, y: "calc(var(--spacing) * -2)" }}
       animate={{ opacity: 1, y: "calc(var(--spacing) * 2)" }}
-      className="flex mt-6 flex-col mb-36 gap-y-2">
+      className="flex mt-6 w-full px-4 md:w-1/2 flex-col mb-36 gap-y-2">
       {segments.map((segment, index) =>
         segment.type === "text" ? (
           <div key={index}>
-            <h1>{segment.content.heading}</h1>
+            <h1 className="font-semibold text-3xl">{segment.content.heading}</h1>
             <p>{segment.content.text}</p>
           </div>
         ) : segment.type === "image" ? (
@@ -29,12 +29,12 @@ export default function SegmentPreviewer() {
             <CodeBlock lang={segment.content.language as BundledLanguage}>
               {segment.content.code}
             </CodeBlock>
-            <p className="text-center">{segment.content.heading}</p>
+            <p className="text-center text-muted-foreground mt-2">{segment.content.heading}</p>
           </div>
         ) : segment.type === "formula" ? (
           <div key={index}>
             <BlockMath math={segment.content.formula} />
-            <p className="text-center">{segment.content.description}</p>
+            <p className="text-center text-muted-foreground mt-2">{segment.content.description}</p>
           </div>
         ) : segment.type === "list" ? (
           <div key={index}>
@@ -60,7 +60,26 @@ export default function SegmentPreviewer() {
             </blockquote>
           </div>
         ) : segment.type === "table" ? (
-          <div key={index} />
+          <div key={index}>
+            <table className="w-full border-collapse border text-center border-border">
+              <thead>
+                <tr>
+                  {segment.content.headers?.map((header, index) => (
+                    <th key={index}>{header}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="[&_tr]:border-y [&_td]:border-x [&_tr]:border-border">
+                {segment.content.rows.map((row, rowIndex) => (
+                  <tr key={rowIndex}>
+                    {row.map((cell, cellIndex) => (
+                      <td key={cellIndex}>{cell}</td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         ) : (
           "Invalid segment type"
         ),
