@@ -1,7 +1,19 @@
-import Link from "next/link";
+"use client";
+
 import { Upload } from "lucide-react";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import {
+    Drawer,
+    DrawerClose,
+    DrawerContent,
+    DrawerDescription,
+    DrawerFooter,
+    DrawerHeader,
+    DrawerTitle,
+    DrawerTrigger,
+} from "@/components/ui/drawer"
+
 
 export default async function UserDescription() {
     const session = await auth.api.getSession({ headers: await headers() });
@@ -20,9 +32,19 @@ export default async function UserDescription() {
             ) : (
                 <div className="flex opacity-[0.8] flex-col gap-y-6 items-center justify-center border-2 border-dashed border-red-500 rounded-lg w-full h-full text-red-900 dark:text-red-500">
                     <p className="text-xl">User has no description</p>
-                    <Link href={`./upload/${session?.user.id}`} className="p-2 border-2 border-solid border-transparent hover:border-accent transition-colors duration-150 rounded-xl" >
-                        <Upload className="text-red-800 dark:text-red-500" />
-                    </Link>
+                    <Drawer>
+                        <DrawerTrigger asChild>
+                            <button type="button" className="p-2 border-2 border-solid border-transparent hover:border-accent transition-colors duration-150 rounded-xl" >
+                                <Upload className="text-red-800 dark:text-red-500" />
+                            </button>
+                        </DrawerTrigger>
+                        <DrawerContent>
+                            <div className="flex flex-col w-full max-w-md">
+
+                            </div>
+                        </DrawerContent>
+                    </Drawer>
+
                 </div>
             )}
         </div >
