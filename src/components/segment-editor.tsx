@@ -12,6 +12,16 @@ import { CodeBlock } from "./codeblock";
 import { useEditorContext } from "./editor-context";
 import TooltipWrapper from "./tooltip-wrapper";
 import { Button } from "./ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "./ui/dialog";
 import { Input } from "./ui/input";
 import {
   Select,
@@ -107,7 +117,9 @@ function ImageSegment() {
 function MathSegment({ segment, onUpdate }: GenericSegmentProps) {
   const sgmnt = segment as Extract<NoteSegment, { type: "formula" }>;
   const [formula, setFormula] = useState<string>(sgmnt.content.formula);
-  const [description, setDescription] = useState<string | undefined>(sgmnt.content.description);
+  const [description, setDescription] = useState<string | undefined>(
+    sgmnt.content.description
+  );
 
   return (
     <div className="flex relative flex-col gap-y-2">
@@ -558,13 +570,39 @@ export default function SegmentEditor() {
             className="border w-full xl:w-[620px] p-4 rounded-md flex flex-col gap-y-2"
           >
             <TooltipWrapper content="Segment options">
-              <Button
-                className="absolute hidden xl:flex items-center justify-center -translate-x-full -left-2 top-4"
-                variant="outline"
-                size="icon"
-              >
-                <Settings2 />
-              </Button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button
+                    className="absolute hidden xl:flex items-center justify-center -translate-x-full -left-2 top-4"
+                    variant="outline"
+                    size="icon"
+                  >
+                    <Settings2 />
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Dialog options</DialogTitle>
+                    <DialogDescription>
+                      Options for this segment.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter>
+                    <DialogClose asChild>
+                      <Button onClick={() => {
+                        setSegments((prev) => {
+                          const newSegments = [...prev];
+                          newSegments.splice(index, 1);
+                          return newSegments;
+                        });
+                        toast.success("Segment removed successfully");
+                      }} variant="destructive">
+                        Remove
+                      </Button>
+                    </DialogClose>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </TooltipWrapper>
             {segment.type === "text" ? (
               <TextSegment

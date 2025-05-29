@@ -64,7 +64,8 @@ export default async function EditorPage({
   return (
     <EditorContextProvider
       id={id}
-      existingSegments={JSON.parse(result.content)}>
+      existingSegments={JSON.parse(result.content)}
+    >
       <div className="min-h-screen items-center w-full flex flex-col">
         <div className="sticky backdrop-blur-md top-0 w-full z-50 grid grid-cols-3">
           <div className="w-fit font-[Poppins] pl-1 pt-1 flex flex-col">

@@ -9,7 +9,7 @@ import {
   Settings,
   Underline,
 } from "lucide-react";
-import { useEffect, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";
 import { useEditorContext } from "./editor-context";
 import SegmentEditor from "./segment-editor";
@@ -101,5 +101,23 @@ export function BottomFloatingButtons() {
 export function DecisionBasedSegmentRenderer() {
   const context = useEditorContext();
 
-  return context.mode === "edit" ? <SegmentEditor /> : <SegmentPreviewer />;
+  const [isPending, startTransition] = useTransition();
+  const [mode, setMode] = useState(context.mode);
+
+  useEffect(() => {
+    startTransition(() => {
+      setMode(context.mode);
+    });
+  }, [context.mode]);
+
+  if (isPending) {
+    return (
+      <div className="flex flex-col items-center justify-center mt-6">
+        <h1 className="text-xl">Reloading editor...</h1>
+        <LoaderCircle className="animate-spin" />
+      </div>
+    );
+  }
+
+  return mode === "edit" ? <SegmentEditor /> : <SegmentPreviewer />;
 }
