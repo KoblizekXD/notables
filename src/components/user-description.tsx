@@ -1,52 +1,73 @@
-"use client";
-
 import { Upload } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import {
-    Drawer,
-    DrawerClose,
-    DrawerContent,
-    DrawerDescription,
-    DrawerFooter,
-    DrawerHeader,
-    DrawerTitle,
-    DrawerTrigger,
-} from "@/components/ui/drawer"
 
 
 export default async function UserDescription() {
-    const session = await auth.api.getSession({ headers: await headers() });
+  const session = await auth.api.getSession({ headers: await headers() });
 
-    // const descriptionText = session?.user.description || null;    
-    const descriptionText = "lol Lorem ipsum dolor sit, amet consectetur adipisicing elit. Illo eum libero, quos, sapiente cum, a voluptatibus corrupti minus fugit doloribus veniam aperiam excepturi aut! Voluptate fuga ab facere illo asperiores. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quia eveniet accusantium voluptatum ullam possimus illum, deleniti placeat in nostrum tenetur non dolore recusandae dignissimos culpa cum odit voluptates soluta corrupti! Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam quo doloribus rem officia doloremque. Esse explicabo saepe ratione facilis dolorem nam! Sapiente nam sint maiores corporis minus fugit quas fugiat. Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint expedita vel eveniet vero ratione velit, pariatur, veritatis explicabo consequuntur dignissimos, eos nisi similique voluptate assumenda labore fugiat hic saepe aliquam. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reprehenderit consequatur enim porro at ea maiores quisquam voluptatem consequuntur recusandae vel, cum dolorum nobis natus doloremque voluptatum libero voluptatibus mollitia neque!";
+  // const descriptionText = session?.user.description || null;    
+  const descriptionText = null; // For testing purposes, set to null to see the fallback UI
+  // const descriptionText = "lol Lorem ipsum dolor sit, amet consectetur adipisicing elit. Illo eum libero, quos, sapiente cum, a voluptatibus corrupti minus fugit doloribus veniam aperiam excepturi aut! Voluptate fuga ab facere illo asperiores. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quia eveniet accusantium voluptatum ullam possimus illum, deleniti placeat in nostrum tenetur non dolore recusandae dignissimos culpa cum odit voluptates soluta corrupti! Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam quo doloribus rem officia doloremque. Esse explicabo saepe ratione facilis dolorem nam! Sapiente nam sint maiores corporis minus fugit quas fugiat. Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint expedita vel eveniet vero ratione velit, pariatur, veritatis explicabo consequuntur dignissimos, eos nisi similique voluptate assumenda labore fugiat hic saepe aliquam. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reprehenderit consequatur enim porro at ea maiores quisquam voluptatem consequuntur recusandae vel, cum dolorum nobis natus doloremque voluptatum libero voluptatibus mollitia neque!";
 
-    return (
-        <div className="flex flex-col gap-y-6 items-center justify-center rounded-xl w-full h-full ">
-            {descriptionText !== null ? (
-                <div className="rounded-sm overflow-hidden">
-                    <p className="max-h-95 scrollbar-custom rounded-xl overflow-y-auto p-2 py-3 border-2 border-solid border-transparent hover:border-accent transition-colors duration-150 text-gray-500 dark:text-gray-400">
-                        {descriptionText}
-                    </p>
+  return (
+    <div className="flex flex-col gap-y-6 items-center justify-center rounded-xl w-full h-full max-w-2xl">
+      {descriptionText !== null ? (
+        <div className="rounded-sm overflow-hidden">
+          <p className="max-h-95 scrollbar-custom rounded-xl overflow-y-auto p-2 py-3 border-2 border-solid border-transparent hover:border-accent transition-colors duration-150 text-gray-500 dark:text-gray-400">
+            {descriptionText}
+          </p>
+        </div>
+      ) : (
+        <div className="flex opacity-[0.8] flex-col gap-y-6 py-4 items-center justify-center border-2 border-dashed border-red-500 rounded-lg w-full h-full text-red-600">
+          <p className="text-xl">User has no description</p>
+          <Drawer>
+            <div className="flex mx-auto items-center justify-center w-full">
+              <DrawerTrigger asChild>
+                <Button variant="ghost" className="border-2 border-solid border-transparent hover:border-accent transition-colors duration-150 rounded-xl bg-transparent w-14 h-12 p-0.5" >
+                  <Upload className="text-red-600 !w-6 !h-6" />
+                </Button>
+              </DrawerTrigger>
+              <DrawerContent>
+                <div className="flex w-full lg:max-w-3xl p-2">
+                  <div className="flex border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg w-full h-full">
+
+                  </div>
+                  <div className="flex flex-col">
+                    <DrawerHeader>
+                      <DrawerTitle>Upload description</DrawerTitle>
+                      <DrawerDescription>Only markdown files are supported</DrawerDescription>
+                    </DrawerHeader>
+                    <DrawerFooter className="flex gap-y-1.5">
+                      <Button
+                        variant="outline"
+                        className="border-green-200 dark:border-green-700 hover:bg-green-950"
+                      >
+                        Submit
+                      </Button>
+                      <DrawerClose asChild>
+                        <Button variant="destructive">Close</Button>
+                      </DrawerClose>
+                    </DrawerFooter>
+                  </div>
                 </div>
-            ) : (
-                <div className="flex opacity-[0.8] flex-col gap-y-6 items-center justify-center border-2 border-dashed border-red-500 rounded-lg w-full h-full text-red-900 dark:text-red-500">
-                    <p className="text-xl">User has no description</p>
-                    <Drawer>
-                        <DrawerTrigger asChild>
-                            <button type="button" className="p-2 border-2 border-solid border-transparent hover:border-accent transition-colors duration-150 rounded-xl" >
-                                <Upload className="text-red-800 dark:text-red-500" />
-                            </button>
-                        </DrawerTrigger>
-                        <DrawerContent>
-                            <div className="flex flex-col w-full max-w-md">
+              </DrawerContent>
+            </div>
+          </Drawer>
 
-                            </div>
-                        </DrawerContent>
-                    </Drawer>
-
-                </div>
-            )}
-        </div >
-    );
+        </div>
+      )}
+    </div >
+  );
 }
