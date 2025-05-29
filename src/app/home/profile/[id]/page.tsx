@@ -16,8 +16,8 @@ export default async function Profile({
 
   return (
     <div className="flex flex-col items-center justify-center w-full h-full gap-y-6">
-      <div className="flex items-center max-md:flex-col md:flex-row justify-between w-full gap-x-16 px-15 py-6">
-        <div className="flex flex-row md:flex-col justify-between items-start py-3">
+      <div className="flex items-center max-lg:flex-col lg:flex-row justify-between w-full gap-x-16 px-15 md:py-6 py-2">
+        <div className="flex flex-col max-lg:md:flex-row justify-between min-lg:items-start items-center py-3">
           <div className="flex justify-between items-center gap-x-4">
             <Avatar className="size-18 border">
               <AvatarImage src={user.image || ""} />
