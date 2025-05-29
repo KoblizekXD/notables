@@ -1,4 +1,5 @@
-import type { Collection, User } from "@/db/fetch";
+import { getPopularCollections } from "@/db/fetch";
+import type { Collection, User } from "@/db/types";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
@@ -39,8 +40,7 @@ const CollectionCard = ({
 };
 
 const PopularCollections = async () => {
-  // const popular = await getPopularCollections(4);
-  const popular: any = [];
+  const popular = await getPopularCollections(4);
   return (
     <div className="grid grid-rows-4 w-full h-full gap-1">
       {popular.map((i, index) => (
