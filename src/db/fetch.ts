@@ -30,7 +30,7 @@ const getUserNotes = async (userId: string, limit: number) => {
 }
 
 // const updateUserDescription = async (userId: string, description: string) => {
-//   await db.update(user).set({ description: user. }).where(eq(user.id, userId));
+//   await db.update(user).set({ description: user.description }).where(eq(user.id, userId));
 // }
 
 export { getMostLikedNotes, getPopularCollections, getUserNotes, getUser };
