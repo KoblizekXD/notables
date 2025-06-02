@@ -1,15 +1,15 @@
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogClose,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import { updateEmail } from "@/lib/actions";
+import { useState } from "react";
 
 export function ChangeEmailDialog({
   userId,

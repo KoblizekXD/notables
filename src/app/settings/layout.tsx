@@ -3,6 +3,7 @@ import DynamicCommand from "@/components/dynamic-command";
 import Logo from "@/components/logo";
 import SidebarExec from "@/components/sidebar-inset";
 import { SidebarStateToggler } from "@/components/sidebar-state-toggler";
+import SidebarToggle from "@/components/sidebar-trigger";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -12,14 +13,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { DropdownThemeToggle } from "@/components/ui/dropdown-theme-toggle";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { auth } from "@/lib/auth";
+import { getSignedAvatarUrl } from "@/lib/minio";
 import { Cloud, ExternalLink, LogOut, Settings } from "lucide-react";
 import { headers } from "next/headers";
 import Link from "next/link";
-import { getSignedAvatarUrl } from "@/lib/minio";
-import { DropdownThemeToggle } from "@/components/ui/dropdown-theme-toggle";
-import SidebarToggle from "@/components/sidebar-trigger";
 
 export default async function DashboardLayout({
   children,
@@ -43,7 +43,7 @@ export default async function DashboardLayout({
                     <AvatarImage
                       src={
                         (await getSignedAvatarUrl(
-                          session?.user.image || ""
+                          session?.user.image || "",
                         )) as string
                       }
                     />
@@ -70,8 +70,7 @@ export default async function DashboardLayout({
                       </span>
                       <Link
                         className="text-xs font-normal underline gap-x-1 flex items-center"
-                        href={`/profiles/${session?.user.id}`}
-                      >
+                        href={`/profiles/${session?.user.id}`}>
                         My profile
                         <ExternalLink size={14} />
                       </Link>
@@ -101,7 +100,7 @@ export default async function DashboardLayout({
         </div>
         <div className="flex flex-1">
           <SidebarExec userPath={`/profiles/${session?.user.id}`}>
-          <SidebarToggle />
+            <SidebarToggle />
             {children}
           </SidebarExec>
         </div>

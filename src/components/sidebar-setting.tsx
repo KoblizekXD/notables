@@ -21,14 +21,12 @@ export default function SidebarSettings() {
       <div>
         <label
           htmlFor="sidebar-position"
-          className="block text-sm font-medium text-muted-foreground"
-        >
+          className="block text-sm font-medium text-muted-foreground">
           Sidebar Position
         </label>
         <Select
           defaultValue={sidebarPosition}
-          onValueChange={toggleSidebarPosition}
-        >
+          onValueChange={toggleSidebarPosition}>
           <SelectTrigger className="w-full">
             <SelectValue id="sidebar-position" placeholder="Select Position" />
           </SelectTrigger>
@@ -41,8 +39,7 @@ export default function SidebarSettings() {
       <div>
         <label
           htmlFor="sidebar-type"
-          className="block text-sm font-medium text-muted-foreground"
-        >
+          className="block text-sm font-medium text-muted-foreground">
           Sidebar Type
         </label>
         <Select defaultValue={sidebarType} onValueChange={toggleSidebarType}>

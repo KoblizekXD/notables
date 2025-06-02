@@ -16,7 +16,7 @@ export async function createBucketIfNotExists(bucketName: string) {
 }
 
 export async function getSignedAvatarUrl(
-  objectName: string
+  objectName: string,
 ): Promise<string | null> {
   if (!objectName) return null;
   const bucketName = process.env.S3_BUCKET as string;
@@ -25,7 +25,7 @@ export async function getSignedAvatarUrl(
     const url = await s3Client.presignedGetObject(
       bucketName,
       objectName,
-      expirySeconds
+      expirySeconds,
     );
     return url;
   } catch (err) {

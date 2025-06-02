@@ -1,7 +1,5 @@
 "use client";
 
-import { uploadAvatar } from "@/lib/actions";
-import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -10,15 +8,17 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import Cropper from "react-easy-crop";
 import { Slider } from "@/components/ui/slider";
+import { uploadAvatar } from "@/lib/actions";
+import { useRef, useState } from "react";
+import Cropper, { type Area } from "react-easy-crop";
 
 import { ChangeEmailDialog } from "./change-email-dialog";
 import { ChangeUsernameDialog } from "./change-username-dialog";
 
 async function getCroppedImg(
   imageSrc: string,
-  crop: { width: number; height: number; x: number; y: number }
+  crop: { width: number; height: number; x: number; y: number },
 ): Promise<Blob> {
   const image = new Image();
   image.src = imageSrc;
@@ -30,7 +30,7 @@ async function getCroppedImg(
   const canvas = document.createElement("canvas");
   canvas.width = crop.width;
   canvas.height = crop.height;
-  const ctx = canvas.getContext("2d")!;
+  const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
   ctx.drawImage(
     image,
     crop.x,
@@ -40,7 +40,7 @@ async function getCroppedImg(
     0,
     0,
     crop.width,
-    crop.height
+    crop.height,
   );
 
   return new Promise((resolve) => {
@@ -55,7 +55,7 @@ export function UserSettings({ userId }: { userId: string }) {
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState<any>(null);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
   const [uploadSuccess, setUploadSuccess] = useState<boolean | null>(null);
 
   const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -67,7 +67,7 @@ export function UserSettings({ userId }: { userId: string }) {
     }
   };
 
-  const onCropComplete = (_: any, croppedAreaPixels: any) => {
+  const onCropComplete = (_: Area, croppedAreaPixels: Area) => {
     setCroppedAreaPixels(croppedAreaPixels);
   };
 
@@ -92,12 +92,12 @@ export function UserSettings({ userId }: { userId: string }) {
             <DialogTitle>Upload and Crop Avatar</DialogTitle>
           </DialogHeader>
 
+          {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
           <div
             className="group w-full mt-4 border-3 border-dashed rounded-lg hover:border-black/20 transition-colors duration-200 aspect-square relative bg-muted overflow-hidden select-none"
             onClick={() => {
               if (imageSrc === null) inputRef.current?.click();
-            }}
-          >
+            }}>
             {imageSrc ? (
               <Cropper
                 image={imageSrc}

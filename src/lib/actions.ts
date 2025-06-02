@@ -3,12 +3,12 @@
 import type { NoteSegment } from "@/components/segment-editor";
 import db from "@/db/db";
 import { collection, note, user } from "@/db/schema";
+import { createBucketIfNotExists, s3Client } from "@/lib/minio";
 import { desc, eq } from "drizzle-orm";
-import { s3Client, createBucketIfNotExists } from "@/lib/minio";
 
 export async function saveNote(
   id: string,
-  segments: NoteSegment[]
+  segments: NoteSegment[],
 ): Promise<string | undefined> {
   const result = await db
     .update(note)
@@ -24,7 +24,7 @@ export async function saveNote(
 
 export const getMostLikedNotes = async (
   userId: typeof user.id,
-  limit: number
+  limit: number,
 ) =>
   await db
     .select()
@@ -45,7 +45,7 @@ export const getUser = async (userId: string) =>
   await db.select().from(user).where(eq(user.id, userId)).limit(1);
 
 export async function uploadAvatar(
-  formData: FormData
+  formData: FormData,
 ): Promise<{ success: boolean }> {
   const file = formData.get("file") as File;
   const userId = formData.get("userId") as string;

@@ -1,17 +1,17 @@
 "use client";
 
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogClose,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { updateUsername } from "@/lib/actions";
+import { useState } from "react";
 
 export function ChangeUsernameDialog({ userId }: { userId: string }) {
   const [username, setUsername] = useState("");

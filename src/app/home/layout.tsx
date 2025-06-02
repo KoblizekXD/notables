@@ -3,6 +3,7 @@ import DynamicCommand from "@/components/dynamic-command";
 import Logo from "@/components/logo";
 import SidebarExec from "@/components/sidebar-inset";
 import { SidebarStateToggler } from "@/components/sidebar-state-toggler";
+import SidebarToggle from "@/components/sidebar-trigger";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -14,12 +15,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { auth } from "@/lib/auth";
+import { getSignedAvatarUrl } from "@/lib/minio";
 import { Cloud, ExternalLink, LogOut, Settings } from "lucide-react";
 import { headers } from "next/headers";
 import Link from "next/link";
 import { DropdownThemeToggle } from "../../components/ui/dropdown-theme-toggle";
-import { getSignedAvatarUrl } from "@/lib/minio";
-import SidebarToggle from "@/components/sidebar-trigger";
 
 export default async function DashboardLayout({
   children,
@@ -40,7 +40,13 @@ export default async function DashboardLayout({
               <DropdownMenuTrigger asChild>
                 <div className="w-fit h-fit hover:bg-muted rounded-sm transition-all p-0.5 cursor-pointer">
                   <Avatar>
-                    <AvatarImage src={await getSignedAvatarUrl(session?.user.image || "") as string} />
+                    <AvatarImage
+                      src={
+                        (await getSignedAvatarUrl(
+                          session?.user.image || "",
+                        )) as string
+                      }
+                    />
                     <AvatarFallback>
                       {session?.user.name.substring(0, 2)}
                     </AvatarFallback>
@@ -64,8 +70,7 @@ export default async function DashboardLayout({
                       </span>
                       <Link
                         className="text-xs font-normal underline gap-x-1 flex items-center"
-                        href={`/profiles/${session?.user.id}`}
-                      >
+                        href={`/profiles/${session?.user.id}`}>
                         My profile
                         <ExternalLink size={14} />
                       </Link>

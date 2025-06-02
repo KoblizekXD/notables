@@ -17,7 +17,9 @@ export default function SegmentPreviewer() {
       {segments.map((segment, index) =>
         segment.type === "text" ? (
           <div key={index}>
-            <h1 className="font-semibold text-3xl">{segment.content.heading}</h1>
+            <h1 className="font-semibold text-3xl">
+              {segment.content.heading}
+            </h1>
             <p>{segment.content.text}</p>
           </div>
         ) : segment.type === "image" ? (
@@ -29,12 +31,16 @@ export default function SegmentPreviewer() {
             <CodeBlock lang={segment.content.language as BundledLanguage}>
               {segment.content.code}
             </CodeBlock>
-            <p className="text-center text-muted-foreground mt-2">{segment.content.heading}</p>
+            <p className="text-center text-muted-foreground mt-2">
+              {segment.content.heading}
+            </p>
           </div>
         ) : segment.type === "formula" ? (
           <div key={index}>
             <BlockMath math={segment.content.formula} />
-            <p className="text-center text-muted-foreground mt-2">{segment.content.description}</p>
+            <p className="text-center text-muted-foreground mt-2">
+              {segment.content.description}
+            </p>
           </div>
         ) : segment.type === "list" ? (
           <div key={index}>

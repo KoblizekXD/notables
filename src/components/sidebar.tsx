@@ -81,16 +81,14 @@ export default function Sidebar({ userPath }: { userPath: string }) {
       className="top-[var(--header-height)] bg-sidebar-primary"
       collapsible={sidebarType === "icon" ? "icon" : "offcanvas"}
       onMouseOver={() => sidebarType === "icon" && setOpen(true)}
-      onMouseLeave={() => sidebarType === "icon" && setOpen(false)}
-    >
+      onMouseLeave={() => sidebarType === "icon" && setOpen(false)}>
       <SidebarHeader className="overflow-x-auto md:overflow-visible ">
         <SidebarGroupLabel className="-ml-2 -mb-2">Platform</SidebarGroupLabel>
         <SidebarGroupAction
           title="Toggle navbar"
           onClick={toggleSidebar}
           className="hover:bg-muted transition-colors"
-          hidden={sidebarType === "icon"}
-        >
+          hidden={sidebarType === "icon"}>
           {sidebarPosition === "left" ? (
             <PanelLeftClose />
           ) : (
@@ -103,8 +101,7 @@ export default function Sidebar({ userPath }: { userPath: string }) {
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton
                   className="hover:bg-muted transition-colors"
-                  asChild
-                >
+                  asChild>
                   <Link href={item.url}>
                     <item.icon />
                     <span>{item.title}</span>
@@ -133,8 +130,7 @@ export default function Sidebar({ userPath }: { userPath: string }) {
                       asChild
                       key={item.title}
                       className="hover:bg-muted transition-colors"
-                      hidden={!open}
-                    >
+                      hidden={!open}>
                       <Link href={item.url}>
                         <p>{item.title}</p>
                       </Link>
@@ -151,8 +147,7 @@ export default function Sidebar({ userPath }: { userPath: string }) {
         <SidebarGroupContent>
           <SidebarMenuButton
             className="hover:bg-muted transition-colors"
-            asChild
-          >
+            asChild>
             <Link href="/settings">
               <Settings />
               <span>Settings</span>
