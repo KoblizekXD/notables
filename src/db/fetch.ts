@@ -29,8 +29,8 @@ const getUserNotes = async (userId: string, limit: number) => {
     .orderBy(desc(note.updatedAt));
 }
 
-// const updateUserDescription = async (userId: string, description: string) => {
-//   await db.update(user).set({ description: user.description }).where(eq(user.id, userId));
-// }
+const updateUserDescription = async (userId: string, description: string) => {
+  await db.update(user).set({ description: user.description }).where(eq(user.id, userId));
+}
 
 export { getMostLikedNotes, getPopularCollections, getUserNotes, getUser };
