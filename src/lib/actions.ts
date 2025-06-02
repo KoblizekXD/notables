@@ -5,8 +5,6 @@ import db from "@/db/db";
 import { collection, note, user } from "@/db/schema";
 import { desc, eq } from "drizzle-orm";
 import { s3Client, createBucketIfNotExists } from "@/lib/minio";
-import { randomUUID } from "crypto";
-import { revalidatePath } from "next/cache";
 
 export async function saveNote(
   id: string,
@@ -58,7 +56,7 @@ export async function uploadAvatar(
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
   try {
-    const bucketName = process.env.S3_BUCKET!;
+    const bucketName = process.env.S3_BUCKET as string;
     await createBucketIfNotExists(bucketName);
     await s3Client.putObject(bucketName, objectName, buffer);
     const imagePath = `${objectName}`;
