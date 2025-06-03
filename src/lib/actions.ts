@@ -8,7 +8,7 @@ import { desc, eq } from "drizzle-orm";
 
 export async function saveNote(
   id: string,
-  segments: NoteSegment[],
+  segments: NoteSegment[]
 ): Promise<string | undefined> {
   const result = await db
     .update(note)
@@ -24,7 +24,7 @@ export async function saveNote(
 
 export const getMostLikedNotes = async (
   userId: typeof user.id,
-  limit: number,
+  limit: number
 ) =>
   await db
     .select()
@@ -45,7 +45,7 @@ export const getUser = async (userId: string) =>
   await db.select().from(user).where(eq(user.id, userId)).limit(1);
 
 export async function uploadAvatar(
-  formData: FormData,
+  formData: FormData
 ): Promise<{ success: boolean }> {
   const file = formData.get("file") as File;
   const userId = formData.get("userId") as string;
@@ -65,6 +65,27 @@ export async function uploadAvatar(
   } catch (error) {
     console.error("Upload failed:", error);
     return { success: false };
+  }
+}
+
+export async function uploadImage(
+  file: File,
+  name: string
+): Promise<{ success: boolean; imagePath?: string; error?: string }> {
+  if (!file) return { success: false, error: "No file provided" };
+  const ext = file.name.split(".").findLast(() => true);
+  if (!ext) return { success: false, error: "Invalid file extension" };
+  const objectName = `images/${name}.${ext}`;
+  const arrayBuffer = await file.arrayBuffer();
+  const buffer = Buffer.from(arrayBuffer);
+  try {
+    const bucketName = "images";
+    await createBucketIfNotExists(bucketName);
+    await s3Client.putObject(bucketName, objectName, buffer);
+    return { success: true, imagePath: objectName };
+  } catch (error) {
+    console.error("Upload failed:", error);
+    return { success: false, error: "Upload failed" };
   }
 }
 
