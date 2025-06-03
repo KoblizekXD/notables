@@ -11,7 +11,9 @@ export default async function SuspenseProfile({ notes }: { notes: Promise<{ id: 
             </div>
         }>
             {(await notes).map((note) => (
-                <UserNote key={note.id} title={note.title as string} entity={capitalizeFirstLetter(note.entityType)} createdAt={note.createdAt} rating={0} tags={["history", "ancient rome"]} />
+                // <UserNote key={note.id} title={note.title as string} entity={capitalizeFirstLetter(note.entityType)} createdAt={note.createdAt} rating={note.rating} tags={note.tags} />
+
+                <UserNote key={note.id} title={note.title as string} entity={capitalizeFirstLetter(note.entityType)} createdAt={note.createdAt} />
             ))}
         </Suspense>
     );

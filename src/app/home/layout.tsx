@@ -18,6 +18,7 @@ import { Cloud, ExternalLink, LogOut, Settings } from "lucide-react";
 import { headers } from "next/headers";
 import Link from "next/link";
 import { DropdownThemeToggle } from "./dropdown-theme-toggle";
+import DashboardFooter from "@/components/dashboard-footer";
 
 export default async function DashboardLayout({
   children,
@@ -90,10 +91,13 @@ export default async function DashboardLayout({
         </div>
         <div className="flex flex-1">
           <SidebarExec userPath={`./profile/${session?.user.id}`}>
-            {children}
+            {children}<DashboardFooter />
           </SidebarExec>
+          
         </div>
+        
       </SidebarProvider>
+      
     </div>
   );
 }

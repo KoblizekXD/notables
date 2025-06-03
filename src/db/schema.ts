@@ -132,9 +132,6 @@ export const note = pgTable("note", {
     .defaultNow()
     .$onUpdateFn(() => new Date())
     .notNull(),
-  rating: integer("rating")
-    .notNull()
-    .default(0),
   updatedAt: timestamp("updated_at")
     .defaultNow()
     .$onUpdateFn(() => new Date())

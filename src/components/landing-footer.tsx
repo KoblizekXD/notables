@@ -50,7 +50,7 @@ export default function DashFooter() {
                     </div>
                 </div>
                 <div className="w-full flex items-center justify-center">
-                    <p className="flex flex-row gap-3 items-center text-lg">
+                    <p className="flex flex-row gap-2 items-center font-semibold text-poppins  text-lg">
                         <Copyright size={20} />
                         Notables
                     </p>

@@ -185,5 +185,8 @@
   border: 2px solid #ded2ff;
   transition: 0.2s ease-in-out;
   cursor: pointer;
+}
 
+.text-poppins {
+  font-family: 'Poppins', sans-serif;
 }
