@@ -19,14 +19,14 @@ export default async function UserDescription() {
   const session = await auth.api.getSession({ headers: await headers() });
 
   // const descriptionText = session?.user.description || null;    
-  const descriptionText = null; // For testing purposes, set to null to see the fallback UI
-  // const descriptionText = "lol Lorem ipsum dolor sit, amet consectetur adipisicing elit. Illo eum libero, quos, sapiente cum, a voluptatibus corrupti minus fugit doloribus veniam aperiam excepturi aut! Voluptate fuga ab facere illo asperiores. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quia eveniet accusantium voluptatum ullam possimus illum, deleniti placeat in nostrum tenetur non dolore recusandae dignissimos culpa cum odit voluptates soluta corrupti! Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam quo doloribus rem officia doloremque. Esse explicabo saepe ratione facilis dolorem nam! Sapiente nam sint maiores corporis minus fugit quas fugiat. Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint expedita vel eveniet vero ratione velit, pariatur, veritatis explicabo consequuntur dignissimos, eos nisi similique voluptate assumenda labore fugiat hic saepe aliquam. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reprehenderit consequatur enim porro at ea maiores quisquam voluptatem consequuntur recusandae vel, cum dolorum nobis natus doloremque voluptatum libero voluptatibus mollitia neque!";
+  // const descriptionText = null; // For testing purposes, set to null to see the fallback UI
+  const descriptionText = "lol Lorem ipsum dolor sit, amet consectetur adipisicing elit. Illo eum libero, quos, sapiente cum, a voluptatibus corrupti minus fugit doloribus veniam aperiam excepturi aut! Voluptate fuga ab facere illo asperiores. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quia eveniet accusantium voluptatum ullam possimus illum, deleniti placeat in nostrum tenetur non dolore recusandae dignissimos culpa cum odit voluptates soluta corrupti! Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam quo doloribus rem officia doloremque. Esse explicabo saepe ratione facilis dolorem nam! Sapiente nam sint maiores corporis minus fugit quas fugiat. Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint expedita vel eveniet vero ratione velit, pariatur, veritatis explicabo consequuntur dignissimos, eos nisi similique voluptate assumenda labore fugiat hic saepe aliquam. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reprehenderit consequatur enim porro at ea maiores quisquam voluptatem consequuntur recusandae vel, cum dolorum nobis natus doloremque voluptatum libero voluptatibus mollitia neque!";
 
   return (
     <div className="flex flex-col gap-y-6 items-center justify-center rounded-xl w-full h-full max-w-2xl">
       {descriptionText !== null ? (
-        <div className="rounded-sm overflow-hidden">
-          <p className="max-h-95 scrollbar-custom rounded-xl overflow-y-auto p-2 py-3 border-2 border-solid border-transparent hover:border-accent transition-colors duration-150 text-gray-500 dark:text-gray-400">
+        <div className="rounded-md overflow-hidden border-2 border-solid border-transparent hover:border-accent transition-colors duration-150">
+          <p className="scrollbar-custom mr-0.5 max-h-95 rounded-xl overflow-y-auto p-2 py-1.5 text-gray-500 dark:text-gray-400">
             {descriptionText}
           </p>
         </div>

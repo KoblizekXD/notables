@@ -5,7 +5,7 @@ import ThemeBasedRenderer from "@/components/theme-based-renderer";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { CornerLeftDown, ChevronRight, ArrowRight } from "lucide-react";
 import WhyUsCards from "@/components/why-us-cards";
-import DashFooter from "@/components/dashboard-footer";
+import DashFooter from "@/components/landing-footer";
 import Link from "next/link";
 
 export default function Home() {
