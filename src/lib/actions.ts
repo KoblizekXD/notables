@@ -2,13 +2,13 @@
 
 import type { NoteSegment } from "@/components/segment-editor";
 import db from "@/db/db";
-import { collection, note, user } from "@/db/schema";
+import { author, collection, note, tag, taggedEntity, user } from "@/db/schema";
 import { createBucketIfNotExists, s3Client } from "@/lib/minio";
-import { desc, eq } from "drizzle-orm";
+import { type InferSelectModel, and, desc, eq } from "drizzle-orm";
 
 export async function saveNote(
   id: string,
-  segments: NoteSegment[],
+  segments: NoteSegment[]
 ): Promise<string | undefined> {
   const result = await db
     .update(note)
@@ -24,7 +24,7 @@ export async function saveNote(
 
 export const getMostLikedNotes = async (
   userId: typeof user.id,
-  limit: number,
+  limit: number
 ) =>
   await db
     .select()
@@ -45,7 +45,7 @@ export const getUser = async (userId: string) =>
   await db.select().from(user).where(eq(user.id, userId)).limit(1);
 
 export async function uploadAvatar(
-  formData: FormData,
+  formData: FormData
 ): Promise<{ success: boolean }> {
   const file = formData.get("file") as File;
   const userId = formData.get("userId") as string;
@@ -85,4 +85,29 @@ export const updateUsername = async (userId: string, name: string) => {
   } catch {
     return false;
   }
+};
+
+export const getAuthor = async (
+  authorId: string
+): Promise<InferSelectModel<typeof author> | undefined> => {
+  const res = await db
+    .select()
+    .from(author)
+    .where(eq(author.id, authorId))
+    .innerJoin(taggedEntity, eq(tag.id, taggedEntity.tagId))
+    .limit(1);
+  if (res.length === 0) return undefined;
+  return res[0];
+};
+
+export const getAuthorsNotes = async (
+  authorId: string,
+  limit: number
+): Promise<InferSelectModel<typeof note>[]> => {
+  return await db
+    .select()
+    .from(note)
+    .where(and(eq(note.entityId, authorId), eq(note.entityType, "author")))
+    .orderBy(desc(note.updatedAt))
+    .limit(limit);
 };
