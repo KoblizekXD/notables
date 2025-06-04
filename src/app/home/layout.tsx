@@ -91,8 +91,10 @@ export default async function DashboardLayout({
         </div>
         <div className="flex flex-1">
           <SidebarExec userPath={`./profile/${session?.user.id}`}>
-            {children}
-            <DashboardFooter />
+            <div className="flex flex-col justify-between">
+              {children}
+              <DashboardFooter />
+            </div>
           </SidebarExec>
         </div>
       </SidebarProvider>

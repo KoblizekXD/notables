@@ -1,8 +1,8 @@
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import YearBadge from "@/components/year-badge";
 import UserDescription from "@/components/user-description";
-import { UserPen } from "lucide-react";
-import Link from "next/link";
+// import { UserPen } from "lucide-react";
+// import Link from "next/link";
 import { getUser, getUserNotes } from "@/db/fetch";
 import SuspenseProfile from "./suspence";
 import DashboardFooter from "@/components/dashboard-footer";
@@ -28,9 +28,11 @@ export default async function Profile({
               <div className="flex flex-col items-start justify-between">
                 <div className="flex items-center justify-baseline gap-x-2">
                   <h1 className="text-2xl font-bold">{user.name}</h1>
+                  {/* 
                   <Link href={`/account/${user.id}`} className="p-2 border-2 border-solid border-transparent hover:border-accent transition-colors duration-150 rounded-xl" >
                     <UserPen />
                   </Link>
+                  */}
                 </div>
                 <p className="text-sm text-gray-500">{user.email}</p>
               </div>
