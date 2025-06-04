@@ -27,6 +27,7 @@ export const session = pgTable("session", {
   createdAt: timestamp("created_at").notNull(),
   updatedAt: timestamp("updated_at").notNull(),
   ipAddress: text("ip_address"),
+  description: text("description"),
   userAgent: text("user_agent"),
   userId: text("user_id")
     .notNull()

@@ -14,13 +14,13 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 
 export default async function UserDescription() {
-  function handleDescUpdate() {}
+  function handleDescUpdate() { }
 
   const session = await auth.api.getSession({ headers: await headers() });
 
-  // const descriptionText = session?.user.description || null;    
+  const descriptionText = session?.user.description || null;
   // const descriptionText = null; // For testing purposes, set to null to see the fallback UI
-  const descriptionText = "lol Lorem ipsum dolor sit, amet consectetur adipisicing elit. Illo eum libero, quos, sapiente cum, a voluptatibus corrupti minus fugit doloribus veniam aperiam excepturi aut! Voluptate fuga ab facere illo asperiores. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quia eveniet accusantium voluptatum ullam possimus illum, deleniti placeat in nostrum tenetur non dolore recusandae dignissimos culpa cum odit voluptates soluta corrupti! Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam quo doloribus rem officia doloremque. Esse explicabo saepe ratione facilis dolorem nam! Sapiente nam sint maiores corporis minus fugit quas fugiat. Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint expedita vel eveniet vero ratione velit, pariatur, veritatis explicabo consequuntur dignissimos, eos nisi similique voluptate assumenda labore fugiat hic saepe aliquam. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reprehenderit consequatur enim porro at ea maiores quisquam voluptatem consequuntur recusandae vel, cum dolorum nobis natus doloremque voluptatum libero voluptatibus mollitia neque!";
+  // const descriptionText = "lol Lorem ipsum dolor sit, amet consectetur adipisicing elit. Illo eum libero, quos, sapiente cum, a voluptatibus corrupti minus fugit doloribus veniam aperiam excepturi aut! Voluptate fuga ab facere illo asperiores. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quia eveniet accusantium voluptatum ullam possimus illum, deleniti placeat in nostrum tenetur non dolore recusandae dignissimos culpa cum odit voluptates soluta corrupti! Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam quo doloribus rem officia doloremque. Esse explicabo saepe ratione facilis dolorem nam! Sapiente nam sint maiores corporis minus fugit quas fugiat. Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint expedita vel eveniet vero ratione velit, pariatur, veritatis explicabo consequuntur dignissimos, eos nisi similique voluptate assumenda labore fugiat hic saepe aliquam. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reprehenderit consequatur enim porro at ea maiores quisquam voluptatem consequuntur recusandae vel, cum dolorum nobis natus doloremque voluptatum libero voluptatibus mollitia neque!";
 
   return (
     <div className="flex flex-col gap-y-6 items-center justify-center rounded-xl w-full h-full max-w-2xl">

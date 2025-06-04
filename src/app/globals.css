@@ -176,7 +176,8 @@
 .dark .scrollbar-custom::-webkit-scrollbar-thumb {
   background-color: #6c5d97; 
   border-radius: 9999px;
-  border: 2px solid #a690e8;
+  /* border: 2px solid #a690e8; */
+  border: transparent;
 }
 
 .scrollbar-custom::-webkit-scrollbar-thumb {
