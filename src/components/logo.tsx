@@ -16,7 +16,7 @@ export default function Logo({
       animate={animate ? { opacity: 1, x: "calc(var(--spacing) * 2)" } : {}}
       transition={{ duration: 0.4, ease: "circInOut" }}
       className={cn("absolute left-1 top-3", className)}>
-      <Link href={"/"}>
+      <Link href={"./home"}>
         <ThemeBasedRenderer
           light={
             <Image

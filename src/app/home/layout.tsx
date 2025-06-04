@@ -61,7 +61,7 @@ export default async function DashboardLayout({
                       </span>
                       <Link
                         className="text-xs font-normal underline gap-x-1 flex items-center"
-                        href={`./profile/${session?.user.id}`}>
+                        href={`./home/profile/${session?.user.id}`}>
                         My profile
                         <ExternalLink size={14} />
                       </Link>
@@ -90,11 +90,9 @@ export default async function DashboardLayout({
           </div>
         </div>
         <div className="flex flex-1">
-          <SidebarExec userPath={`./profile/${session?.user.id}`}>
-            <div className="flex flex-col justify-between">
-              {children}
-              <DashboardFooter />
-            </div>
+          <SidebarExec userPath={`./home/profile/${session?.user.id}`} className="flex flex-col justify-between">
+            {children}
+            <DashboardFooter />
           </SidebarExec>
         </div>
       </SidebarProvider>

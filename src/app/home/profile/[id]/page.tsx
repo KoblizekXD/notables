@@ -5,7 +5,6 @@ import UserDescription from "@/components/user-description";
 // import Link from "next/link";
 import { getUser, getUserNotes } from "@/db/fetch";
 import SuspenseProfile from "./suspence";
-import DashboardFooter from "@/components/dashboard-footer";
 
 export default async function Profile({
   params,
@@ -43,14 +42,13 @@ export default async function Profile({
           </div>
           <UserDescription />
         </div>
-        <div className="px-26 w-full flex flex-col gap-y-3 items-start justify-baseline">
+        <div className="px-26 w-full flex flex-col gap-y-3 items-start justify-baseline pb-3 ">
           <h1 className="text-2xl font-bold">My notes:</h1>
           <div className="flex flex-wrap gap-x-2.5 pl-2 ">
             <SuspenseProfile notes={Promise.resolve(notes)} />
           </div>
         </div>
       </div>
-      <DashboardFooter />
     </div>
   )
 }
