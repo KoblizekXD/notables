@@ -43,7 +43,7 @@ export default async function DashboardLayout({
                     <AvatarImage
                       src={
                         (await getSignedAvatarUrl(
-                          session?.user.image || "",
+                          session?.user.image || ""
                         )) as string
                       }
                     />
@@ -70,7 +70,8 @@ export default async function DashboardLayout({
                       </span>
                       <Link
                         className="text-xs font-normal underline gap-x-1 flex items-center"
-                        href={`/home/profile/${session?.user.id}`}>
+                        href={`/home/profile/${session?.user.id}`}
+                      >
                         My profile
                         <ExternalLink size={14} />
                       </Link>
@@ -86,9 +87,11 @@ export default async function DashboardLayout({
                   <Cloud />
                   API
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Settings />
-                  Settings
+                <DropdownMenuItem asChild>
+                  <Link href={"/settings"}>
+                    <Settings />
+                    Settings
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem className="text-red-500">
                   <LogOut />
@@ -101,7 +104,8 @@ export default async function DashboardLayout({
         <div className="flex flex-1">
           <SidebarExec
             userPath={`./home/profile/${session?.user.id}`}
-            className="flex flex-col justify-between">
+            className="flex flex-col justify-between"
+          >
             {children}
             <DashboardFooter />
           </SidebarExec>

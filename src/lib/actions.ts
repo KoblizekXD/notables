@@ -63,7 +63,7 @@ export async function uploadAvatar(
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
   try {
-    const bucketName = process.env.S3_BUCKET as string;
+    const bucketName = "avatars";
     await createBucketIfNotExists(bucketName);
     await s3Client.putObject(bucketName, objectName, buffer);
     const imagePath = `${objectName}`;
