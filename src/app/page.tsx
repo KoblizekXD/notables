@@ -17,9 +17,9 @@ export default function Home() {
             <div className="absolute inset-0 -z-10 h-full w-full bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]" />
           }
         />
-        <Logo />
+        <Logo destination="/" />
         <div className="absolute top-2">
-          <NavMenu className="navMenu transition-opacity duration-150 ease-in-out" />
+          <NavMenu className="md:opacity-100 opacity-0 transition-opacity duration-150 ease-in-out" />
         </div>
         <ThemeToggle className="absolute right-2 top-2" />
         <div className="text-center lg:mt-[30vh] md:mt-[24vh] mt-[18vh] flex gap-y-10 md:gap-y-3 flex-col items-center md:p-4 px-6">

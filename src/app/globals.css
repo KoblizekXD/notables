@@ -142,12 +142,6 @@
   --sidebar-ring: hsl(217.2 91.2% 59.8%);
 }
 
-@media (max-width: 648px) {
-  .navMenu {
-    opacity: 0;
-  }
-}
-
 .ArrowGap {
   gap: 15rem;
 }
@@ -168,4 +162,31 @@
 .shiki code {
   background-color: transparent !important;
   padding: 0 !important;
+}
+
+.scrollbar-custom::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.dark .scrollbar-custom::-webkit-scrollbar-thumb {
+  background-color: #6c5d97;
+  border-radius: 9999px;
+  /* border: 2px solid #a690e8; */
+  border: transparent;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb {
+  background-color: #c3b0fd;
+  border-radius: 9999px;
+  border: 2px solid #ded2ff;
+  transition: 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.text-poppins {
+  font-family: "Poppins", sans-serif;
 }

@@ -16,6 +16,16 @@ export const auth = betterAuth({
       verification,
     },
   }),
+  user: {
+    additionalFields: {
+      description: {
+        type: "string",
+        name: "description",
+        required: false,
+        defaultValue: null,
+      },
+    },
+  },
   onAPIError: {
     throw: true,
     errorURL: "/error",
@@ -42,6 +52,13 @@ export const auth = betterAuth({
       provider: "cloudflare-turnstile",
       secretKey: process.env.CAPTCHA_SECRET_KEY as string,
     }),
+    // user: {
+    //   description: {
+    //     type: "text",
+    //     name: "description",
+    //     required: false,
+    //   },
+    // }
   ],
   emailAndPassword: {
     enabled: true,

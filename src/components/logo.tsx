@@ -8,15 +8,16 @@ import ThemeBasedRenderer from "./theme-based-renderer";
 
 export default function Logo({
   animate = true,
+  destination = "/",
   className,
-}: { animate?: boolean; className?: string }) {
+}: { animate?: boolean; className?: string; destination?: string }) {
   return (
     <motion.div
       initial={animate ? { opacity: 0, x: "calc(var(--spacing) * -2)" } : {}}
       animate={animate ? { opacity: 1, x: "calc(var(--spacing) * 2)" } : {}}
       transition={{ duration: 0.4, ease: "circInOut" }}
       className={cn("absolute left-1 top-3", className)}>
-      <Link href={"/"}>
+      <Link href={destination}>
         <ThemeBasedRenderer
           light={
             <Image
