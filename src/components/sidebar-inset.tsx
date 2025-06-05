@@ -7,7 +7,9 @@ export default function SidebarExec({
   userPath,
   className,
 }: {
-  children: React.ReactNode; userPath: string; className?: string;
+  children: React.ReactNode;
+  userPath: string;
+  className?: string;
 }) {
   const { sidebarPosition } = useSidebar();
   return (

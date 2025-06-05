@@ -23,8 +23,8 @@ export const auth = betterAuth({
         name: "description",
         required: false,
         defaultValue: null,
-      }
-    }
+      },
+    },
   },
   onAPIError: {
     throw: true,

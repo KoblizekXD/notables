@@ -142,7 +142,6 @@
   --sidebar-ring: hsl(217.2 91.2% 59.8%);
 }
 
-
 .ArrowGap {
   gap: 15rem;
 }
@@ -174,14 +173,14 @@
 }
 
 .dark .scrollbar-custom::-webkit-scrollbar-thumb {
-  background-color: #6c5d97; 
+  background-color: #6c5d97;
   border-radius: 9999px;
   /* border: 2px solid #a690e8; */
   border: transparent;
 }
 
 .scrollbar-custom::-webkit-scrollbar-thumb {
-  background-color: #c3b0fd; 
+  background-color: #c3b0fd;
   border-radius: 9999px;
   border: 2px solid #ded2ff;
   transition: 0.2s ease-in-out;
@@ -189,5 +188,5 @@
 }
 
 .text-poppins {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }

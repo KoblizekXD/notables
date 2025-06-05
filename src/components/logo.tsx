@@ -8,9 +8,9 @@ import ThemeBasedRenderer from "./theme-based-renderer";
 
 export default function Logo({
   animate = true,
-  destination,
+  destination = "/",
   className,
-}: { animate?: boolean; className?: string; destination: string }) {
+}: { animate?: boolean; className?: string; destination?: string }) {
   return (
     <motion.div
       initial={animate ? { opacity: 0, x: "calc(var(--spacing) * -2)" } : {}}

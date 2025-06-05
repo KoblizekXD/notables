@@ -1,9 +1,9 @@
 import Commander from "@/components/commander";
+import DashboardFooter from "@/components/dashboard-footer";
 import DynamicCommand from "@/components/dynamic-command";
 import Logo from "@/components/logo";
 import SidebarExec from "@/components/sidebar-inset";
 import { SidebarStateToggler } from "@/components/sidebar-state-toggler";
-import SidebarToggle from "@/components/sidebar-trigger";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -13,14 +13,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { DropdownThemeToggle } from "@/components/ui/dropdown-theme-toggle";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { auth } from "@/lib/auth";
 import { getSignedAvatarUrl } from "@/lib/minio";
 import { Cloud, ExternalLink, LogOut, Settings } from "lucide-react";
 import { headers } from "next/headers";
 import Link from "next/link";
-import { DropdownThemeToggle } from "./dropdown-theme-toggle";
-import DashboardFooter from "@/components/dashboard-footer";
 
 export default async function DashboardLayout({
   children,
@@ -100,7 +99,9 @@ export default async function DashboardLayout({
           </div>
         </div>
         <div className="flex flex-1">
-          <SidebarExec userPath={`./home/profile/${session?.user.id}`} className="flex flex-col justify-between">
+          <SidebarExec
+            userPath={`./home/profile/${session?.user.id}`}
+            className="flex flex-col justify-between">
             {children}
             <DashboardFooter />
           </SidebarExec>

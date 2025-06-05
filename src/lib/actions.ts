@@ -41,7 +41,15 @@ export const getPopularCollections = async (limit: number) =>
     .limit(limit);
 
 export const getUser = async (userId: string) =>
-  await db.select().from(user).where(eq(user.id, userId)).limit(1);
+  (await db.select().from(user).where(eq(user.id, userId)).limit(1))[0];
+
+export const getUserNotes = async (userId: string, limit: number) =>
+  await db
+    .select()
+    .from(note)
+    .where(eq(note.userId, userId))
+    .orderBy(desc(note.updatedAt))
+    .limit(limit);
 
 export async function uploadAvatar(
   formData: FormData,

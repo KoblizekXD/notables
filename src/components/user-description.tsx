@@ -7,7 +7,10 @@ interface UserDescriptionProps {
   description: string | null;
 }
 
-export default async function UserDescription({ user_id, description }: UserDescriptionProps) {
+export default async function UserDescription({
+  user_id,
+  description,
+}: UserDescriptionProps) {
   const session = await auth.api.getSession({ headers: await headers() });
 
   return (
@@ -15,9 +18,9 @@ export default async function UserDescription({ user_id, description }: UserDesc
       {description !== null ? (
         <div className="flex flex-col gap-y-0.5 items-end justify-end">
           {session?.user.id === user_id && (
-            <DescriptionDrawer 
+            <DescriptionDrawer
               user_id={user_id}
-              variant="edit_description" 
+              variant="edit_description"
               descriptionText={description}
             />
           )}
@@ -29,10 +32,12 @@ export default async function UserDescription({ user_id, description }: UserDesc
         </div>
       ) : (
         <div className="flex opacity-[0.8] flex-col gap-y-6 py-4 items-center justify-center border-2 border-dashed border-red-500 rounded-lg w-full h-full">
-          <p className="lg:text-xl md:text-lg text-md text-red-600">User has no description</p>
+          <p className="lg:text-xl md:text-lg text-md text-red-600">
+            User has no description
+          </p>
           <DescriptionDrawer user_id={user_id} variant="normal" />
         </div>
       )}
-    </div >
+    </div>
   );
 }

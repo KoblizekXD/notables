@@ -1,15 +1,15 @@
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import YearBadge from "@/components/year-badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import UserDescription from "@/components/user-description";
+import YearBadge from "@/components/year-badge";
 // import { UserPen } from "lucide-react";
 // import Link from "next/link";
-import { getUser, getUserNotes } from "@/db/fetch";
 import SuspenseProfile from "./suspence";
+import { getUser, getUserNotes } from "@/lib/actions";
 
 export default async function Profile({
   params,
 }: {
-  params: Promise<{ id: string }>
+  params: Promise<{ id: string }>;
 }) {
   const user = await getUser((await params).id);
   const notes = await getUserNotes(user.id, 10);
@@ -21,7 +21,9 @@ export default async function Profile({
           <div className="flex justify-between items-center gap-x-4">
             <Avatar className="size-18 border">
               <AvatarImage src={user.image || ""} />
-              <AvatarFallback>{user.name.substring(0, 2).toUpperCase()}</AvatarFallback>
+              <AvatarFallback>
+                {user.name.substring(0, 2).toUpperCase()}
+              </AvatarFallback>
             </Avatar>
             <div className="flex flex-col items-start justify-between">
               <div className="flex items-center justify-baseline gap-x-2">
@@ -43,5 +45,5 @@ export default async function Profile({
       </div>
       <SuspenseProfile notes={Promise.resolve(notes)} />
     </div>
-  )
+  );
 }

@@ -1,5 +1,5 @@
 import RecentNotes from "@/components/home-recent-notes";
-import PopularCollections from "@/components/poular-collections";
+import PopularCollections from "@/components/popular-collections";
 import Link from "next/link";
 
 export default function Home() {
@@ -26,7 +26,7 @@ export default function Home() {
           </div>
         </div>
 
-        <Link href="./home/profile/tTqy381POeN9DxRFI63VbEclTzAlO242" >
+        <Link href="./home/profile/tTqy381POeN9DxRFI63VbEclTzAlO242">
           test desc
         </Link>
 
