@@ -1,9 +1,9 @@
 import Commander from "@/components/commander";
+import DashboardFooter from "@/components/dashboard-footer";
 import DynamicCommand from "@/components/dynamic-command";
 import Logo from "@/components/logo";
 import SidebarExec from "@/components/sidebar-inset";
 import { SidebarStateToggler } from "@/components/sidebar-state-toggler";
-import SidebarToggle from "@/components/sidebar-trigger";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -13,13 +13,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { DropdownThemeToggle } from "@/components/ui/dropdown-theme-toggle";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { auth } from "@/lib/auth";
 import { getSignedAvatarUrl } from "@/lib/minio";
 import { Cloud, ExternalLink, LogOut, Settings } from "lucide-react";
 import { headers } from "next/headers";
 import Link from "next/link";
-import { DropdownThemeToggle } from "../../components/ui/dropdown-theme-toggle";
 
 export default async function DashboardLayout({
   children,
@@ -31,7 +31,7 @@ export default async function DashboardLayout({
     <div className="h-screen w-full">
       <SidebarProvider className="flex flex-col" defaultOpen={false}>
         <div className="bg-background h-[var(--header-height)] flex gap-x-2 md:gap-0 border-b md:grid grid-cols-3 w-full items-center sticky top-0 z-50">
-          <Logo className="md:ml-1.5" />
+          <Logo className="md:ml-1.5" destination="/home" />
           <div className="p-1 items-center md:items-stretch h-full flex-1 col-start-2 flex justify-end">
             <DynamicCommand trigger={<Commander />} />
           </div>
@@ -43,7 +43,7 @@ export default async function DashboardLayout({
                     <AvatarImage
                       src={
                         (await getSignedAvatarUrl(
-                          session?.user.image || "",
+                          session?.user.image || ""
                         )) as string
                       }
                     />
@@ -70,7 +70,8 @@ export default async function DashboardLayout({
                       </span>
                       <Link
                         className="text-xs font-normal underline gap-x-1 flex items-center"
-                        href={`/profiles/${session?.user.id}`}>
+                        href={`/home/profile/${session?.user.id}`}
+                      >
                         My profile
                         <ExternalLink size={14} />
                       </Link>
@@ -86,9 +87,11 @@ export default async function DashboardLayout({
                   <Cloud />
                   API
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Settings />
-                  Settings
+                <DropdownMenuItem asChild>
+                  <Link href={"/settings"}>
+                    <Settings />
+                    Settings
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem className="text-red-500">
                   <LogOut />
@@ -99,9 +102,12 @@ export default async function DashboardLayout({
           </div>
         </div>
         <div className="flex flex-1">
-          <SidebarExec userPath={`/profiles/${session?.user.id}`}>
-            <SidebarToggle />
+          <SidebarExec
+            userPath={`./home/profile/${session?.user.id}`}
+            className="flex flex-col justify-between"
+          >
             {children}
+            <DashboardFooter />
           </SidebarExec>
         </div>
       </SidebarProvider>

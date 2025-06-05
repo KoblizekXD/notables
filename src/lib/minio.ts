@@ -19,11 +19,10 @@ export async function getSignedAvatarUrl(
   objectName: string,
 ): Promise<string | null> {
   if (!objectName) return null;
-  const bucketName = process.env.S3_BUCKET as string;
   const expirySeconds = 60 * 60;
   try {
     const url = await s3Client.presignedGetObject(
-      bucketName,
+      "avatars",
       objectName,
       expirySeconds,
     );
