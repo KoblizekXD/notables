@@ -67,7 +67,7 @@ export function BottomFloatingButtons() {
     window.addEventListener("keydown", handleKeyDown);
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
-    }
+    };
   }, [context.id, context.segments]);
 
   return (

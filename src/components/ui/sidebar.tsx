@@ -42,8 +42,9 @@ type SidebarContextProps = {
   toggleSidebar: () => void;
   sidebarType: "icon" | "toggle";
   setSidebarType: (type: "icon" | "toggle") => void;
-  toggleSidebarType: (type: boolean) => void;
+  toggleSidebarType: () => void;
   sidebarPosition: "left" | "right";
+  setSidebarPosition: (sidebarPosition: "left" | "right") => void;
   toggleSidebarPosition: () => void;
 };
 
@@ -120,8 +121,6 @@ function SidebarProvider({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [toggleSidebar]);
 
-  // We add a state so that we can do data-state="expanded" or "collapsed".
-  // This makes it easier to style the sidebar with Tailwind classes.
   const state = open ? "expanded" : "collapsed";
 
   const toggleSidebarPosition = React.useCallback(() => {
@@ -150,6 +149,7 @@ function SidebarProvider({
       toggleSidebarType,
       sidebarPosition,
       toggleSidebarPosition,
+      setSidebarPosition,
     }),
     [state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar],
   );

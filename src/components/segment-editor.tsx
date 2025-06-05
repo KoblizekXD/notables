@@ -118,7 +118,7 @@ function MathSegment({ segment, onUpdate }: GenericSegmentProps) {
   const sgmnt = segment as Extract<NoteSegment, { type: "formula" }>;
   const [formula, setFormula] = useState<string>(sgmnt.content.formula);
   const [description, setDescription] = useState<string | undefined>(
-    sgmnt.content.description
+    sgmnt.content.description,
   );
 
   return (
@@ -170,10 +170,10 @@ function CodeSegment({ segment, onUpdate }: GenericSegmentProps) {
   const sgmnt = segment as Extract<NoteSegment, { type: "code" }>;
   const [code, setCode] = useState<string>(sgmnt.content.code);
   const [heading, setHeading] = useState<string | undefined>(
-    sgmnt.content.heading
+    sgmnt.content.heading,
   );
   const [language, setLanguage] = useState<BundledLanguage>(
-    sgmnt.content.language as BundledLanguage
+    sgmnt.content.language as BundledLanguage,
   );
 
   return (
@@ -207,8 +207,7 @@ function CodeSegment({ segment, onUpdate }: GenericSegmentProps) {
             },
           });
         }}
-        name="language"
-      >
+        name="language">
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="Language" />
         </SelectTrigger>
@@ -238,10 +237,10 @@ function QuoteSegment({ segment, onUpdate }: GenericSegmentProps) {
   const sgmnt = segment as Extract<NoteSegment, { type: "quote" }>;
   const [quote, setQuote] = useState<string>(sgmnt.content.text);
   const [author, setAuthor] = useState<string | undefined>(
-    sgmnt.content.author
+    sgmnt.content.author,
   );
   const [source, setSource] = useState<string | undefined>(
-    sgmnt.content.source
+    sgmnt.content.source,
   );
 
   return (
@@ -325,8 +324,7 @@ function ListSegment({ segment, onUpdate }: GenericSegmentProps) {
         <Button
           variant="outline"
           className="mr-auto"
-          onClick={() => setItems((prev) => [...prev, ""])}
-        >
+          onClick={() => setItems((prev) => [...prev, ""])}>
           Add Item
         </Button>
         <Button
@@ -341,8 +339,7 @@ function ListSegment({ segment, onUpdate }: GenericSegmentProps) {
                 items: items.slice(0, -1),
               },
             });
-          }}
-        >
+          }}>
           Remove
         </Button>
       </div>
@@ -426,8 +423,7 @@ function TableSegment({ segment, onUpdate }: GenericSegmentProps) {
                 });
               }}
               variant={"outline"}
-              size={"icon"}
-            >
+              size={"icon"}>
               <Plus />
             </Button>
           </TooltipWrapper>
@@ -446,8 +442,7 @@ function TableSegment({ segment, onUpdate }: GenericSegmentProps) {
                 });
               }}
               variant={"destructive"}
-              size={"icon"}
-            >
+              size={"icon"}>
               <Minus />
             </Button>
           </TooltipWrapper>
@@ -467,8 +462,7 @@ function TableSegment({ segment, onUpdate }: GenericSegmentProps) {
               });
             }}
             variant={"outline"}
-            size={"icon"}
-          >
+            size={"icon"}>
             <Plus />
           </Button>
         </TooltipWrapper>
@@ -485,8 +479,7 @@ function TableSegment({ segment, onUpdate }: GenericSegmentProps) {
               });
             }}
             variant={"destructive"}
-            size={"icon"}
-          >
+            size={"icon"}>
             <Minus />
           </Button>
         </TooltipWrapper>
@@ -567,16 +560,14 @@ export default function SegmentEditor() {
             key={`${segment.type}-${index}`}
             initial={{ opacity: 0, y: "calc(var(--spacing) * -2)" }}
             animate={{ opacity: 1, y: "calc(var(--spacing) * 2)" }}
-            className="border w-full xl:w-[620px] p-4 rounded-md flex flex-col gap-y-2"
-          >
+            className="border w-full xl:w-[620px] p-4 rounded-md flex flex-col gap-y-2">
             <TooltipWrapper content="Segment options">
               <Dialog>
                 <DialogTrigger asChild>
                   <Button
                     className="absolute hidden xl:flex items-center justify-center -translate-x-full -left-2 top-4"
                     variant="outline"
-                    size="icon"
-                  >
+                    size="icon">
                     <Settings2 />
                   </Button>
                 </DialogTrigger>
@@ -589,14 +580,16 @@ export default function SegmentEditor() {
                   </DialogHeader>
                   <DialogFooter>
                     <DialogClose asChild>
-                      <Button onClick={() => {
-                        setSegments((prev) => {
-                          const newSegments = [...prev];
-                          newSegments.splice(index, 1);
-                          return newSegments;
-                        });
-                        toast.success("Segment removed successfully");
-                      }} variant="destructive">
+                      <Button
+                        onClick={() => {
+                          setSegments((prev) => {
+                            const newSegments = [...prev];
+                            newSegments.splice(index, 1);
+                            return newSegments;
+                          });
+                          toast.success("Segment removed successfully");
+                        }}
+                        variant="destructive">
                         Remove
                       </Button>
                     </DialogClose>
@@ -672,8 +665,7 @@ export default function SegmentEditor() {
             return [...prev, newSegment];
           });
         }}
-        className="flex w-full mt-4 gap-x-2"
-      >
+        className="flex w-full mt-4 gap-x-2">
         <Select name="type">
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Segment type" />
