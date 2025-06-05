@@ -107,3 +107,22 @@ export const updateUsername = async (userId: string, name: string) => {
     return false;
   }
 };
+
+export async function getSignedImageUrl(
+  objectName: string,
+): Promise<string | null> {
+  if (!objectName) return null;
+  const bucketName = "images";
+  const expirySeconds = 60 * 60;
+  try {
+    const url = await s3Client.presignedGetObject(
+      bucketName,
+      objectName,
+      expirySeconds,
+    );
+    return url;
+  } catch (err) {
+    console.error("Error generating signed URL:", err);
+    return null;
+  }
+}

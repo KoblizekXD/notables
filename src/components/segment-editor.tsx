@@ -1,6 +1,7 @@
 "use client";
 
-import { uploadImage } from "@/lib/actions";
+import { getSignedImageUrl, uploadImage } from "@/lib/actions";
+import { randomUUID } from "@/lib/utils";
 import { motion } from "framer-motion";
 import "katex/dist/katex.min.css";
 import { Minus, Plus, Settings2 } from "lucide-react";
@@ -32,7 +33,6 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Textarea } from "./ui/textarea";
-import { randomUUID } from "@/lib/utils";
 
 interface GenericSegmentProps {
   segment: NoteSegment;
@@ -94,7 +94,7 @@ function ImageSegment({ segment, onUpdate }: GenericSegmentProps) {
         toast.error("Failed to upload image");
         return;
       }
-      setImageUrl(uploadResult.imagePath as string);
+      setImageUrl(await getSignedImageUrl(uploadResult.imagePath as string));
       onUpdate({
         ...sgmnt,
         content: {
@@ -112,7 +112,7 @@ function ImageSegment({ segment, onUpdate }: GenericSegmentProps) {
       <Input type="file" accept="image/*" onChange={handleFileChange} />
       {imageUrl && (
         <Image
-          src={`http://${process.env.S3_ENDPOINT}:${process.env.S3_PORT}/${imageUrl}`}
+          src={imageUrl}
           alt="Uploaded image"
           width="0"
           height="0"
