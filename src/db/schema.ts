@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import {
   boolean,
   integer,
@@ -90,6 +91,27 @@ export const taggedEntity = pgTable(
   ],
 );
 
+export const taggedEntityRelations = relations(taggedEntity, ({ one }) => ({
+  tag: one(tag, {
+    fields: [taggedEntity.tagId],
+    references: [tag.id],
+  }),
+  author: one(author, {
+    fields: [taggedEntity.entityId],
+    references: [author.id],
+    relationName: 'author_relation',
+  }),
+  work: one(work, {
+    fields: [taggedEntity.entityId],
+    references: [work.id],
+    relationName: 'work_relation',
+  }),
+  note: one(note, {
+    fields: [taggedEntity.entityId],
+    references: [note.id],
+  }),
+}));
+
 export const author = pgTable("author", {
   id: uuid("id").primaryKey().defaultRandom(),
   name: text("name").notNull(),
@@ -102,6 +124,16 @@ export const author = pgTable("author", {
     .$onUpdateFn(() => new Date())
     .notNull(),
 });
+
+export const tagRelations = relations(tag, ({ many }) => ({
+  taggedEntities: many(taggedEntity),
+}));
+
+export const authorRelations = relations(author, ({ many }) => ({
+  taggedEntities: many(taggedEntity, {
+    relationName: 'author_relation',
+  }),
+}));
 
 export const work = pgTable("work", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -118,6 +150,12 @@ export const work = pgTable("work", {
     .$onUpdateFn(() => new Date())
     .notNull(),
 });
+
+export const workRelations = relations(work, ({ many }) => ({
+  taggedEntities: many(taggedEntity, {
+    relationName: 'work_relation',
+  }),
+}));
 
 export const note = pgTable("note", {
   id: uuid("id").primaryKey().defaultRandom(),
