@@ -2,7 +2,7 @@
 
 import type { NoteSegment } from "@/components/segment-editor";
 import db from "@/db/db";
-import { author, collection, note, user } from "@/db/schema";
+import { author, collection, note, tag, taggedEntity, user } from "@/db/schema";
 import { createBucketIfNotExists, s3Client } from "@/lib/minio";
 import { and, desc, eq } from "drizzle-orm";
 
@@ -140,6 +140,108 @@ export const getAuthor = async (authorId: string) => {
   });
   if (!authorWithTags) return null;
   return authorWithTags;
+};
+
+export const getTag = async (tagId: string) => {
+  const tagWithAuthors = await db
+    .select()
+    .from(tag)
+    .where(eq(tag.id, tagId))
+    .limit(1);
+  if (tagWithAuthors.length === 0) return null;
+  return tagWithAuthors[0];
+};
+
+export async function getEntitiesByTagId({
+  tagId,
+  limit = 10,
+  offset = 0,
+}: {
+  tagId: string;
+  limit?: number;
+  offset?: number;
+}) {
+  const results = await db
+    .select({
+      entityId: taggedEntity.entityId,
+      entityType: taggedEntity.entityType,
+    })
+    .from(taggedEntity)
+    .where(eq(taggedEntity.tagId, tagId))
+    .limit(limit)
+    .offset(offset);
+
+  return results;
+}
+
+export async function getEntitiesByTagIdWithDetails({
+  tagId,
+  limit = 10,
+  offset = 0,
+}: {
+  tagId: string;
+  limit?: number;
+  offset?: number;
+}) {
+  // First get the basic entity info
+  const entityRefs = await db
+    .select({
+      entityId: taggedEntity.entityId,
+      entityType: taggedEntity.entityType,
+    })
+    .from(taggedEntity)
+    .where(eq(taggedEntity.tagId, tagId))
+    .limit(limit < 1 ? 1 : limit)
+    .offset(offset < 0 ? 0 : offset);
+
+  // Then fetch details for each entity type
+  const results = await Promise.all(
+    entityRefs.map(async (ref) => {
+      switch (ref.entityType) {
+        case "author": {
+          const author = await db.query.author.findFirst({
+            where: (author, { eq }) => eq(author.id, ref.entityId),
+            columns: {
+              id: true,
+              name: true,
+            },
+          });
+          return { ...ref, entity: author };
+        }
+        case "work": {
+          const work = await db.query.work.findFirst({
+            where: (work, { eq }) => eq(work.id, ref.entityId),
+            columns: {
+              id: true,
+              title: true,
+            },
+          });
+          return { ...ref, entity: work };
+        }
+        case "note": {
+          const note = await db.query.note.findFirst({
+            where: (note, { eq }) => eq(note.id, ref.entityId),
+            columns: {
+              id: true,
+              title: true,
+            },
+            with: {
+              user: {
+                columns: {
+                  name: true,
+                },
+              },
+            },
+          });
+          return { ...ref, entity: note };
+        }
+        default:
+          return ref;
+      }
+    })
+  );
+
+  return results;
 }
 
 export async function getAuthorNotes(

@@ -101,6 +101,15 @@ export const taggedEntityRelations = relations(taggedEntity, ({ one }) => ({
     references: [author.id],
     relationName: 'author_relation',
   }),
+  work: one(work, {
+    fields: [taggedEntity.entityId],
+    references: [work.id],
+    relationName: 'work_relation',
+  }),
+  note: one(note, {
+    fields: [taggedEntity.entityId],
+    references: [note.id],
+  }),
 }));
 
 export const author = pgTable("author", {
@@ -141,6 +150,12 @@ export const work = pgTable("work", {
     .$onUpdateFn(() => new Date())
     .notNull(),
 });
+
+export const workRelations = relations(work, ({ many }) => ({
+  taggedEntities: many(taggedEntity, {
+    relationName: 'work_relation',
+  }),
+}));
 
 export const note = pgTable("note", {
   id: uuid("id").primaryKey().defaultRandom(),
