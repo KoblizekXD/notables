@@ -2,9 +2,9 @@
 
 import type { NoteSegment } from "@/components/segment-editor";
 import db from "@/db/db";
-import { author, collection, note, tag, taggedEntity, user } from "@/db/schema";
+import { author, collection, note, user } from "@/db/schema";
 import { createBucketIfNotExists, s3Client } from "@/lib/minio";
-import { type InferSelectModel, and, desc, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 
 export async function saveNote(
   id: string,
@@ -96,7 +96,7 @@ export const updateUsername = async (userId: string, name: string) => {
 
 export async function uploadDescription(
   user_id: string,
-  description: string,
+  description: string
 ): Promise<string | undefined> {
   if (!description) {
     return "Description cannot be empty";
@@ -125,4 +125,39 @@ export async function uploadDescription(
   }
 
   return undefined;
+}
+
+export const getAuthor = async (authorId: string) => {
+  const authorWithTags = await db.query.author.findFirst({
+    where: eq(author.id, authorId),
+    with: {
+      taggedEntities: {
+        with: {
+          tag: true,
+        },
+      },
+    },
+  });
+  if (!authorWithTags) return null;
+  return authorWithTags;
+}
+
+export async function getAuthorNotes(
+  authorId: string,
+  limit: number,
+  offset: number
+) {
+  return await db
+    .select({
+      id: note.id,
+      title: note.title,
+      updatedAt: note.updatedAt,
+      username: user.name,
+    })
+    .from(note)
+    .where(and(eq(note.entityType, "author"), eq(note.entityId, authorId)))
+    .leftJoin(user, eq(note.userId, user.id))
+    .orderBy(desc(note.updatedAt))
+    .offset(offset < 0 ? 0 : offset)
+    .limit(limit);
 }

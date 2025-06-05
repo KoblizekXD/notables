@@ -10,7 +10,7 @@ export default function LinkingButton({
 }: {
   children: React.ReactNode;
   href: string;
-} & React.ComponentProps<"button">) {
+} & React.ComponentProps<typeof Button>) {
   const router = useRouter();
 
   return (
