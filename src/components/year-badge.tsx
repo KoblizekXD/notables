@@ -1,20 +1,18 @@
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
 import { Crown, X } from "lucide-react";
 import {
     HoverCard,
     HoverCardContent,
     HoverCardTrigger,
-} from "@/components/ui/hover-card"
+} from "@/components/ui/hover-card";
 
-export default async function YearBadge() {
-    const session = await auth.api.getSession({ headers: await headers() });
+interface YearBadgeProps {
+    createdAt: Date;
+}
 
+export default async function YearBadge({createdAt}: YearBadgeProps) {
     return (
-        <div>
+        <>
             {(() => {
-                const createdAt = session?.user?.createdAt ? new Date(session?.user.createdAt) : null;
-
                 return createdAt ? (new Date().getFullYear() - createdAt.getFullYear() > 0 ? (
                     <div className="flex items-center justify-between gap-2 px-4 py-5">
                         <HoverCard>
@@ -29,13 +27,13 @@ export default async function YearBadge() {
                                 <Crown className="text-amber-500" />
                             </HoverCardContent>
                         </HoverCard>
-                        <p className="flex flex-col items-center">Account created <br /> {session?.user?.createdAt.toString().substring(4, 15)}</p>
+                        <p className="flex flex-col items-center whitespace-nowrap">Account created <br /> {createdAt.toString().substring(4, 15)}</p>
                     </div>
                 ) : (
                     <div className="flex flex-col items-center justify-baseline gap-3 px-4 py-5">
                         <div className="flex flex-col items-center justify-baseline">
                             <p>Account created:</p>
-                            <p>{session?.user?.createdAt.toString().substring(4, 15)}</p>
+                            <p>{createdAt.toString().substring(4, 15)}</p>
                         </div>
                         <div className="px-2 py-1 bg-accent rounded-xl border dark:text-red-300 text-red-600 flex items-center gap-1">
                             <X className="text-red-600" /> No badges
@@ -43,6 +41,6 @@ export default async function YearBadge() {
                     </div>
                 )) : null;
             })()}
-        </div>
+        </>
     );
 }
