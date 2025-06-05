@@ -11,7 +11,7 @@ export default async function UserDescription({ user_id, description }: UserDesc
   const session = await auth.api.getSession({ headers: await headers() });
 
   return (
-    <div className="flex flex-col gap-y-6 items-center justify-center rounded-xl w-full h-full max-w-2xl">
+    <div className="flex flex-col gap-y-6 items-center justify-center rounded-xl w-auto h-full max-w-2xl">
       {description !== null ? (
         <div className="flex flex-col gap-y-0.5 items-end justify-end">
           {session?.user.id === user_id && (
