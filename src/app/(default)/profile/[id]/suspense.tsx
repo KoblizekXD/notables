@@ -16,7 +16,8 @@ export default async function SuspenseProfile({
         <div className="flex flex-col items-center justify-center w-full h-full gap-y-6">
           <Skeleton />
         </div>
-      }>
+      }
+    >
       {(await notes).length === 0 ? (
         <div className="flex flex-col items-center justify-baseline w-full h-full gap-y-6">
           <p className="text-2xl font-bold">No notes yet</p>
