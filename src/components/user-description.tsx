@@ -25,7 +25,7 @@ export default async function UserDescription({
             />
           )}
           <div className="rounded-md overflow-hidden border-2 border-solid border-neutral-900 hover:border-accent transition-colors duration-150 ">
-            <p className="scrollbar-custom mr-0.5 max-h-95 min-h-40 min-w-80 rounded-xl overflow-y-auto p-2 py-1.5 text-gray-500 dark:text-gray-400">
+            <p className="scrollbar-custom mr-0.5 max-h-95 min-h-40 min-w-50 rounded-xl overflow-y-auto p-2 py-1.5 text-gray-500 dark:text-gray-400">
               {description}
             </p>
           </div>

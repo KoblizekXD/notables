@@ -20,7 +20,7 @@ export default async function SuspenseProfile({
     >
       {(await notes).length === 0 ? (
         <div className="flex flex-col items-center justify-baseline w-full h-full gap-y-6">
-          <p className="text-2xl font-bold">No notes yet</p>
+          <p className="text-2xl font-bold">User has no notes yet</p>
         </div>
       ) : (
         <div className="px-26 w-auto flex flex-col gap-y-3 items-start justify-baseline pb-3 ">
