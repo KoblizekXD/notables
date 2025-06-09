@@ -8,7 +8,7 @@ export default function DashFooter() {
   return (
     <div className="w-full flex bg-[#e5e7eb] dark:bg-[#141414] items-center justify-center p-2 pt-6 pl-5">
       <footer className="relative flex flex-col md:px-12 px-2 w-[88%] items-center justify-between md:gap-6 gap-10 mb-5">
-        <div className="flex items-center justify-center flex-wrap gap-x-3 lg:gap-x-6.5">
+        <div className="flex items-center justify-center flex-wrap gap-x-3 gap-y-4 lg:gap-x-7">
           <Link
             href="./about-us"
             className="hover:underline whitespace-nowrap">
@@ -36,7 +36,7 @@ export default function DashFooter() {
           </Link>
         </div>
         <div className="flex items-center justify-between gap-x-2 min-lg:gap-x-6.5">
-          <div className="flex flex-row gap-3">
+          <div className="flex flex-row gap-6">
               <Link
                 href={"https://www.instagram.com/0xaa55h/"}
                 className="w-12 h-12 aspect-square flex items-center justify-center rounded-full bg-accent-foreground hover:bg-black dark:hover:bg-neutral-300 transition-color duration-200">
