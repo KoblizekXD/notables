@@ -26,7 +26,7 @@ export default function Home() {
           </div>
         </div>
 
-        <Link href="./home/profile/tTqy381POeN9DxRFI63VbEclTzAlO242">
+        <Link href="/profile/tTqy381POeN9DxRFI63VbEclTzAlO242">
           test desc
         </Link>
 

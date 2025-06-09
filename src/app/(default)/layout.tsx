@@ -70,7 +70,7 @@ export default async function DashboardLayout({
                       </span>
                       <Link
                         className="text-xs font-normal underline gap-x-1 flex items-center"
-                        href={`/home/profile/${session?.user.id}`}
+                        href={`/profile/${session?.user.id}`}
                       >
                         My profile
                         <ExternalLink size={14} />
