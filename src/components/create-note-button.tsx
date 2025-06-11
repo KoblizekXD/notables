@@ -2,7 +2,7 @@
 
 import { Plus } from "lucide-react";
 import { useState } from "react";
-import { NewNoteDialog } from "./new-note-dialog";
+import { NewNoteDialog } from "./new-note-dialog/new-note-dialog";
 
 export function CreateNoteButton() {
   const [open, setOpen] = useState(false);
