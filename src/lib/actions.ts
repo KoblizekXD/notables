@@ -2,9 +2,32 @@
 
 import type { NoteSegment } from "@/components/segment-editor";
 import db from "@/db/db";
-import {  author, collection, note, tag, taggedEntity, user, settings } from "@/db/schema";
-import { createBucketIfNotExists, s3Client } from "@/lib/minio";
+import {
+  author,
+  collection,
+  note,
+  tag,
+  taggedEntity,
+  user,
+  settings,
+} from "@/db/schema";
 import { and, desc, eq } from "drizzle-orm";
+import {
+  createBucketIfNotExists,
+  s3Client,
+  getSignedAvatarUrl,
+} from "@/lib/minio";
+import { auth } from "@/lib/auth";
+import {
+  settingsSchema,
+  booleanToSidebarPosition,
+  booleanToSidebarType,
+  numberToTheme,
+  sidebarPositionToBoolean,
+  sidebarTypeToBoolean,
+  themeToNumber,
+} from "@/lib/schemas";
+import { headers } from "next/headers";
 
 export async function saveNote(
   id: string,
@@ -171,7 +194,7 @@ export async function getSettings(): Promise<{
     const session = await auth.api.getSession({
       headers: await headers(),
     });
-    if (!session) 
+    if (!session)
       return { settings: getDefaultSettings(), error: "Unauthorized" };
     const result = await db
       .select()
@@ -219,7 +242,7 @@ export async function updateSettings(
     const session = await auth.api.getSession({
       headers: await headers(),
     });
-    if (!session) 
+    if (!session)
       return {
         settings: getDefaultSettings(),
         success: false,
@@ -230,13 +253,13 @@ export async function updateSettings(
       sidebarType: boolean;
       theme: number;
     }> = {};
-    if (newSettings.sidebarPosition !== undefined) 
+    if (newSettings.sidebarPosition !== undefined)
       dbSettings.sidebarPosition = sidebarPositionToBoolean(
         newSettings.sidebarPosition
       );
-    if (newSettings.sidebarType !== undefined) 
+    if (newSettings.sidebarType !== undefined)
       dbSettings.sidebarType = sidebarTypeToBoolean(newSettings.sidebarType);
-    if (newSettings.theme !== undefined) 
+    if (newSettings.theme !== undefined)
       dbSettings.theme = themeToNumber(newSettings.theme);
     const existingSettings = await db
       .select()
@@ -431,7 +454,7 @@ export async function getAuthorNotes(
 }
 
 export async function getSignedImageUrl(
-  objectName: string,
+  objectName: string
 ): Promise<string | null> {
   if (!objectName) return null;
   const bucketName = "images";
@@ -440,7 +463,7 @@ export async function getSignedImageUrl(
     const url = await s3Client.presignedGetObject(
       bucketName,
       objectName,
-      expirySeconds,
+      expirySeconds
     );
     return url;
   } catch (err) {
