@@ -2,24 +2,9 @@
 
 import type { NoteSegment } from "@/components/segment-editor";
 import db from "@/db/db";
-import { collection, note, user, settings } from "@/db/schema";
-import {
-  createBucketIfNotExists,
-  s3Client,
-  getSignedAvatarUrl,
-} from "@/lib/minio";
-import { desc, eq } from "drizzle-orm";
-import { auth } from "@/lib/auth";
-import {
-  settingsSchema,
-  booleanToSidebarPosition,
-  booleanToSidebarType,
-  numberToTheme,
-  sidebarPositionToBoolean,
-  sidebarTypeToBoolean,
-  themeToNumber,
-} from "@/lib/schemas";
-import { headers } from "next/headers";
+import {  author, collection, note, tag, taggedEntity, user, settings } from "@/db/schema";
+import { createBucketIfNotExists, s3Client } from "@/lib/minio";
+import { and, desc, eq } from "drizzle-orm";
 
 export async function saveNote(
   id: string,
@@ -78,7 +63,7 @@ export async function uploadAvatar(
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
   try {
-    const bucketName = process.env.S3_BUCKET as string;
+    const bucketName = "avatars";
     await createBucketIfNotExists(bucketName);
     await s3Client.putObject(bucketName, objectName, buffer);
     const imagePath = `${objectName}`;
@@ -87,6 +72,27 @@ export async function uploadAvatar(
   } catch (error) {
     console.error("Upload failed:", error);
     return { success: false };
+  }
+}
+
+export async function uploadImage(
+  file: File,
+  name: string
+): Promise<{ success: boolean; imagePath?: string; error?: string }> {
+  if (!file) return { success: false, error: "No file provided" };
+  const ext = file.name.split(".").findLast(() => true);
+  if (!ext) return { success: false, error: "Invalid file extension" };
+  const objectName = `images/${name}.${ext}`;
+  const arrayBuffer = await file.arrayBuffer();
+  const buffer = Buffer.from(arrayBuffer);
+  try {
+    const bucketName = "images";
+    await createBucketIfNotExists(bucketName);
+    await s3Client.putObject(bucketName, objectName, buffer);
+    return { success: true, imagePath: objectName };
+  } catch (error) {
+    console.error("Upload failed:", error);
+    return { success: false, error: "Upload failed" };
   }
 }
 
@@ -285,4 +291,160 @@ function getDefaultSettings(): UISettings {
     sidebarType: "toggle",
     theme: "system",
   };
+}
+
+export const getAuthor = async (authorId: string) => {
+  const authorWithTags = await db.query.author.findFirst({
+    where: eq(author.id, authorId),
+    with: {
+      taggedEntities: {
+        with: {
+          tag: true,
+        },
+      },
+    },
+  });
+  if (!authorWithTags) return null;
+  return authorWithTags;
+};
+
+export const getTag = async (tagId: string) => {
+  const tagWithAuthors = await db
+    .select()
+    .from(tag)
+    .where(eq(tag.id, tagId))
+    .limit(1);
+  if (tagWithAuthors.length === 0) return null;
+  return tagWithAuthors[0];
+};
+
+export async function getEntitiesByTagId({
+  tagId,
+  limit = 10,
+  offset = 0,
+}: {
+  tagId: string;
+  limit?: number;
+  offset?: number;
+}) {
+  const results = await db
+    .select({
+      entityId: taggedEntity.entityId,
+      entityType: taggedEntity.entityType,
+    })
+    .from(taggedEntity)
+    .where(eq(taggedEntity.tagId, tagId))
+    .limit(limit)
+    .offset(offset);
+
+  return results;
+}
+
+export async function getEntitiesByTagIdWithDetails({
+  tagId,
+  limit = 10,
+  offset = 0,
+}: {
+  tagId: string;
+  limit?: number;
+  offset?: number;
+}) {
+  // First get the basic entity info
+  const entityRefs = await db
+    .select({
+      entityId: taggedEntity.entityId,
+      entityType: taggedEntity.entityType,
+    })
+    .from(taggedEntity)
+    .where(eq(taggedEntity.tagId, tagId))
+    .limit(limit < 1 ? 1 : limit)
+    .offset(offset < 0 ? 0 : offset);
+
+  // Then fetch details for each entity type
+  const results = await Promise.all(
+    entityRefs.map(async (ref) => {
+      switch (ref.entityType) {
+        case "author": {
+          const author = await db.query.author.findFirst({
+            where: (author, { eq }) => eq(author.id, ref.entityId),
+            columns: {
+              id: true,
+              name: true,
+            },
+          });
+          return { ...ref, entity: author };
+        }
+        case "work": {
+          const work = await db.query.work.findFirst({
+            where: (work, { eq }) => eq(work.id, ref.entityId),
+            columns: {
+              id: true,
+              title: true,
+            },
+          });
+          return { ...ref, entity: work };
+        }
+        case "note": {
+          const note = await db.query.note.findFirst({
+            where: (note, { eq }) => eq(note.id, ref.entityId),
+            columns: {
+              id: true,
+              title: true,
+            },
+            with: {
+              user: {
+                columns: {
+                  name: true,
+                },
+              },
+            },
+          });
+          return { ...ref, entity: note };
+        }
+        default:
+          return ref;
+      }
+    })
+  );
+
+  return results;
+}
+
+export async function getAuthorNotes(
+  authorId: string,
+  limit: number,
+  offset: number
+) {
+  return await db
+    .select({
+      id: note.id,
+      title: note.title,
+      updatedAt: note.updatedAt,
+      username: user.name,
+    })
+    .from(note)
+    .where(and(eq(note.entityType, "author"), eq(note.entityId, authorId)))
+    .leftJoin(user, eq(note.userId, user.id))
+    .orderBy(desc(note.updatedAt))
+    .offset(offset < 0 ? 0 : offset)
+    .limit(limit);
+}
+
+export async function getSignedImageUrl(
+  objectName: string,
+): Promise<string | null> {
+  if (!objectName) return null;
+  const bucketName = "images";
+  const expirySeconds = 60 * 60;
+  try {
+    const url = await s3Client.presignedGetObject(
+      bucketName,
+      objectName,
+      expirySeconds,
+    );
+    return url;
+  } catch (err) {
+    console.error("Error generating signed URL:", err);
+    return null;
+  }
 }

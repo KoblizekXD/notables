@@ -4,7 +4,7 @@ import DynamicCommand from "@/components/dynamic-command";
 import Logo from "@/components/logo";
 import SidebarExec from "@/components/sidebar-inset";
 import { SidebarStateToggler } from "@/components/sidebar-state-toggler";
-import { Avatar } from "@/components/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,8 +14,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { DropdownThemeToggle } from "@/components/ui/dropdown-theme-toggle";
-import { SidebarProvider } from "@/components/sidebar-provider";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import { auth } from "@/lib/auth";
+import { getSignedAvatarUrl } from "@/lib/minio";
 import { Cloud, ExternalLink, LogOut, Settings } from "lucide-react";
 import { headers } from "next/headers";
 import Link from "next/link";
@@ -38,22 +39,30 @@ export default async function DashboardLayout({
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <div className="w-fit h-fit hover:bg-muted rounded-sm transition-all p-0.5 cursor-pointer">
-                  <Avatar
-                    userId={session?.user.id || ""}
-                    imagePath={session?.user.image}
-                    fallback={session?.user.name.substring(0, 2) || "??"}
-                  />
+                  <Avatar>
+                    <AvatarImage
+                      src={
+                        (await getSignedAvatarUrl(
+                          session?.user.image || ""
+                        )) as string
+                      }
+                    />
+                    <AvatarFallback>
+                      {session?.user.name.substring(0, 2)}
+                    </AvatarFallback>
+                  </Avatar>
                 </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56">
                 <DropdownMenuLabel>
                   <div className="flex items-center gap-2">
                     <div className="flex items-center justify-center">
-                      <Avatar
-                        userId={session?.user.id || ""}
-                        imagePath={session?.user.image}
-                        fallback={session?.user.name.substring(0, 2) || "??"}
-                      />
+                      <Avatar>
+                        <AvatarImage src={session?.user.image || ""} />
+                        <AvatarFallback>
+                          {session?.user.name.substring(0, 2)}
+                        </AvatarFallback>
+                      </Avatar>
                     </div>
                     <div className="flex flex-col">
                       <span className="text-sm font-medium">
@@ -61,7 +70,7 @@ export default async function DashboardLayout({
                       </span>
                       <Link
                         className="text-xs font-normal underline gap-x-1 flex items-center"
-                        href={`/home/profile/${session?.user.id}`}
+                        href={`/profile/${session?.user.id}`}
                       >
                         My profile
                         <ExternalLink size={14} />
@@ -78,9 +87,11 @@ export default async function DashboardLayout({
                   <Cloud />
                   API
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Settings />
-                  Settings
+                <DropdownMenuItem asChild>
+                  <Link href={"/settings"}>
+                    <Settings />
+                    Settings
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem className="text-red-500">
                   <LogOut />
