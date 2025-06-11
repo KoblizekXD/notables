@@ -1,6 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
-import { SidebarPosition, SidebarType, Theme } from "@/lib/schemas";
-import { settingsService, UISettings } from "@/lib/settings";
+import { type UISettings, settingsService } from "@/lib/settings";
+import { useCallback, useEffect, useState } from "react";
 
 interface UseSettingsReturn {
   settings: UISettings | null;
@@ -38,19 +37,18 @@ export function useSettings(): UseSettingsReturn {
     async (newSettings: Partial<UISettings>) => {
       try {
         setError(null);
-        const updatedSettings = await settingsService.updateSettings(
-          newSettings
-        );
+        const updatedSettings =
+          await settingsService.updateSettings(newSettings);
         setSettings(updatedSettings);
       } catch (err) {
         console.error("Error updating settings:", err);
         setError(
-          err instanceof Error ? err.message : "Failed to update settings"
+          err instanceof Error ? err.message : "Failed to update settings",
         );
-        throw err; 
+        throw err;
       }
     },
-    []
+    [],
   );
 
   const refreshSettings = useCallback(async () => {
@@ -72,11 +70,11 @@ export function useSettings(): UseSettingsReturn {
 }
 
 export function useSetting<K extends keyof UISettings>(
-  key: K
+  key: K,
 ): [UISettings[K] | null, (value: UISettings[K]) => Promise<void>, boolean] {
   const { settings, updateSettings, loading } = useSettings();
   const [optimisticValue, setOptimisticValue] = useState<UISettings[K] | null>(
-    null
+    null,
   );
 
   const currentValue = optimisticValue ?? settings?.[key] ?? null;
@@ -92,7 +90,7 @@ export function useSetting<K extends keyof UISettings>(
         throw error;
       }
     },
-    [key, updateSettings]
+    [key, updateSettings],
   );
 
   return [currentValue, updateSetting, loading];

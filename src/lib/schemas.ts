@@ -13,7 +13,7 @@ export const signupSchema = z
       .max(32, "Your username must be atmost 32 characters long")
       .regex(
         /^[a-zA-Z0-9_]+$/,
-        "Your username must only contain letters, numbers, and underscores!"
+        "Your username must only contain letters, numbers, and underscores!",
       ),
     email: z.string().email("Please enter a valid email address!"),
     password: z.string().min(8).max(40),

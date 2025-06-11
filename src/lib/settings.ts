@@ -1,8 +1,8 @@
-import { SidebarPosition, SidebarType, Theme } from "./schemas";
 import {
   getSettings as getSettingsAction,
   updateSettings as updateSettingsAction,
 } from "./actions";
+import type { SidebarPosition, SidebarType, Theme } from "./schemas";
 
 export interface UISettings {
   sidebarPosition: SidebarPosition;
@@ -29,7 +29,7 @@ export class SettingsService {
     if (typeof window === "undefined") return false;
     const timestamp = localStorage.getItem(SETTINGS_TIMESTAMP_KEY);
     if (!timestamp) return false;
-    const cacheTime = parseInt(timestamp, 10);
+    const cacheTime = Number.parseInt(timestamp, 10);
     const now = Date.now();
     return now - cacheTime < CACHE_DURATION;
   }
@@ -49,7 +49,8 @@ export class SettingsService {
         typeof parsedSettings.sidebarPosition === "string" &&
         typeof parsedSettings.sidebarType === "string" &&
         typeof parsedSettings.theme === "string"
-      ) return parsedSettings as UISettings;
+      )
+        return parsedSettings as UISettings;
       return null;
     } catch (error) {
       console.error("Error parsing cached settings:", error);

@@ -20,8 +20,7 @@ export default async function Settings() {
           type="single"
           collapsible
           className="space-y-4"
-          defaultValue="theme-settings"
-        >
+          defaultValue="theme-settings">
           <AccordionItem value="theme-settings">
             <AccordionTrigger className="text-lg font-semibold text-muted-foreground">
               Theme Settings

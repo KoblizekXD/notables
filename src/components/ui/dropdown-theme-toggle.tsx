@@ -1,7 +1,7 @@
 "use client";
 
-import { DropdownMenuCheckboxItem } from "@/components/ui/dropdown-menu";
 import { useAppSettings } from "@/components/sidebar-provider";
+import { DropdownMenuCheckboxItem } from "@/components/ui/dropdown-menu";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -23,7 +23,7 @@ export function DropdownThemeToggle() {
       await updateSettings({ theme: newTheme });
     } catch (error) {
       toast.error(
-        error instanceof Error ? error.message : "Failed to update theme"
+        error instanceof Error ? error.message : "Failed to update theme",
       );
     }
   };
@@ -31,8 +31,7 @@ export function DropdownThemeToggle() {
   return (
     <DropdownMenuCheckboxItem
       checked={settings?.theme === "dark"}
-      onCheckedChange={handleToggle}
-    >
+      onCheckedChange={handleToggle}>
       Dark mode
     </DropdownMenuCheckboxItem>
   );

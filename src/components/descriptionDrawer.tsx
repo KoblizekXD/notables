@@ -32,7 +32,7 @@ export default function DescriptionDrawer({
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const res = await uploadDescription(user_id as string, description);
-    if (res){
+    if (res) {
       setError(res);
     }
   };

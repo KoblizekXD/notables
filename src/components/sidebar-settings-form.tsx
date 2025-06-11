@@ -1,5 +1,6 @@
 "use client";
 
+import { useAppSettings } from "@/components/sidebar-provider";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,15 +11,14 @@ import {
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { useAppSettings } from "@/components/sidebar-provider";
-import { SidebarPosition, SidebarType } from "@/lib/schemas";
+import type { SidebarPosition, SidebarType } from "@/lib/schemas";
 import {
   Loader2,
-  RefreshCw,
-  PanelLeft,
-  PanelRight,
   Menu,
   MoreHorizontal,
+  PanelLeft,
+  PanelRight,
+  RefreshCw,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -30,7 +30,7 @@ export function SidebarSettingsForm() {
       await updateSettings({ sidebarPosition: position });
     } catch (error) {
       toast.error(
-        error instanceof Error ? error.message : "Failed to update position"
+        error instanceof Error ? error.message : "Failed to update position",
       );
     }
   };
@@ -40,7 +40,7 @@ export function SidebarSettingsForm() {
       await updateSettings({ sidebarType: type });
     } catch (error) {
       toast.error(
-        error instanceof Error ? error.message : "Failed to update type"
+        error instanceof Error ? error.message : "Failed to update type",
       );
     }
   };
@@ -104,12 +104,10 @@ export function SidebarSettingsForm() {
               <RadioGroup
                 value={settings?.sidebarPosition || "left"}
                 onValueChange={handlePositionChange}
-                className="grid grid-cols-1 gap-4"
-              >
+                className="grid grid-cols-1 gap-4">
                 <label
                   htmlFor="position-left"
-                  className="flex items-center space-x-3 border rounded-lg p-4 hover:bg-muted/50 transition-colors cursor-pointer"
-                >
+                  className="flex items-center space-x-3 border rounded-lg p-4 hover:bg-muted/50 transition-colors cursor-pointer">
                   <RadioGroupItem value="left" id="position-left" />
                   <div className="flex items-center gap-2 flex-1">
                     <PanelLeft className="h-4 w-4" />
@@ -124,8 +122,7 @@ export function SidebarSettingsForm() {
 
                 <label
                   htmlFor="position-right"
-                  className="flex items-center space-x-3 border rounded-lg p-4 hover:bg-muted/50 transition-colors cursor-pointer"
-                >
+                  className="flex items-center space-x-3 border rounded-lg p-4 hover:bg-muted/50 transition-colors cursor-pointer">
                   <RadioGroupItem value="right" id="position-right" />
                   <div className="flex items-center gap-2 flex-1">
                     <PanelRight className="h-4 w-4" />
@@ -157,12 +154,10 @@ export function SidebarSettingsForm() {
               <RadioGroup
                 value={settings?.sidebarType || "toggle"}
                 onValueChange={handleTypeChange}
-                className="grid grid-cols-1 gap-4"
-              >
+                className="grid grid-cols-1 gap-4">
                 <label
                   htmlFor="type-toggle"
-                  className="flex items-center space-x-3 border rounded-lg p-4 hover:bg-muted/50 transition-colors cursor-pointer"
-                >
+                  className="flex items-center space-x-3 border rounded-lg p-4 hover:bg-muted/50 transition-colors cursor-pointer">
                   <RadioGroupItem value="toggle" id="type-toggle" />
                   <div className="flex items-center gap-2 flex-1">
                     <Menu className="h-4 w-4" />
@@ -177,8 +172,7 @@ export function SidebarSettingsForm() {
 
                 <label
                   htmlFor="type-icon"
-                  className="flex items-center space-x-3 border rounded-lg p-4 hover:bg-muted/50 transition-colors cursor-pointer"
-                >
+                  className="flex items-center space-x-3 border rounded-lg p-4 hover:bg-muted/50 transition-colors cursor-pointer">
                   <RadioGroupItem value="icon" id="type-icon" />
                   <div className="flex items-center gap-2 flex-1">
                     <MoreHorizontal className="h-4 w-4" />

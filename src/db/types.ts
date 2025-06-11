@@ -1,5 +1,5 @@
 import type { InferSelectModel } from "drizzle-orm";
-import type { collection, note, user, settings } from "./schema";
+import type { collection, note, settings, user } from "./schema";
 
 type Note = InferSelectModel<typeof note>;
 type Collection = InferSelectModel<typeof collection>;

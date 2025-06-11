@@ -1,5 +1,6 @@
 "use client";
 
+import { useAppSettings } from "@/components/sidebar-provider";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -7,9 +8,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useAppSettings } from "@/components/sidebar-provider";
-import { UISettings } from "@/lib/settings";
-import { Moon, Sun, Monitor } from "lucide-react";
+import type { UISettings } from "@/lib/settings";
+import { Monitor, Moon, Sun } from "lucide-react";
 import { toast } from "sonner";
 
 export function ThemeSettings(props: React.ComponentProps<"button">) {
@@ -20,7 +20,7 @@ export function ThemeSettings(props: React.ComponentProps<"button">) {
       await updateSettings({ theme });
     } catch (error) {
       toast.error(
-        error instanceof Error ? error.message : "Failed to update theme"
+        error instanceof Error ? error.message : "Failed to update theme",
       );
     }
   };

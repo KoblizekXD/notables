@@ -6,32 +6,32 @@ import {
   author,
   collection,
   note,
+  settings,
   tag,
   taggedEntity,
   user,
-  settings,
 } from "@/db/schema";
-import { and, desc, eq } from "drizzle-orm";
-import {
-  createBucketIfNotExists,
-  s3Client,
-  getSignedAvatarUrl,
-} from "@/lib/minio";
 import { auth } from "@/lib/auth";
 import {
-  settingsSchema,
+  createBucketIfNotExists,
+  getSignedAvatarUrl,
+  s3Client,
+} from "@/lib/minio";
+import {
   booleanToSidebarPosition,
   booleanToSidebarType,
   numberToTheme,
+  settingsSchema,
   sidebarPositionToBoolean,
   sidebarTypeToBoolean,
   themeToNumber,
 } from "@/lib/schemas";
+import { and, desc, eq } from "drizzle-orm";
 import { headers } from "next/headers";
 
 export async function saveNote(
   id: string,
-  segments: NoteSegment[]
+  segments: NoteSegment[],
 ): Promise<string | undefined> {
   const result = await db
     .update(note)
@@ -46,7 +46,7 @@ export async function saveNote(
 }
 export const getMostLikedNotes = async (
   userId: typeof user.id,
-  limit: number
+  limit: number,
 ) =>
   await db
     .select()
@@ -75,7 +75,7 @@ export const getUserNotes = async (userId: string, limit: number) =>
     .limit(limit);
 
 export async function uploadAvatar(
-  formData: FormData
+  formData: FormData,
 ): Promise<{ success: boolean; imagePath?: string }> {
   const file = formData.get("file") as File;
   const userId = formData.get("userId") as string;
@@ -100,7 +100,7 @@ export async function uploadAvatar(
 
 export async function uploadImage(
   file: File,
-  name: string
+  name: string,
 ): Promise<{ success: boolean; imagePath?: string; error?: string }> {
   if (!file) return { success: false, error: "No file provided" };
   const ext = file.name.split(".").findLast(() => true);
@@ -140,7 +140,7 @@ export const updateUsername = async (userId: string, name: string) => {
 
 export async function uploadDescription(
   user_id: string,
-  description: string
+  description: string,
 ): Promise<string | undefined> {
   if (!description) {
     return "Description cannot be empty";
@@ -211,7 +211,7 @@ export async function getSettings(): Promise<{
       });
       userSettings = {
         sidebarPosition: booleanToSidebarPosition(
-          defaultSettings.sidebarPosition
+          defaultSettings.sidebarPosition,
         ),
         sidebarType: booleanToSidebarType(defaultSettings.sidebarType),
         theme: numberToTheme(defaultSettings.theme),
@@ -236,7 +236,7 @@ export async function getSettings(): Promise<{
 }
 
 export async function updateSettings(
-  newSettings: Partial<UISettings>
+  newSettings: Partial<UISettings>,
 ): Promise<{ settings: UISettings; success: boolean; error?: string }> {
   try {
     const session = await auth.api.getSession({
@@ -255,7 +255,7 @@ export async function updateSettings(
     }> = {};
     if (newSettings.sidebarPosition !== undefined)
       dbSettings.sidebarPosition = sidebarPositionToBoolean(
-        newSettings.sidebarPosition
+        newSettings.sidebarPosition,
       );
     if (newSettings.sidebarType !== undefined)
       dbSettings.sidebarType = sidebarTypeToBoolean(newSettings.sidebarType);
@@ -289,7 +289,7 @@ export async function updateSettings(
     const updatedSettings = updatedResult[0];
     const uiSettings: UISettings = {
       sidebarPosition: booleanToSidebarPosition(
-        updatedSettings.sidebarPosition
+        updatedSettings.sidebarPosition,
       ),
       sidebarType: booleanToSidebarType(updatedSettings.sidebarType),
       theme: numberToTheme(updatedSettings.theme),
@@ -427,7 +427,7 @@ export async function getEntitiesByTagIdWithDetails({
         default:
           return ref;
       }
-    })
+    }),
   );
 
   return results;
@@ -436,7 +436,7 @@ export async function getEntitiesByTagIdWithDetails({
 export async function getAuthorNotes(
   authorId: string,
   limit: number,
-  offset: number
+  offset: number,
 ) {
   return await db
     .select({
@@ -454,16 +454,17 @@ export async function getAuthorNotes(
 }
 
 export async function getSignedImageUrl(
-  objectName: string
+  objectName: string,
 ): Promise<string | null> {
   if (!objectName) return null;
   const bucketName = "images";
   const expirySeconds = 60 * 60;
   try {
+    await createBucketIfNotExists(bucketName);
     const url = await s3Client.presignedGetObject(
       bucketName,
       objectName,
-      expirySeconds
+      expirySeconds,
     );
     return url;
   } catch (err) {

@@ -1,5 +1,6 @@
 "use client";
 
+import { useAppSettings } from "@/components/sidebar-provider";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,9 +11,8 @@ import {
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { useAppSettings } from "@/components/sidebar-provider";
-import { Theme } from "@/lib/schemas";
-import { Loader2, RefreshCw, Monitor, Sun, Moon } from "lucide-react";
+import type { Theme } from "@/lib/schemas";
+import { Loader2, Monitor, Moon, RefreshCw, Sun } from "lucide-react";
 import { toast } from "sonner";
 
 export function ThemeSettingsForm() {
@@ -23,7 +23,7 @@ export function ThemeSettingsForm() {
       await updateSettings({ theme });
     } catch (error) {
       toast.error(
-        error instanceof Error ? error.message : "Failed to update theme"
+        error instanceof Error ? error.message : "Failed to update theme",
       );
     }
   };
@@ -83,12 +83,10 @@ export function ThemeSettingsForm() {
             <RadioGroup
               value={settings?.theme || "system"}
               onValueChange={handleThemeChange}
-              className="grid grid-cols-1 gap-4"
-            >
+              className="grid grid-cols-1 gap-4">
               <label
                 htmlFor="system"
-                className="flex items-center space-x-3 border rounded-lg p-4 hover:bg-muted/50 transition-colors cursor-pointer"
-              >
+                className="flex items-center space-x-3 border rounded-lg p-4 hover:bg-muted/50 transition-colors cursor-pointer">
                 <RadioGroupItem value="system" id="system" />
                 <div className="flex items-center gap-2 flex-1">
                   <Monitor className="h-4 w-4" />
@@ -103,8 +101,7 @@ export function ThemeSettingsForm() {
 
               <label
                 htmlFor="light"
-                className="flex items-center space-x-3 border rounded-lg p-4 hover:bg-muted/50 transition-colors cursor-pointer"
-              >
+                className="flex items-center space-x-3 border rounded-lg p-4 hover:bg-muted/50 transition-colors cursor-pointer">
                 <RadioGroupItem value="light" id="light" />
                 <div className="flex items-center gap-2 flex-1">
                   <Sun className="h-4 w-4" />
@@ -119,8 +116,7 @@ export function ThemeSettingsForm() {
 
               <label
                 htmlFor="dark"
-                className="flex items-center space-x-3 border rounded-lg p-4 hover:bg-muted/50 transition-colors cursor-pointer"
-              >
+                className="flex items-center space-x-3 border rounded-lg p-4 hover:bg-muted/50 transition-colors cursor-pointer">
                 <RadioGroupItem value="dark" id="dark" />
                 <div className="flex items-center gap-2 flex-1">
                   <Moon className="h-4 w-4" />

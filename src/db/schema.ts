@@ -5,10 +5,10 @@ import {
   pgEnum,
   pgTable,
   primaryKey,
+  smallint,
   text,
   timestamp,
   uuid,
-  smallint,
 } from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
@@ -89,7 +89,7 @@ export const taggedEntity = pgTable(
   },
   (table) => [
     primaryKey({ columns: [table.tagId, table.entityId, table.entityType] }),
-  ]
+  ],
 );
 
 export const taggedEntityRelations = relations(taggedEntity, ({ one }) => ({
@@ -100,12 +100,12 @@ export const taggedEntityRelations = relations(taggedEntity, ({ one }) => ({
   author: one(author, {
     fields: [taggedEntity.entityId],
     references: [author.id],
-    relationName: 'author_relation',
+    relationName: "author_relation",
   }),
   work: one(work, {
     fields: [taggedEntity.entityId],
     references: [work.id],
-    relationName: 'work_relation',
+    relationName: "work_relation",
   }),
   note: one(note, {
     fields: [taggedEntity.entityId],
@@ -132,7 +132,7 @@ export const tagRelations = relations(tag, ({ many }) => ({
 
 export const authorRelations = relations(author, ({ many }) => ({
   taggedEntities: many(taggedEntity, {
-    relationName: 'author_relation',
+    relationName: "author_relation",
   }),
 }));
 
@@ -154,7 +154,7 @@ export const work = pgTable("work", {
 
 export const workRelations = relations(work, ({ many }) => ({
   taggedEntities: many(taggedEntity, {
-    relationName: 'work_relation',
+    relationName: "work_relation",
   }),
 }));
 
@@ -208,7 +208,7 @@ export const favorite = pgTable(
   },
   (table) => [
     primaryKey({ columns: [table.userId, table.entityId, table.entityType] }),
-  ]
+  ],
 );
 
 export const collectionNote = pgTable("collection_note", {

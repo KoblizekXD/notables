@@ -51,11 +51,12 @@ export function PaginatedNotePreview({
             noteQuery.data?.map((note) => (
               <div
                 key={note.id}
-                className="p-4 border flex justify-center items-center rounded-lg bg-background w-1/2"
-              >
+                className="p-4 border flex justify-center items-center rounded-lg bg-background w-1/2">
                 <div className="flex flex-col gap-y-0.5">
                   <h2>{note.title}</h2>
-                  <p className="text-sm text-muted-foreground">Written by: {note.username}</p>
+                  <p className="text-sm text-muted-foreground">
+                    Written by: {note.username}
+                  </p>
                 </div>
                 <div className="ml-auto flex items-center gap-x-2">
                   <p className="text-sm text-muted-foreground">
@@ -65,8 +66,7 @@ export function PaginatedNotePreview({
                   <LinkingButton
                     variant="link"
                     size="icon"
-                    href={`/notes/${note.id}`}
-                  >
+                    href={`/notes/${note.id}`}>
                     <ArrowRight />
                   </LinkingButton>
                 </div>

@@ -1,13 +1,14 @@
 "use client";
 
-import React, { createContext, useContext, useEffect } from "react";
 import {
   SidebarProvider as BaseSidebarProvider,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { useTheme } from "next-themes";
 import { useSettings } from "@/hooks/use-settings";
-import { UISettings } from "@/lib/settings";
+import type { UISettings } from "@/lib/settings";
+import { useTheme } from "next-themes";
+import type React from "react";
+import { createContext, useContext, useEffect } from "react";
 
 interface SettingsContextType {
   settings: UISettings | null;
@@ -35,9 +36,9 @@ export function SidebarProvider({
       <ProviderContent
         settings={settings}
         loading={loading}
-        updateSettings={updateSettings}
-        children={children}
-      />
+        updateSettings={updateSettings}>
+        {children}
+      </ProviderContent>
     </BaseSidebarProvider>
   );
 }
@@ -148,9 +149,7 @@ function ProviderContent({
 export function useAppSettings() {
   const context = useContext(SettingsContext);
   if (!context)
-    throw new Error(
-      "useAppSettings must be used within a SidebarProvider"
-    );
+    throw new Error("useAppSettings must be used within a SidebarProvider");
   return context;
 }
 

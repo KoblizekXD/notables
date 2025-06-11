@@ -1,4 +1,5 @@
 "use client";
+import { useAppSettings } from "@/components/sidebar-provider";
 import {
   Select,
   SelectContent,
@@ -6,8 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useAppSettings } from "@/components/sidebar-provider";
-import { UISettings } from "@/lib/settings";
+import type { UISettings } from "@/lib/settings";
 import { toast } from "sonner";
 
 export default function SidebarSettings() {
@@ -17,7 +17,7 @@ export default function SidebarSettings() {
       await updateSettings({ sidebarPosition: value });
     } catch (error) {
       toast.error(
-        error instanceof Error ? error.message : "Failed to update position"
+        error instanceof Error ? error.message : "Failed to update position",
       );
     }
   };
@@ -27,7 +27,7 @@ export default function SidebarSettings() {
       await updateSettings({ sidebarType: value });
     } catch (error) {
       toast.error(
-        error instanceof Error ? error.message : "Failed to update type"
+        error instanceof Error ? error.message : "Failed to update type",
       );
     }
   };
@@ -37,14 +37,12 @@ export default function SidebarSettings() {
       <div>
         <label
           htmlFor="sidebar-position"
-          className="block text-sm font-medium text-muted-foreground"
-        >
+          className="block text-sm font-medium text-muted-foreground">
           Sidebar Position
         </label>
         <Select
           value={settings?.sidebarPosition || "left"}
-          onValueChange={handlePositionChange}
-        >
+          onValueChange={handlePositionChange}>
           <SelectTrigger className="w-full">
             <SelectValue id="sidebar-position" placeholder="Select Position" />
           </SelectTrigger>
@@ -57,14 +55,12 @@ export default function SidebarSettings() {
       <div>
         <label
           htmlFor="sidebar-type"
-          className="block text-sm font-medium text-muted-foreground"
-        >
+          className="block text-sm font-medium text-muted-foreground">
           Sidebar Type
         </label>
         <Select
           value={settings?.sidebarType || "toggle"}
-          onValueChange={handleTypeChange}
-        >
+          onValueChange={handleTypeChange}>
           <SelectTrigger className="w-full">
             <SelectValue id="sidebar-type" placeholder="Select Type" />
           </SelectTrigger>

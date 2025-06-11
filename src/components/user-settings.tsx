@@ -19,7 +19,7 @@ import { ChangeUsernameDialog } from "./change-username-dialog";
 
 async function getCroppedImg(
   imageSrc: string,
-  crop: { width: number; height: number; x: number; y: number }
+  crop: { width: number; height: number; x: number; y: number },
 ): Promise<Blob> {
   const image = new Image();
   image.src = imageSrc;
@@ -41,7 +41,7 @@ async function getCroppedImg(
     0,
     0,
     crop.width,
-    crop.height
+    crop.height,
   );
 
   return new Promise((resolve) => {
@@ -115,12 +115,13 @@ export function UserSettings({
           <DialogHeader>
             <DialogTitle>Upload and Crop Avatar</DialogTitle>
           </DialogHeader>
-          <div
+          <button
+            type="button"
             className="group w-full mt-4 border-3 border-dashed rounded-lg hover:border-black/20 transition-colors duration-200 aspect-square relative bg-muted overflow-hidden select-none"
             onClick={() => {
               if (imageSrc === null) inputRef.current?.click();
             }}
-          >
+            aria-label="Select image to upload">
             {imageSrc ? (
               <Cropper
                 image={imageSrc}
@@ -138,7 +139,7 @@ export function UserSettings({
                 </div>
               </div>
             )}
-          </div>
+          </button>
 
           <div className="w-full flex flex-row gap-2 justify-between items-center">
             <label htmlFor="zoom-slider" className="select-none">

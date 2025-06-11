@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Avatar as UIAvatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { AvatarFallback, AvatarImage, Avatar as UIAvatar } from "./ui/avatar";
 
 interface AvatarProps {
   userId: string;
@@ -19,8 +19,12 @@ export function Avatar({
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [imageKey, setImageKey] = useState(0);
+  const [currentImagePath, setCurrentImagePath] = useState(imagePath);
   useEffect(() => {
-    if (!imagePath) {
+    setCurrentImagePath(imagePath);
+  }, [imagePath]);
+  useEffect(() => {
+    if (!currentImagePath) {
       setImageUrl(null);
       setLoading(false);
       return;
@@ -29,7 +33,7 @@ export function Avatar({
       try {
         setLoading(true);
         const { getAvatarUrl } = await import("@/lib/actions");
-        const url = await getAvatarUrl(imagePath);
+        const url = await getAvatarUrl(currentImagePath);
         setImageUrl(url);
       } catch (error) {
         console.error("Error fetching avatar URL:", error);
@@ -39,14 +43,17 @@ export function Avatar({
       }
     };
     fetchImageUrl();
-  }, [imagePath, imageKey]);
+  }, [currentImagePath, imageKey]);
+
   useEffect(() => {
     const handleAvatarUpdate = (event: CustomEvent) => {
       if (event.detail.userId === userId) {
-        setImageKey((prev) => prev + 1); 
+        setImageUrl(null);
+        setLoading(true);
+        setCurrentImagePath(event.detail.imagePath);
+        setImageKey((prev) => prev + 1);
       }
     };
-
     window.addEventListener(
       "avatarUpdated",
       handleAvatarUpdate as EventListener
@@ -64,7 +71,7 @@ export function Avatar({
       <AvatarImage
         src={imageUrl || ""}
         alt="Profile picture"
-        key={imageKey}
+        key={`${userId}-${imageKey}`}
       />
       <AvatarFallback>{loading ? "..." : fallback}</AvatarFallback>
     </UIAvatar>

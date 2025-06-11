@@ -58,8 +58,7 @@ export function PaginatedTagEntityPreview({
             entityQuery.data?.map((entity) => (
               <div
                 key={entity.entityId}
-                className="p-4 border flex justify-center items-center rounded-lg bg-background w-1/2"
-              >
+                className="p-4 border flex justify-center items-center rounded-lg bg-background w-1/2">
                 <div className="flex flex-col gap-y-0.5">
                   {/* biome-ignore lint/suspicious/noExplicitAny: <explanation> */}
                   <h2>{(entity as any).entity.name}</h2>
@@ -75,10 +74,9 @@ export function PaginatedTagEntityPreview({
                       entity.entityType === "author"
                         ? `/authors/${entity.entityId}`
                         : entity.entityType === "work"
-                        ? `/works/${entity.entityId}`
-                        : `/notes/${entity.entityId}`
-                    }
-                  >
+                          ? `/works/${entity.entityId}`
+                          : `/notes/${entity.entityId}`
+                    }>
                     <ArrowRight />
                   </LinkingButton>
                 </div>
