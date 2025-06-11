@@ -18,9 +18,9 @@ const nextConfig: NextConfig = {
         hostname: "notables.aa55h.dev",
         pathname: "/images/**",
         protocol: "https",
-      }
-    ]
-  }
+      },
+    ],
+  },
 };
 
 export default nextConfig;
