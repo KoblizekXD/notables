@@ -81,7 +81,7 @@ export function NewNoteDialog({ open, onOpenChange }: NewNoteDialogProps) {
   useEffect(() => {
     if (selectionOptions.selectWork) {
       setLoadingWorks(true);
-      setSelectedWork(""); 
+      setSelectedWork("");
       getAllWorks()
         .then((worksData) => {
           setWorks(worksData);
@@ -314,12 +314,26 @@ export function NewNoteDialog({ open, onOpenChange }: NewNoteDialogProps) {
           >
             Cancel
           </Button>
-          <Button onClick={handleSubmit} disabled={isPending}>
-            {isPending && (
-              <LoaderCircle className="w-4 h-4 animate-spin mr-2" />
-            )}
-            Create Note
-          </Button>
+          <div className="group relative overflow-hidden rounded-md">
+            {/* Background transition element */}
+            <div className="absolute inset-0 bg-primary w-0 transition-[width] duration-400 group-hover:w-full rounded-md" />
+
+            <Button
+              onClick={handleSubmit}
+              disabled={isPending}
+              className="relative z-10 bg-transparent hover:bg-transparent"
+            >
+              <span className="relative">
+                <span className="flex items-center gap-2">
+                  {isPending && (
+                    <LoaderCircle className="w-4 h-4 animate-spin" />
+                  )}
+                  Create Note
+                </span>
+                <span className="absolute -bottom-0.5 left-0 h-0.5 bg-primary-foreground w-0 transition-[width] duration-400 group-hover:w-full rounded-xl" />
+              </span>
+            </Button>
+          </div>
         </DialogFooter>
       </DialogContent>
     </Dialog>
