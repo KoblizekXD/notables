@@ -2,13 +2,28 @@
 
 import type { NoteSegment } from "@/components/segment-editor";
 import db from "@/db/db";
-import { collection, note, user } from "@/db/schema";
-import { createBucketIfNotExists, s3Client } from "@/lib/minio";
+import { collection, note, user, settings } from "@/db/schema";
+import {
+  createBucketIfNotExists,
+  s3Client,
+  getSignedAvatarUrl,
+} from "@/lib/minio";
 import { desc, eq } from "drizzle-orm";
+import { auth } from "@/lib/auth";
+import {
+  settingsSchema,
+  booleanToSidebarPosition,
+  booleanToSidebarType,
+  numberToTheme,
+  sidebarPositionToBoolean,
+  sidebarTypeToBoolean,
+  themeToNumber,
+} from "@/lib/schemas";
+import { headers } from "next/headers";
 
 export async function saveNote(
   id: string,
-  segments: NoteSegment[],
+  segments: NoteSegment[]
 ): Promise<string | undefined> {
   const result = await db
     .update(note)
@@ -23,7 +38,7 @@ export async function saveNote(
 }
 export const getMostLikedNotes = async (
   userId: typeof user.id,
-  limit: number,
+  limit: number
 ) =>
   await db
     .select()
@@ -52,8 +67,8 @@ export const getUserNotes = async (userId: string, limit: number) =>
     .limit(limit);
 
 export async function uploadAvatar(
-  formData: FormData,
-): Promise<{ success: boolean }> {
+  formData: FormData
+): Promise<{ success: boolean; imagePath?: string }> {
   const file = formData.get("file") as File;
   const userId = formData.get("userId") as string;
   if (!file || !userId) return { success: false };
@@ -68,7 +83,7 @@ export async function uploadAvatar(
     await s3Client.putObject(bucketName, objectName, buffer);
     const imagePath = `${objectName}`;
     await db.update(user).set({ image: imagePath }).where(eq(user.id, userId));
-    return { success: true };
+    return { success: true, imagePath };
   } catch (error) {
     console.error("Upload failed:", error);
     return { success: false };
@@ -96,7 +111,7 @@ export const updateUsername = async (userId: string, name: string) => {
 
 export async function uploadDescription(
   user_id: string,
-  description: string,
+  description: string
 ): Promise<string | undefined> {
   if (!description) {
     return "Description cannot be empty";
@@ -125,4 +140,149 @@ export async function uploadDescription(
   }
 
   return undefined;
+}
+
+export async function getAvatarUrl(imagePath: string): Promise<string | null> {
+  try {
+    return await getSignedAvatarUrl(imagePath);
+  } catch (error) {
+    console.error("Error getting avatar URL:", error);
+    return null;
+  }
+}
+
+export interface UISettings {
+  sidebarPosition: "left" | "right";
+  sidebarType: "toggle" | "icon";
+  theme: "system" | "light" | "dark";
+}
+
+export async function getSettings(): Promise<{
+  settings: UISettings;
+  error?: string;
+}> {
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+    if (!session) 
+      return { settings: getDefaultSettings(), error: "Unauthorized" };
+    const result = await db
+      .select()
+      .from(settings)
+      .where(eq(settings.userId, session.user.id))
+      .limit(1);
+
+    let userSettings: UISettings;
+    if (result.length === 0) {
+      const defaultSettings = settingsSchema.parse({});
+      await db.insert(settings).values({
+        userId: session.user.id,
+        ...defaultSettings,
+      });
+      userSettings = {
+        sidebarPosition: booleanToSidebarPosition(
+          defaultSettings.sidebarPosition
+        ),
+        sidebarType: booleanToSidebarType(defaultSettings.sidebarType),
+        theme: numberToTheme(defaultSettings.theme),
+      };
+    } else {
+      const dbSettings = result[0];
+      userSettings = {
+        sidebarPosition: booleanToSidebarPosition(dbSettings.sidebarPosition),
+        sidebarType: booleanToSidebarType(dbSettings.sidebarType),
+        theme: numberToTheme(dbSettings.theme),
+      };
+    }
+
+    return { settings: userSettings };
+  } catch (error) {
+    console.error("Error fetching settings:", error);
+    return {
+      settings: getDefaultSettings(),
+      error: "Failed to fetch settings",
+    };
+  }
+}
+
+export async function updateSettings(
+  newSettings: Partial<UISettings>
+): Promise<{ settings: UISettings; success: boolean; error?: string }> {
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+    if (!session) 
+      return {
+        settings: getDefaultSettings(),
+        success: false,
+        error: "Unauthorized",
+      };
+    const dbSettings: Partial<{
+      sidebarPosition: boolean;
+      sidebarType: boolean;
+      theme: number;
+    }> = {};
+    if (newSettings.sidebarPosition !== undefined) 
+      dbSettings.sidebarPosition = sidebarPositionToBoolean(
+        newSettings.sidebarPosition
+      );
+    if (newSettings.sidebarType !== undefined) 
+      dbSettings.sidebarType = sidebarTypeToBoolean(newSettings.sidebarType);
+    if (newSettings.theme !== undefined) 
+      dbSettings.theme = themeToNumber(newSettings.theme);
+    const existingSettings = await db
+      .select()
+      .from(settings)
+      .where(eq(settings.userId, session.user.id))
+      .limit(1);
+    if (existingSettings.length > 0) {
+      await db
+        .update(settings)
+        .set(dbSettings)
+        .where(eq(settings.userId, session.user.id));
+    } else {
+      const defaultSettings = settingsSchema.parse({});
+      await db.insert(settings).values({
+        userId: session.user.id,
+        sidebarPosition:
+          dbSettings.sidebarPosition ?? defaultSettings.sidebarPosition,
+        sidebarType: dbSettings.sidebarType ?? defaultSettings.sidebarType,
+        theme: dbSettings.theme ?? defaultSettings.theme,
+      });
+    }
+    const updatedResult = await db
+      .select()
+      .from(settings)
+      .where(eq(settings.userId, session.user.id))
+      .limit(1);
+    const updatedSettings = updatedResult[0];
+    const uiSettings: UISettings = {
+      sidebarPosition: booleanToSidebarPosition(
+        updatedSettings.sidebarPosition
+      ),
+      sidebarType: booleanToSidebarType(updatedSettings.sidebarType),
+      theme: numberToTheme(updatedSettings.theme),
+    };
+    return {
+      success: true,
+      settings: uiSettings,
+    };
+  } catch (error) {
+    console.error("Error updating settings:", error);
+    return {
+      settings: getDefaultSettings(),
+      success: false,
+      error: "Failed to update settings",
+    };
+  }
+}
+
+function getDefaultSettings(): UISettings {
+  return {
+    sidebarPosition: "left",
+    sidebarType: "toggle",
+    theme: "system",
+  };
 }

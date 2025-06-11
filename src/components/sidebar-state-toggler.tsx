@@ -24,12 +24,14 @@ export function SidebarStateToggler() {
     <>
       <DropdownMenuCheckboxItem
         checked={sidebarType === "icon"}
-        onCheckedChange={toggleSidebarType}>
+        onCheckedChange={() => toggleSidebarType()}
+      >
         Collapsible sidebar
       </DropdownMenuCheckboxItem>
       <DropdownMenuCheckboxItem
         checked={sidebarPosition === "right"}
-        onCheckedChange={toggleSidebarPosition}>
+        onCheckedChange={() => toggleSidebarPosition()}
+      >
         Move sidebar to right
       </DropdownMenuCheckboxItem>
     </>

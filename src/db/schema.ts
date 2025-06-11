@@ -7,6 +7,7 @@ import {
   text,
   timestamp,
   uuid,
+  smallint,
 } from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
@@ -87,7 +88,7 @@ export const taggedEntity = pgTable(
   },
   (table) => [
     primaryKey({ columns: [table.tagId, table.entityId, table.entityType] }),
-  ],
+  ]
 );
 
 export const author = pgTable("author", {
@@ -169,7 +170,7 @@ export const favorite = pgTable(
   },
   (table) => [
     primaryKey({ columns: [table.userId, table.entityId, table.entityType] }),
-  ],
+  ]
 );
 
 export const collectionNote = pgTable("collection_note", {
@@ -192,4 +193,14 @@ export const collection = pgTable("collection", {
   likes: integer("likes").notNull().default(0),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const settings = pgTable("settings", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  sidebarPosition: boolean().notNull().default(false),
+  sidebarType: boolean().notNull().default(false),
+  theme: smallint().notNull().default(0), // 0- system, 1- light, 2- dark
 });

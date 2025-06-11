@@ -1,4 +1,5 @@
-import SidebarSettings from "@/components/sidebar-setting";
+import { SidebarSettingsForm } from "@/components/sidebar-settings-form";
+import { ThemeSettingsForm } from "@/components/theme-settings-form";
 import {
   Accordion,
   AccordionContent,
@@ -15,7 +16,38 @@ export default async function Settings() {
   return (
     <div className="m-3 sm:m-4 md:m-5">
       <div className="flex flex-col w-full lg:max-w-4xl xl:max-w-7xl mx-auto gap-8">
-        <Accordion type="single" collapsible className="space-y-4">
+        <Accordion
+          type="single"
+          collapsible
+          className="space-y-4"
+          defaultValue="theme-settings"
+        >
+          <AccordionItem value="theme-settings">
+            <AccordionTrigger className="text-lg font-semibold text-muted-foreground">
+              Theme Settings
+            </AccordionTrigger>
+            <AccordionContent className="space-y-4">
+              <p className="text-sm text-muted-foreground">
+                Customize the appearance of the application. Changes are applied
+                immediately and cached locally.
+              </p>
+              <ThemeSettingsForm />
+            </AccordionContent>
+          </AccordionItem>
+
+          <AccordionItem value="sidebar-settings-new">
+            <AccordionTrigger className="text-lg font-semibold text-muted-foreground">
+              Sidebar Settings
+            </AccordionTrigger>
+            <AccordionContent className="space-y-4">
+              <p className="text-sm text-muted-foreground">
+                Configure the sidebar position and behavior. Changes are applied
+                immediately and cached locally.
+              </p>
+              <SidebarSettingsForm />
+            </AccordionContent>
+          </AccordionItem>
+
           <AccordionItem value="avatar-upload">
             <AccordionTrigger className="text-lg font-semibold text-muted-foreground">
               User settings
@@ -26,20 +58,10 @@ export default async function Settings() {
                 liking. A square aspect ratio is recommended for optimal
                 display.
               </p>
-              <UserSettings userId={session.user.id} />
-            </AccordionContent>
-          </AccordionItem>
-
-          <AccordionItem value="sidebar-settings">
-            <AccordionTrigger className="text-lg font-semibold text-muted-foreground">
-              Sidebar Settings
-            </AccordionTrigger>
-            <AccordionContent className="space-y-4">
-              <p className="text-sm text-muted-foreground">
-                Customize the position and type of the sidebar to suit your
-                preferences.
-              </p>
-              <SidebarSettings />
+              <UserSettings
+                userId={session.user.id}
+                currentImagePath={session.user.image}
+              />
             </AccordionContent>
           </AccordionItem>
         </Accordion>
