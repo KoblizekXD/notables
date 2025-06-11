@@ -91,13 +91,15 @@ export default function SignInPage({
         transition={{ duration: 0.4, ease: "circInOut" }}
         className={
           "w-[90%] h-fit md:w-[50%] md:min-h-fit p-5 flex flex-col gap-y-1 border border-border bg-background shadow-xl rounded-md"
-        }>
+        }
+      >
         <h1 className="text-2xl font-semibold">Sign in</h1>
         <h2 className="text-muted-foreground text-sm md:text-base flex items-center gap-x-1">
           Not a member yet?{" "}
           <Link
             className="underline flex items-center text-blue-500"
-            href={"/sign-up"}>
+            href={"/sign-up"}
+          >
             Join today
             <ArrowRightIcon size={18} />
           </Link>
@@ -105,7 +107,8 @@ export default function SignInPage({
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="pt-4 space-y-5">
+            className="pt-4 space-y-5"
+          >
             <FormField
               control={form.control}
               name="email"
@@ -143,7 +146,8 @@ export default function SignInPage({
             <Button
               type="submit"
               className="flex items-center gap-x-2"
-              disabled={isPending}>
+              disabled={isPending}
+            >
               {isPending && <LoaderCircle className="animate-spin" />}
               Sign in
             </Button>
@@ -164,22 +168,29 @@ export default function SignInPage({
                 toast.error("Please complete the captcha challenge!");
                 return;
               }
-              const res = await authClient.signIn.social({
-                provider: "google",
-                callbackURL: `${websiteUrl}/api/auth/callback/github`,
-                fetchOptions: {
-                  headers: {
-                    "x-captcha-response": token,
-                  },
-                },
+              startTransition(async () => {
+                try {
+                  await authClient.signIn.social({
+                    provider: "google",
+                    callbackURL: `${websiteUrl}/home`,
+                    fetchOptions: {
+                      headers: {
+                        "x-captcha-response": token,
+                      },
+                    },
+                  });
+                } catch (error) {
+                  turnstile.reset();
+                  toast.error(
+                    "Failed to sign in with Google. Please try again."
+                  );
+                  console.error("Google OAuth error:", error);
+                }
               });
-              if (res.error) {
-                toast.error(res.error.message);
-                return;
-              }
-              router.push("/home");
-            }}>
+            }}
+          >
             <FontAwesomeIcon icon={faGoogle} className="mr-2" />
+            {isPending ? <LoaderCircle className="animate-spin ml-2" /> : null}
             Sign in with Google
           </Button>
           <Button
@@ -191,22 +202,29 @@ export default function SignInPage({
                 toast.error("Please complete the captcha challenge!");
                 return;
               }
-              const res = await authClient.signIn.social({
-                provider: "github",
-                callbackURL: `${websiteUrl}/api/auth/callback/github`,
-                fetchOptions: {
-                  headers: {
-                    "x-captcha-response": token,
-                  },
-                },
+              startTransition(async () => {
+                try {
+                  await authClient.signIn.social({
+                    provider: "github",
+                    callbackURL: `${websiteUrl}/home`,
+                    fetchOptions: {
+                      headers: {
+                        "x-captcha-response": token,
+                      },
+                    },
+                  });
+                } catch (error) {
+                  turnstile.reset();
+                  toast.error(
+                    "Failed to sign in with GitHub. Please try again."
+                  );
+                  console.error("GitHub OAuth error:", error);
+                }
               });
-              if (res.error) {
-                toast.error(res.error.message);
-                return;
-              }
-              router.push("/home");
-            }}>
+            }}
+          >
             <FontAwesomeIcon icon={faGithub} className="mr-2" />
+            {isPending ? <LoaderCircle className="animate-spin ml-2" /> : null}
             Sign in with GitHub
           </Button>
         </div>

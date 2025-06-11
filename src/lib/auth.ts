@@ -26,6 +26,10 @@ export const auth = betterAuth({
       },
     },
   },
+  session: {
+    expiresIn: 60 * 60 * 24 * 7,
+    updateAge: 60 * 60 * 24,
+  },
   onAPIError: {
     throw: true,
     errorURL: "/error",
@@ -33,14 +37,19 @@ export const auth = betterAuth({
   databaseHooks: {
     session: {
       create: {
-        after: async (session, context) => {
+        after: async (session) => {
           logger.info(`User ${session.userId} signed in`);
+        },
+      },
+      delete: {
+        after: async (session) => {
+          logger.info(`User ${session.userId} signed out`);
         },
       },
     },
     user: {
       create: {
-        after: async (user, context) => {
+        after: async (user) => {
           logger.info(`User ${user.id} signed up`);
         },
       },
