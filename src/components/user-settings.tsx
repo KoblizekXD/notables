@@ -12,6 +12,7 @@ import { Slider } from "@/components/ui/slider";
 import { uploadAvatar } from "@/lib/actions";
 import { useRef, useState } from "react";
 import Cropper, { type Area } from "react-easy-crop";
+import { toast } from "sonner";
 
 import { ChangeEmailDialog } from "./change-email-dialog";
 import { ChangeUsernameDialog } from "./change-username-dialog";
@@ -50,14 +51,19 @@ async function getCroppedImg(
   });
 }
 
-export function UserSettings({ userId }: { userId: string }) {
+export function UserSettings({
+  userId,
+  currentImagePath,
+}: {
+  userId: string;
+  currentImagePath: string | null | undefined;
+}) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
-  const [uploadSuccess, setUploadSuccess] = useState<boolean | null>(null);
-
+  const [isUploading, setIsUploading] = useState(false);
   const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -66,19 +72,37 @@ export function UserSettings({ userId }: { userId: string }) {
       reader.readAsDataURL(file);
     }
   };
-
   const onCropComplete = (_: Area, croppedAreaPixels: Area) => {
     setCroppedAreaPixels(croppedAreaPixels);
   };
-
   const onUpload = async () => {
     if (!imageSrc || !croppedAreaPixels) return;
-    const croppedBlob = await getCroppedImg(imageSrc, croppedAreaPixels);
-    const formData = new FormData();
-    formData.append("userId", userId);
-    formData.append("file", croppedBlob, "avatar.png");
-    const result = await uploadAvatar(formData);
-    setUploadSuccess(result.success);
+    setIsUploading(true);
+    try {
+      const croppedBlob = await getCroppedImg(imageSrc, croppedAreaPixels);
+      const formData = new FormData();
+      formData.append("userId", userId);
+      formData.append("file", croppedBlob, "avatar.png");
+      const result = await uploadAvatar(formData);
+      if (result.success && result.imagePath) {
+        const event = new CustomEvent("avatarUpdated", {
+          detail: { userId, imagePath: result.imagePath },
+        });
+        window.dispatchEvent(event);
+        toast.success("Profile picture updated successfully!");
+        setImageSrc(null);
+        setCrop({ x: 0, y: 0 });
+        setZoom(1);
+        setCroppedAreaPixels(null);
+      } else {
+        toast.error("Failed to upload profile picture. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error uploading avatar:", error);
+      toast.error("An error occurred while uploading. Please try again.");
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   return (
@@ -91,13 +115,13 @@ export function UserSettings({ userId }: { userId: string }) {
           <DialogHeader>
             <DialogTitle>Upload and Crop Avatar</DialogTitle>
           </DialogHeader>
-
-          {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
-          <div
+          <button
+            type="button"
             className="group w-full mt-4 border-3 border-dashed rounded-lg hover:border-black/20 transition-colors duration-200 aspect-square relative bg-muted overflow-hidden select-none"
             onClick={() => {
               if (imageSrc === null) inputRef.current?.click();
-            }}>
+            }}
+            aria-label="Select image to upload">
             {imageSrc ? (
               <Cropper
                 image={imageSrc}
@@ -115,7 +139,7 @@ export function UserSettings({ userId }: { userId: string }) {
                 </div>
               </div>
             )}
-          </div>
+          </button>
 
           <div className="w-full flex flex-row gap-2 justify-between items-center">
             <label htmlFor="zoom-slider" className="select-none">
@@ -143,20 +167,12 @@ export function UserSettings({ userId }: { userId: string }) {
             <Button variant="outline" onClick={() => inputRef.current?.click()}>
               Select Image
             </Button>
-            <Button onClick={onUpload} disabled={!imageSrc}>
-              Upload
+            <Button onClick={onUpload} disabled={!imageSrc || isUploading}>
+              {isUploading ? "Uploading..." : "Upload"}
             </Button>
           </div>
-
-          {uploadSuccess === true && (
-            <p className="text-green-500 mt-2">Upload successful</p>
-          )}
-          {uploadSuccess === false && (
-            <p className="text-red-500 mt-2">Upload failed</p>
-          )}
         </DialogContent>
       </Dialog>
-
       <ChangeEmailDialog userId={userId} />
       <ChangeUsernameDialog userId={userId} />
       <Button disabled>Change Password</Button>

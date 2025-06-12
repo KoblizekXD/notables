@@ -25,9 +25,7 @@ export default async function AuthorPage({
             .map((te) => te.tag)
             .map((tag) => (
               <Link key={tag.id} href={`/tags/${tag.id}`}>
-                <Badge
-                  className="font-[Inter] bg-foreground hover:bg-foreground/50 transition-colors text-background"
-                >
+                <Badge className="font-[Inter] bg-foreground hover:bg-foreground/50 transition-colors text-background">
                   {tag.name}
                 </Badge>
               </Link>

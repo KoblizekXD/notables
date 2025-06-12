@@ -5,6 +5,7 @@ import {
   pgEnum,
   pgTable,
   primaryKey,
+  smallint,
   text,
   timestamp,
   uuid,
@@ -99,12 +100,12 @@ export const taggedEntityRelations = relations(taggedEntity, ({ one }) => ({
   author: one(author, {
     fields: [taggedEntity.entityId],
     references: [author.id],
-    relationName: 'author_relation',
+    relationName: "author_relation",
   }),
   work: one(work, {
     fields: [taggedEntity.entityId],
     references: [work.id],
-    relationName: 'work_relation',
+    relationName: "work_relation",
   }),
   note: one(note, {
     fields: [taggedEntity.entityId],
@@ -131,16 +132,16 @@ export const tagRelations = relations(tag, ({ many }) => ({
 
 export const authorRelations = relations(author, ({ many }) => ({
   taggedEntities: many(taggedEntity, {
-    relationName: 'author_relation',
+    relationName: "author_relation",
   }),
 }));
 
 export const work = pgTable("work", {
   id: uuid("id").primaryKey().defaultRandom(),
   title: text("title").notNull(),
-  authorId: uuid("author_id")
-    .notNull()
-    .references(() => author.id, { onDelete: "cascade" }),
+  authorId: uuid("author_id").references(() => author.id, {
+    onDelete: "set null",
+  }),
   createdAt: timestamp("created_at")
     .defaultNow()
     .$onUpdateFn(() => new Date())
@@ -153,7 +154,7 @@ export const work = pgTable("work", {
 
 export const workRelations = relations(work, ({ many }) => ({
   taggedEntities: many(taggedEntity, {
-    relationName: 'work_relation',
+    relationName: "work_relation",
   }),
 }));
 
@@ -230,4 +231,14 @@ export const collection = pgTable("collection", {
   likes: integer("likes").notNull().default(0),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const settings = pgTable("settings", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  sidebarPosition: boolean().notNull().default(false),
+  sidebarType: boolean().notNull().default(false),
+  theme: smallint().notNull().default(0), // 0- system, 1- light, 2- dark
 });

@@ -35,30 +35,55 @@ export default async function EditorPage({
 
   let description = "";
   let name = undefined;
-  description = (
-    await db
-      .select({
-        id: author.id,
-        name: author.name,
-      })
-      .from(author)
-      .where(eq(author.id, result.entityId))
-      .execute()
-  )[0]?.name;
+
   if (result.entityType === "author") {
-    name = description;
-    description = "author";
+    const authorData = (
+      await db
+        .select({
+          id: author.id,
+          name: author.name,
+        })
+        .from(author)
+        .where(eq(author.id, result.entityId))
+        .execute()
+    )[0];
+
+    if (authorData) {
+      name = authorData.name;
+      description = "author";
+    }
   } else if (result.entityType === "work") {
-    description += "'s work";
-    name = (
+    const workData = (
       await db
         .select({
           title: work.title,
+          authorId: work.authorId,
         })
         .from(work)
-        .where(eq(work.authorId, result.entityId))
+        .where(eq(work.id, result.entityId))
         .execute()
-    )[0].title;
+    )[0];
+
+    if (workData) {
+      name = workData.title;
+
+      // Get author name if work has an author
+      if (workData.authorId) {
+        const authorData = (
+          await db
+            .select({
+              name: author.name,
+            })
+            .from(author)
+            .where(eq(author.id, workData.authorId))
+            .execute()
+        )[0];
+
+        description = authorData ? `${authorData.name}'s work` : "work";
+      } else {
+        description = "work";
+      }
+    }
   }
 
   return (

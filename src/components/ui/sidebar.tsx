@@ -123,17 +123,50 @@ function SidebarProvider({
 
   const state = open ? "expanded" : "collapsed";
 
-  const toggleSidebarPosition = React.useCallback(() => {
+  const toggleSidebarPosition = React.useCallback(async () => {
+    // Close the sidebar first
+    setOpen(false);
+
+    // Wait for close animation to complete
+    await new Promise((resolve) => setTimeout(resolve, 200));
+
+    // Change the position
     sidebarPosition === "left"
       ? setSidebarPosition("right")
       : setSidebarPosition("left");
-    return toggleSidebar();
-  }, [sidebarPosition, setSidebarPosition, toggleSidebar]);
 
-  const toggleSidebarType = React.useCallback(() => {
-    sidebarType === "icon" ? setSidebarType("toggle") : setSidebarType("icon");
-    return toggleSidebar();
-  }, [sidebarType, setSidebarType, toggleSidebar]);
+    // Wait a moment for the new position to take effect
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    // Reopen the sidebar
+    setOpen(true);
+  }, [sidebarPosition, setSidebarPosition, setOpen]);
+
+  const toggleSidebarType = React.useCallback(async () => {
+    const newType = sidebarType === "icon" ? "toggle" : "icon";
+    const changingToIcon = newType === "icon";
+
+    // Only close/reopen when changing to "icon" type
+    if (changingToIcon) {
+      // Close the sidebar first
+      setOpen(false);
+
+      // Wait for close animation to complete
+      await new Promise((resolve) => setTimeout(resolve, 200));
+    }
+
+    // Change the type
+    setSidebarType(newType);
+
+    // Only reopen if we closed it
+    if (changingToIcon) {
+      // Wait a moment for the new type to take effect
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      // Reopen the sidebar
+      setOpen(true);
+    }
+  }, [sidebarType, setSidebarType, setOpen]);
 
   const contextValue = React.useMemo<SidebarContextProps>(
     () => ({
@@ -151,7 +184,21 @@ function SidebarProvider({
       toggleSidebarPosition,
       setSidebarPosition,
     }),
-    [state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar],
+    [
+      state,
+      open,
+      setOpen,
+      isMobile,
+      openMobile,
+      setOpenMobile,
+      toggleSidebar,
+      sidebarType,
+      setSidebarType,
+      toggleSidebarType,
+      sidebarPosition,
+      setSidebarPosition,
+      toggleSidebarPosition,
+    ],
   );
 
   return (
