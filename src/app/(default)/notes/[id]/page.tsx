@@ -29,7 +29,7 @@ export default async function NotePage(props: {
       mode="preview"
       existingSegments={JSON.parse(note?.note.content || "[]")}>
       <div className="min-h-screen items-center w-full flex flex-col">
-        <div className="sticky backdrop-blur-md top-0 w-full z-50 grid grid-cols-2 px-4">
+        <div className="backdrop-blur-md top-0 w-full grid grid-cols-2 px-4">
           <div className="w-fit font-[Poppins] pl-1 pt-1 flex flex-col">
             <h1 className="text-2xl font-[600]">{note?.note.title}</h1>
             <Link
@@ -42,7 +42,7 @@ export default async function NotePage(props: {
           </div>
         </div>
         <SegmentPreviewer />
-        <div className="fixed border-t bottom-0 w-full z-50 grid grid-cols-2 px-4 py-4 bg-background">
+        <div className="border-t bottom-0 w-full z-50 grid grid-cols-2 px-4 py-4 bg-background">
           <div className="flex items-center gap-x-2">
             <h2>Updated at {note.note.updatedAt.toLocaleString()}</h2>
             <span className="text-muted-foreground text-sm">
