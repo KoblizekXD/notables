@@ -89,7 +89,7 @@ export const taggedEntity = pgTable(
   },
   (table) => [
     primaryKey({ columns: [table.tagId, table.entityId, table.entityType] }),
-  ]
+  ],
 );
 
 export const taggedEntityRelations = relations(taggedEntity, ({ one }) => ({
@@ -208,7 +208,7 @@ export const favorite = pgTable(
   },
   (table) => [
     primaryKey({ columns: [table.userId, table.entityId, table.entityType] }),
-  ]
+  ],
 );
 
 export const collectionNote = pgTable("collection_note", {

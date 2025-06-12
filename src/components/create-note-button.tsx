@@ -9,10 +9,10 @@ export function CreateNoteButton() {
 
   return (
     <>
-      <div
+      <button
+        type="button"
         className="group bg-foreground text-background py-2 px-3 rounded-lg cursor-pointer relative overflow-hidden"
-        onClick={() => setOpen(true)}
-      >
+        onClick={() => setOpen(true)}>
         <div className="absolute inset-0 bg-primary w-0 transition-[width] duration-500 group-hover:w-full rounded-lg" />
         <div className="relative inline-flex items-center text-lg z-10">
           <span className="relative mb-0.5">
@@ -23,7 +23,7 @@ export function CreateNoteButton() {
             <span className="absolute -bottom-0.5 left-0 h-0.5 bg-background w-0 transition-[width] duration-500 group-hover:w-full rounded-xl" />
           </span>
         </div>
-      </div>
+      </button>
       <NewNoteDialog open={open} onOpenChange={setOpen} />
     </>
   );

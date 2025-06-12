@@ -23,9 +23,7 @@ export function WorkSelector({
         options={workOptions}
         value={selectedWork}
         onValueChange={onWorkChange}
-        placeholder={
-          loadingWorks ? "Loading works..." : "Select a work"
-        }
+        placeholder={loadingWorks ? "Loading works..." : "Select a work"}
         searchPlaceholder="Search works..."
         emptyMessage="No works found."
         disabled={loadingWorks}

@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";
 import { Button } from "../ui/button";
-import { Combobox, type ComboboxOption } from "../ui/combobox";
+import type { ComboboxOption } from "../ui/combobox";
 import {
   Dialog,
   DialogContent,
@@ -67,7 +67,7 @@ export function NewNoteDialog({ open, onOpenChange }: NewNoteDialogProps) {
             authorsData.map((author) => ({
               value: author.id,
               label: author.name,
-            }))
+            })),
           );
         })
         .catch((error) => {
@@ -88,14 +88,14 @@ export function NewNoteDialog({ open, onOpenChange }: NewNoteDialogProps) {
           setWorkOptions(
             worksData.map((work) => {
               const authorName = authors.find(
-                (a) => a.id === work.authorId
+                (a) => a.id === work.authorId,
               )?.name;
               return {
                 value: work.id,
                 label: work.title,
                 description: authorName ? `by ${authorName}` : "No author",
               };
-            })
+            }),
           );
         })
         .catch((error) => {
@@ -109,6 +109,21 @@ export function NewNoteDialog({ open, onOpenChange }: NewNoteDialogProps) {
       setSelectedWork("");
     }
   }, [selectionOptions.selectWork, authors]);
+  const isFormValid = () => {
+    if (!title.trim()) return false;
+    const hasSelection =
+      selectionOptions.selectAuthor ||
+      selectionOptions.selectWork ||
+      selectionOptions.createAuthor ||
+      selectionOptions.createWork;
+    if (!hasSelection) return false;
+    if (selectionOptions.selectAuthor && !selectedAuthor) return false;
+    if (selectionOptions.selectWork && !selectedWork) return false;
+    if (selectionOptions.createAuthor && !newAuthorName.trim()) return false;
+    if (selectionOptions.createWork && !newWorkTitle.trim()) return false;
+
+    return true;
+  };
 
   const handleSubmit = () => {
     if (!title.trim()) {
@@ -144,7 +159,7 @@ export function NewNoteDialog({ open, onOpenChange }: NewNoteDialogProps) {
           }
           const bothResult = await createAuthorAndWork(
             newAuthorName,
-            newWorkTitle
+            newWorkTitle,
           );
           if (
             !bothResult.success ||
@@ -154,7 +169,6 @@ export function NewNoteDialog({ open, onOpenChange }: NewNoteDialogProps) {
             toast.error(bothResult.error || "Failed to create author and work");
             return;
           }
-
           createdAuthorId = bothResult.authorId;
           createdWorkId = bothResult.workId;
         } else if (selectionOptions.createAuthor) {
@@ -177,7 +191,7 @@ export function NewNoteDialog({ open, onOpenChange }: NewNoteDialogProps) {
             newWorkTitle,
             newWorkAuthor && newWorkAuthor !== "none"
               ? newWorkAuthor
-              : undefined
+              : undefined,
           );
           if (!workResult.success || !workResult.workId) {
             toast.error(workResult.error || "Failed to create work");
@@ -185,7 +199,6 @@ export function NewNoteDialog({ open, onOpenChange }: NewNoteDialogProps) {
           }
           createdWorkId = workResult.workId;
         }
-
         if (selectionOptions.selectAuthor) {
           if (!selectedAuthor) {
             toast.error("Please select an author");
@@ -253,8 +266,7 @@ export function NewNoteDialog({ open, onOpenChange }: NewNoteDialogProps) {
         if (!newOpen) {
           resetForm();
         }
-      }}
-    >
+      }}>
       <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Create New Note</DialogTitle>
@@ -310,19 +322,25 @@ export function NewNoteDialog({ open, onOpenChange }: NewNoteDialogProps) {
           <Button
             variant="outline"
             onClick={() => onOpenChange(false)}
-            disabled={isPending}
-          >
+            disabled={isPending}>
             Cancel
           </Button>
-          <div className="group relative overflow-hidden rounded-md">
-            {/* Background transition element */}
-            <div className="absolute inset-0 bg-primary w-0 transition-[width] duration-400 group-hover:w-full rounded-md" />
+          <div
+            className={`${
+              isFormValid() ? "group" : ""
+            } relative overflow-hidden rounded-md`}>
+            {isFormValid() && (
+              <div className="absolute inset-0 bg-primary w-0 transition-[width] duration-400 group-hover:w-full rounded-md" />
+            )}
 
             <Button
               onClick={handleSubmit}
               disabled={isPending}
-              className="relative z-10 bg-transparent hover:bg-transparent"
-            >
+              className={`relative z-10 bg-transparent hover:bg-transparent border-2 transition-colors ${
+                isFormValid()
+                  ? "text-white border-primary/30"
+                  : "text-red-500 border-red-500/50"
+              }`}>
               <span className="relative">
                 <span className="flex items-center gap-2">
                   {isPending && (
@@ -330,7 +348,9 @@ export function NewNoteDialog({ open, onOpenChange }: NewNoteDialogProps) {
                   )}
                   Create Note
                 </span>
-                <span className="absolute -bottom-0.5 left-0 h-0.5 bg-primary-foreground w-0 transition-[width] duration-400 group-hover:w-full rounded-xl" />
+                {isFormValid() && (
+                  <span className="absolute -bottom-0.5 left-0 h-0.5 bg-white w-0 transition-[width] duration-400 group-hover:w-full rounded-xl" />
+                )}
               </span>
             </Button>
           </div>

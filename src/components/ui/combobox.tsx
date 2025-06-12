@@ -60,10 +60,9 @@ export function Combobox({
           className={cn(
             "w-full justify-between",
             !value && "text-muted-foreground",
-            className
+            className,
           )}
-          disabled={disabled}
-        >
+          disabled={disabled}>
           {selectedOption ? selectedOption.label : placeholder}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -82,8 +81,7 @@ export function Combobox({
                     const newValue = currentValue === value ? "" : currentValue;
                     onValueChange?.(newValue);
                     setOpen(false);
-                  }}
-                >
+                  }}>
                   <div className="flex flex-col flex-1">
                     <span>{option.label}</span>
                     {option.description && (
@@ -95,7 +93,7 @@ export function Combobox({
                   <Check
                     className={cn(
                       "ml-auto h-4 w-4",
-                      value === option.value ? "opacity-100" : "opacity-0"
+                      value === option.value ? "opacity-100" : "opacity-0",
                     )}
                   />
                 </CommandItem>

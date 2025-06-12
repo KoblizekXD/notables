@@ -8,10 +8,7 @@ interface NoteTitleInputProps {
   onTitleChange: (title: string) => void;
 }
 
-export function NoteTitleInput({
-  title,
-  onTitleChange,
-}: NoteTitleInputProps) {
+export function NoteTitleInput({ title, onTitleChange }: NoteTitleInputProps) {
   return (
     <div className="grid gap-2">
       <Label htmlFor="title">Title</Label>

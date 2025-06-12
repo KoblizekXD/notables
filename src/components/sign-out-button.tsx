@@ -1,8 +1,8 @@
 "use client";
 
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import { authClient } from "@/lib/auth-client";
 import { signOutAction } from "@/lib/actions";
+import { authClient } from "@/lib/auth-client";
 import { LoaderCircle, LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -39,7 +39,7 @@ export function SignOutButton() {
                 router.push("/sign-in");
               } else {
                 toast.error(
-                  serverResult.error || "Failed to sign out. Please try again."
+                  serverResult.error || "Failed to sign out. Please try again.",
                 );
               }
             } catch (serverError) {
@@ -61,7 +61,7 @@ export function SignOutButton() {
           router.push("/sign-in");
         } else {
           toast.error(
-            serverResult.error || "Failed to sign out. Please try again."
+            serverResult.error || "Failed to sign out. Please try again.",
           );
         }
       }
@@ -77,7 +77,7 @@ export function SignOutButton() {
           router.push("/sign-in");
         } else {
           toast.error(
-            serverResult.error || "Failed to sign out. Please try again."
+            serverResult.error || "Failed to sign out. Please try again.",
           );
         }
       } catch (serverError) {
@@ -93,8 +93,7 @@ export function SignOutButton() {
     <DropdownMenuItem
       className="text-red-500 cursor-pointer"
       onClick={handleSignOut}
-      disabled={isSigningOut}
-    >
+      disabled={isSigningOut}>
       {isSigningOut ? <LoaderCircle className="animate-spin" /> : <LogOut />}
       {isSigningOut ? "Signing out..." : "Sign out"}
     </DropdownMenuItem>

@@ -23,9 +23,7 @@ export function AuthorSelector({
         options={authorOptions}
         value={selectedAuthor}
         onValueChange={onAuthorChange}
-        placeholder={
-          loadingAuthors ? "Loading authors..." : "Select an author"
-        }
+        placeholder={loadingAuthors ? "Loading authors..." : "Select an author"}
         searchPlaceholder="Search authors..."
         emptyMessage="No authors found."
         disabled={loadingAuthors}

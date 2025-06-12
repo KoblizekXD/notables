@@ -2,9 +2,9 @@ import Commander from "@/components/commander";
 import DynamicCommand from "@/components/dynamic-command";
 import Logo from "@/components/logo";
 import SidebarExec from "@/components/sidebar-inset";
+import { SidebarProvider } from "@/components/sidebar-provider";
 import { SidebarStateToggler } from "@/components/sidebar-state-toggler";
 import SidebarToggle from "@/components/sidebar-trigger";
-import { SidebarProvider } from "@/components/sidebar-provider";
 import { SignOutButton } from "@/components/sign-out-button";
 
 import { Avatar } from "@/components/avatar";
@@ -64,8 +64,7 @@ export default async function DashboardLayout({
                       </span>
                       <Link
                         className="text-xs font-normal underline gap-x-1 flex items-center"
-                        href={`/profiles/${session?.user.id}`}
-                      >
+                        href={`/profiles/${session?.user.id}`}>
                         My profile
                         <ExternalLink size={14} />
                       </Link>
