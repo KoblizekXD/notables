@@ -3,6 +3,7 @@
 import { saveNote } from "@/lib/actions";
 import {
   Bold,
+  ExternalLink,
   Import,
   Italic,
   LoaderCircle,
@@ -72,6 +73,16 @@ export function BottomFloatingButtons() {
 
   return (
     <div className="ml-auto flex items-center gap-x-2">
+      <Button
+        onClick={() => {
+          navigator.clipboard.writeText(
+            `${window.location.origin}/notes/${context.id}`,
+          );
+          toast.success("Link copied to clipboard");
+        }}
+        variant={"link"}>
+        Share <ExternalLink />
+      </Button>
       <Button
         onClick={() => {
           if (context.mode === "edit") context.setMode("preview");
