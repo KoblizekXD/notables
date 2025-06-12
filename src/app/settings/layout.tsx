@@ -1,12 +1,13 @@
-import { Avatar } from "@/components/avatar";
 import Commander from "@/components/commander";
-import DashboardFooter from "@/components/dashboard-footer";
 import DynamicCommand from "@/components/dynamic-command";
 import Logo from "@/components/logo";
 import SidebarExec from "@/components/sidebar-inset";
 import { SidebarProvider } from "@/components/sidebar-provider";
 import { SidebarStateToggler } from "@/components/sidebar-state-toggler";
+import SidebarToggle from "@/components/sidebar-trigger";
 import { SignOutButton } from "@/components/sign-out-button";
+
+import { Avatar } from "@/components/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -32,7 +33,7 @@ export default async function DashboardLayout({
     <div className="h-screen w-full">
       <SidebarProvider className="flex flex-col" defaultOpen={false}>
         <div className="bg-background h-[var(--header-height)] flex gap-x-2 md:gap-0 border-b md:grid grid-cols-3 w-full items-center sticky top-0 z-50">
-          <Logo className="md:ml-1.5" destination="/home" />
+          <Logo destination="/home" className="md:ml-1.5" />
           <div className="p-1 items-center md:items-stretch h-full flex-1 col-start-2 flex justify-end">
             <DynamicCommand trigger={<Commander />} />
           </div>
@@ -43,7 +44,7 @@ export default async function DashboardLayout({
                   <Avatar
                     userId={session?.user.id || ""}
                     imagePath={session?.user.image}
-                    fallback={session?.user.name?.substring(0, 2) || "??"}
+                    fallback={session?.user.name.substring(0, 2) || "??"}
                   />
                 </div>
               </DropdownMenuTrigger>
@@ -54,7 +55,7 @@ export default async function DashboardLayout({
                       <Avatar
                         userId={session?.user.id || ""}
                         imagePath={session?.user.image}
-                        fallback={session?.user.name?.substring(0, 2) || "??"}
+                        fallback={session?.user.name.substring(0, 2) || "??"}
                       />
                     </div>
                     <div className="flex flex-col">
@@ -63,7 +64,7 @@ export default async function DashboardLayout({
                       </span>
                       <Link
                         className="text-xs font-normal underline gap-x-1 flex items-center"
-                        href={`/profile/${session?.user.id}`}>
+                        href={`/profiles/${session?.user.id}`}>
                         My profile
                         <ExternalLink size={14} />
                       </Link>
@@ -79,11 +80,9 @@ export default async function DashboardLayout({
                   <Cloud />
                   API
                 </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href={"/settings"}>
-                    <Settings />
-                    Settings
-                  </Link>
+                <DropdownMenuItem>
+                  <Settings />
+                  Settings
                 </DropdownMenuItem>
                 <SignOutButton />
               </DropdownMenuContent>
@@ -91,11 +90,9 @@ export default async function DashboardLayout({
           </div>
         </div>
         <div className="flex flex-1">
-          <SidebarExec
-            userPath={`./home/profile/${session?.user.id}`}
-            className="flex flex-col justify-between">
+          <SidebarExec userPath={`/profiles/${session?.user.id}`}>
+            <SidebarToggle />
             {children}
-            <DashboardFooter />
           </SidebarExec>
         </div>
       </SidebarProvider>

@@ -139,9 +139,9 @@ export const authorRelations = relations(author, ({ many }) => ({
 export const work = pgTable("work", {
   id: uuid("id").primaryKey().defaultRandom(),
   title: text("title").notNull(),
-  authorId: uuid("author_id")
-    .notNull()
-    .references(() => author.id, { onDelete: "cascade" }),
+  authorId: uuid("author_id").references(() => author.id, {
+    onDelete: "set null",
+  }),
   createdAt: timestamp("created_at")
     .defaultNow()
     .$onUpdateFn(() => new Date())

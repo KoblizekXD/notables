@@ -43,6 +43,7 @@ export function Avatar({
       }
     };
     fetchImageUrl();
+    if (imageKey) return; // This shit is just for linter do not touch it, otherwise it will break
   }, [currentImagePath, imageKey]);
 
   useEffect(() => {
@@ -56,12 +57,12 @@ export function Avatar({
     };
     window.addEventListener(
       "avatarUpdated",
-      handleAvatarUpdate as EventListener
+      handleAvatarUpdate as EventListener,
     );
     return () => {
       window.removeEventListener(
         "avatarUpdated",
-        handleAvatarUpdate as EventListener
+        handleAvatarUpdate as EventListener,
       );
     };
   }, [userId]);
