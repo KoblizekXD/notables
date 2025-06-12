@@ -39,7 +39,7 @@ export default function DescriptionDrawer({
 
   return (
     <>
-      {variant === "normal" && (
+      {variant === "upload" && (
         <Drawer>
           <div className="flex items-center justify-center w-full">
             <DrawerTrigger asChild>
@@ -60,6 +60,7 @@ export default function DescriptionDrawer({
                     rows={10}
                     onChange={(e) => setDescription(e.target.value)}
                   />
+                  <p>{description} / 500</p>
                 </div>
                 <div className="flex md:flex-col flex-row items-center justify-center">
                   <DrawerHeader>
@@ -88,12 +89,12 @@ export default function DescriptionDrawer({
           </div>
         </Drawer>
       )}
-      {variant === "edit_description" && (
+      {variant === "edit" && (
         <Drawer>
           <div className="flex items-center justify-center w-full">
             <DrawerTrigger asChild>
               <div className="w-full flex items-end justify-end">
-                <Button variant={"link"} className="text-white py-0 px-2">
+                <Button variant={"link"} className="dark:text-white text-black py-0 px-2">
                   edit description
                 </Button>
               </div>
@@ -102,13 +103,14 @@ export default function DescriptionDrawer({
               <form
                 onSubmit={handleSubmit}
                 className="flex mt-2 w-full lg:max-w-3xl p-2 md:flex-row flex-col">
-                <div className="flex border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg w-full h-full p-1">
+                <div className="flex flex-col items-end border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg w-full h-full p-1">
                   <textarea
                     className="w-full h-full p-2 resize-none outline-none bg-transparent text-gray-800 dark:text-gray-200"
                     defaultValue={descriptionText}
                     rows={10}
                     onChange={(e) => setDescription(e.target.value)}
                   />
+                  <p className="flex justify-end pr-2 text-xs text-gray-500 dark:text-gray-400">{description.length} / 500</p>
                 </div>
                 <div className="flex md:flex-col flex-row items-center justify-center">
                   <DrawerHeader>

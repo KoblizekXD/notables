@@ -20,11 +20,11 @@ export default async function UserDescription({
           {session?.user.id === user_id && (
             <DescriptionDrawer
               user_id={user_id}
-              variant="edit_description"
+              variant="edit"
               descriptionText={description}
             />
           )}
-          <div className="rounded-md overflow-hidden border-2 border-solid border-neutral-900 hover:border-accent transition-colors duration-150 ">
+          <div className="rounded-md overflow-hidden border-2 border-solid border-gray-300 dark:border-neutral-900 hover:dark:border-accent hover:border-gray-200 transition-colors duration-150 ">
             <p className="scrollbar-custom mr-0.5 max-h-95 min-h-40 min-w-50 rounded-xl overflow-y-auto p-2 py-1.5 text-gray-500 dark:text-gray-400">
               {description}
             </p>
@@ -35,7 +35,7 @@ export default async function UserDescription({
           <p className="lg:text-xl md:text-lg text-md text-red-600">
             User has no description
           </p>
-          <DescriptionDrawer user_id={user_id} variant="normal" />
+          <DescriptionDrawer user_id={user_id} variant="upload" />
         </div>
       )}
     </div>
