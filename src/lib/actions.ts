@@ -139,15 +139,19 @@ export const updateUsername = async (userId: string, name: string) => {
   }
 };
 
-export async function uploadDescription(
+export async function updateDescription(
   user_id: string,
   description: string,
 ): Promise<string | undefined> {
-  if (!description) return "Description cannot be empty";
-  if (description.length > 500)
+  const descriptionTrimmed = description.trim();
+
+  if (descriptionTrimmed.length === 0) 
+    return "Description cannot be empty";
+  if (descriptionTrimmed.length > 500)
     return "Description cannot be longer than 500 characters";
-  if (description.length < 2)
+  if (descriptionTrimmed.length < 2)
     return "Description cannot be shorter than 2 characters";
+
   const result = await db
     .update(user)
     .set({

@@ -1,17 +1,28 @@
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
-import DescriptionDrawer from "./descriptionDrawer";
+"use client";
+
+import DescriptionDrawer from "./description-drawer";
+import { useEffect, useState } from "react";
+import { authClient } from "@/lib/auth-client";
+import type { Session, User } from "better-auth";
 
 interface UserDescriptionProps {
   user_id: string;
   description: string | null;
 }
 
-export default async function UserDescription({
+export default function UserDescription({
   user_id,
   description,
 }: UserDescriptionProps) {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const [currentDescription, setCurrentDescription] = useState<string>(description || "");
+  const [session, setSession] = useState<{user: User, session: Session} | null>(null);
+
+  useEffect(() => {
+    (async () => {
+      const s = await authClient.getSession();
+      setSession(s.data);
+    })()
+  }, []);
 
   return (
     <div className="flex flex-col gap-y-6 items-center justify-center rounded-xl w-auto h-full max-w-2xl">
@@ -21,12 +32,13 @@ export default async function UserDescription({
             <DescriptionDrawer
               user_id={user_id}
               variant="edit"
-              descriptionText={description}
+              descriptionText={currentDescription}
+              setDescriptionText={setCurrentDescription}
             />
           )}
           <div className="rounded-md overflow-hidden border-2 border-solid border-gray-300 dark:border-neutral-900 hover:dark:border-accent hover:border-gray-200 transition-colors duration-150 ">
-            <p className="scrollbar-custom mr-0.5 max-h-95 min-h-40 min-w-50 rounded-xl overflow-y-auto p-2 py-1.5 text-gray-500 dark:text-gray-400">
-              {description}
+            <p className="scrollbar-custom mr-0.5 max-h-95 min-h-40 min-w-70 rounded-xl overflow-y-auto p-2 py-1.5 text-gray-500 dark:text-gray-400">
+              {currentDescription}
             </p>
           </div>
         </div>

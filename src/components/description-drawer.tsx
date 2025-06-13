@@ -11,37 +11,48 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { Toaster } from "@/components/ui/sonner";
-import { uploadDescription } from "@/lib/actions";
+import { toast } from "sonner";
+import { updateDescription } from "@/lib/actions";
 import { LoaderCircle, Upload } from "lucide-react";
-import { useState } from "react";
-
-
-interface DescriptionDrawerProps {
-  user_id: string | undefined;
-  variant: string;
-  descriptionText?: string;
-}
+import { type Dispatch, type SetStateAction, useState, useTransition } from "react";
 
 export default function DescriptionDrawer({
   user_id,
   variant,
   descriptionText,
-}: DescriptionDrawerProps) {
-  const [description, setDescription] = useState("");
+  setDescriptionText
+}: {
+  user_id: string | undefined;
+  variant: string;
+  descriptionText?: string;
+  setDescriptionText?: Dispatch<SetStateAction<string>>;
+}) {
+  const [description, setDescription] = useState(descriptionText || "");
   const [error, setError] = useState("");
+  const [isPending, startTransition] = useTransition();
+  const [isOpen, setIsOpen] = useState(false);
 
   if (description.length > 500) {
     setError("Text is too long");
-
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const res = await uploadDescription(user_id as string, description);
-    if (res) {
-      setError(res);
+
+    startTransition(async () => {
+      const res = await updateDescription(user_id as string, description as string);
+      setDescriptionText?.(description);
+
+      if (res !== undefined) {
+        setError(res);
+        toast.error(res);
+      }
+      else {
+        toast.success("Description updated successfully!");
+        setIsOpen(false);
+      }
     }
+    );
   };
 
   return (
@@ -65,6 +76,7 @@ export default function DescriptionDrawer({
                     className="w-full h-full p-2 resize-none outline-none bg-transparent text-gray-800 dark:text-gray-200"
                     placeholder="Write your description here..."
                     rows={10}
+                    disabled={isPending}
                     onChange={(e) => setDescription(e.target.value)}
                   />
                   <p>{description} / 500</p>
@@ -79,10 +91,11 @@ export default function DescriptionDrawer({
                       id="submit"
                       variant="outline"
                       type="submit"
+                      disabled={isPending}
                       className="hover:border-green-300 hover:dark:border-green-700 bg-accent active:dark:bg-green-900 active:bg-green-400">
                       Submit
                     </Button>
-                    <Button disabled className="hidden">
+                    <Button disabled={!isPending} className={isPending ? "flex" : "hidden"}>
                       <LoaderCircle className="animate-spin" />
                       Please wait
                     </Button>
@@ -97,7 +110,7 @@ export default function DescriptionDrawer({
         </Drawer>
       )}
       {variant === "edit" && (
-        <Drawer>
+        <Drawer open={isOpen} onOpenChange={setIsOpen} >
           <div className="flex items-center justify-center w-full">
             <DrawerTrigger asChild>
               <div className="w-full flex items-end justify-end">
@@ -114,6 +127,7 @@ export default function DescriptionDrawer({
                   <textarea
                     className="w-full h-full p-2 resize-none outline-none bg-transparent text-gray-800 dark:text-gray-200"
                     defaultValue={descriptionText}
+                    disabled={isPending}
                     rows={10}
                     onChange={(e) => setDescription(e.target.value)}
                   />
@@ -130,10 +144,11 @@ export default function DescriptionDrawer({
                       id="submit"
                       variant="outline"
                       type="submit"
-                      className="hover:border-green-300 hover:dark:border-green-700 bg-accent active:dark:bg-green-900 active:bg-green-400">
+                      disabled={isPending}
+                      className={`hover:border-green-300 hover:dark:border-green-700 bg-accent active:dark:bg-green-900 active:bg-green-400 ${isPending ? "hidden" : "flex"}`}>
                       Submit
                     </Button>
-                    <Button disabled className="flex">
+                    <Button disabled={!isPending} className={isPending ? "flex" : "hidden"}>
                       <LoaderCircle className="animate-spin" />
                       Please wait
                     </Button>
@@ -147,11 +162,6 @@ export default function DescriptionDrawer({
           </div>
         </Drawer>
       )}
-      <Toaster
-        richColors
-        position="top-center"
-        swipeDirections={["top"]}
-      />
     </>
   );
 }
