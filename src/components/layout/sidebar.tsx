@@ -1,6 +1,5 @@
 "use client";
 import {
-  ChevronDown,
   LibraryBig,
   type LucideIcon,
   NotepadText,
@@ -12,15 +11,9 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "../ui/collapsible";
-import {
   Sidebar as Sbar,
   SidebarContent,
   SidebarFooter,
-  SidebarGroup,
   SidebarGroupAction,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -30,6 +23,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "../ui/sidebar";
+import SidebarCollections from "./sidebar-collections";
 
 interface SidebarItemType {
   title: string;
@@ -37,7 +31,12 @@ interface SidebarItemType {
   icon: LucideIcon;
 }
 
-export default function Sidebar({ userPath }: { userPath: string }) {
+interface SidebarProps {
+  userPath: string;
+  userId?: string;
+}
+
+export default function Sidebar({ userPath, userId }: SidebarProps) {
   const { setOpen, open, sidebarType, toggleSidebar, sidebarPosition } =
     useSidebar();
 
@@ -64,33 +63,20 @@ export default function Sidebar({ userPath }: { userPath: string }) {
     },
   ];
 
-  const groupsItems: Omit<SidebarItemType, "icon">[] = [
-    {
-      title: "g1",
-      url: "#",
-    },
-    {
-      title: "g2",
-      url: "#",
-    },
-  ];
-
   return (
     <Sbar
       side={sidebarPosition}
       className="top-[var(--header-height)] bg-sidebar-primary"
       collapsible={sidebarType === "icon" ? "icon" : "offcanvas"}
       onMouseEnter={() => sidebarType === "icon" && setOpen(true)}
-      onMouseLeave={() => sidebarType === "icon" && setOpen(false)}
-    >
+      onMouseLeave={() => sidebarType === "icon" && setOpen(false)}>
       <SidebarHeader className="overflow-x-auto md:overflow-visible ">
         <SidebarGroupLabel className="-ml-2 -mb-2">Platform</SidebarGroupLabel>
         <SidebarGroupAction
           title="Toggle navbar"
           onClick={toggleSidebar}
           className="hover:bg-muted transition-colors"
-          hidden={sidebarType === "icon"}
-        >
+          hidden={sidebarType === "icon"}>
           {sidebarPosition === "left" ? (
             <PanelLeftClose />
           ) : (
@@ -103,8 +89,7 @@ export default function Sidebar({ userPath }: { userPath: string }) {
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton
                   className="hover:bg-muted transition-colors"
-                  asChild
-                >
+                  asChild>
                   <Link href={item.url}>
                     <item.icon />
                     <span>{item.title}</span>
@@ -117,42 +102,14 @@ export default function Sidebar({ userPath }: { userPath: string }) {
       </SidebarHeader>
 
       <SidebarContent>
-        <Collapsible defaultOpen className="group/collapsible">
-          <SidebarGroup>
-            <SidebarGroupLabel asChild className="-ml-2 -mt-3">
-              <CollapsibleTrigger>
-                My Collections
-                <ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:-rotate-180 duration-300" />
-              </CollapsibleTrigger>
-            </SidebarGroupLabel>
-            <CollapsibleContent>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  {groupsItems.map((item) => (
-                    <SidebarMenuButton
-                      asChild
-                      key={item.title}
-                      className="hover:bg-muted transition-colors"
-                      hidden={!open}
-                    >
-                      <Link href={item.url}>
-                        <p>{item.title}</p>
-                      </Link>
-                    </SidebarMenuButton>
-                  ))}
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </CollapsibleContent>
-          </SidebarGroup>
-        </Collapsible>
+        {userId && <SidebarCollections userId={userId} />}
       </SidebarContent>
 
       <SidebarFooter className="mb-[var(--header-height)]">
         <SidebarGroupContent>
           <SidebarMenuButton
             className="hover:bg-muted transition-colors"
-            asChild
-          >
+            asChild>
             <Link href="/settings">
               <Settings />
               <span>Settings</span>

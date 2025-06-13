@@ -10,12 +10,9 @@ export default async function NotePage(props: {
   params: Promise<{ id: string }>;
 }) {
   const { id } = await props.params;
-
+  if (id === "new") redirect("/home");
   const note = await getNote(id);
-  if (!note) {
-    redirect("/home");
-  }
-
+  if (!note) redirect("/home");
   const description =
     note.note.entityType === "author" ? note.author?.name : note.work?.title;
   const href =
