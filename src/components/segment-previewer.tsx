@@ -1,5 +1,7 @@
 "use client";
 
+import { getSignedImageUrl } from "@/lib/actions";
+import { useQueries } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { BlockMath } from "react-katex";
 import type { BundledLanguage } from "shiki";
@@ -9,74 +11,95 @@ import { useEditorContext } from "./editor-context";
 export default function SegmentPreviewer() {
   const { segments } = useEditorContext();
 
+  const data = useQueries({
+    queries: segments.map((segment, index) => ({
+      queryKey: [`segment-${index}`],
+      queryFn: async () => {
+        if (segment.type === "image") {
+          return {
+            ...segment,
+            content: {
+              ...segment.content,
+              src: await getSignedImageUrl(segment.content.src),
+            },
+          };
+        }
+        return segment;
+      },
+    })),
+  });
+
   return (
     <motion.div
       initial={{ opacity: 0, y: "calc(var(--spacing) * -2)" }}
       animate={{ opacity: 1, y: "calc(var(--spacing) * 2)" }}
       className="flex mt-6 w-full px-4 md:w-1/2 flex-col mb-36 gap-y-2">
-      {segments.map((segment, index) =>
-        segment.type === "text" ? (
+      {data.map((segment, index) =>
+        segment.data?.type === "text" ? (
           <div key={index}>
             <h1 className="font-semibold text-3xl">
-              {segment.content.heading}
+              {segment.data?.content.heading}
             </h1>
-            <p>{segment.content.text}</p>
+            <p>{segment.data?.content.text}</p>
           </div>
-        ) : segment.type === "image" ? (
+        ) : segment.data?.type === "image" ? (
           <div key={index}>
-            <img src={segment.content.src} alt={segment.content.alt} />
+            <img
+              src={segment.data?.content.src || ""}
+              alt={segment.data?.content.alt}
+            />
           </div>
-        ) : segment.type === "code" ? (
+        ) : segment.data?.type === "code" ? (
           <div key={index}>
-            <CodeBlock lang={segment.content.language as BundledLanguage}>
-              {segment.content.code}
+            <CodeBlock lang={segment.data?.content.language as BundledLanguage}>
+              {segment.data?.content.code}
             </CodeBlock>
             <p className="text-center text-muted-foreground mt-2">
-              {segment.content.heading}
+              {segment.data?.content.heading}
             </p>
           </div>
-        ) : segment.type === "formula" ? (
+        ) : segment.data?.type === "formula" ? (
           <div key={index}>
-            <BlockMath math={segment.content.formula} />
+            <BlockMath math={segment.data?.content.formula} />
             <p className="text-center text-muted-foreground mt-2">
-              {segment.content.description}
+              {segment.data?.content.description}
             </p>
           </div>
-        ) : segment.type === "list" ? (
+        ) : segment.data?.type === "list" ? (
           <div key={index}>
-            {segment.content.ordered ? (
+            {segment.data?.content.ordered ? (
               <ol>
-                {segment.content.items.map((item, index) => (
+                {segment.data?.content.items.map((item, index) => (
                   <li key={index}>{item}</li>
                 ))}
               </ol>
             ) : (
               <ul>
-                {segment.content.items.map((item, index) => (
+                {segment.data?.content.items.map((item, index) => (
                   <li key={index}>{item}</li>
                 ))}
               </ul>
             )}
           </div>
-        ) : segment.type === "quote" ? (
+        ) : segment.data?.type === "quote" ? (
           <div key={index}>
             <blockquote>
-              <p>{segment.content.text}</p>
-              <cite>- {segment.content.author}</cite>
+              <p>{segment.data?.content.text}</p>
+              <cite>- {segment.data?.content.author}</cite>
             </blockquote>
           </div>
-        ) : segment.type === "table" ? (
+        ) : segment.data?.type === "table" ? (
           <div key={index}>
             <table className="w-full border-collapse border text-center border-border">
               <thead>
                 <tr>
-                  {segment.content.headers?.map((header, index) => (
+                  {segment.data?.content.headers?.map((header, index) => (
                     <th key={index}>{header}</th>
                   ))}
                 </tr>
               </thead>
               <tbody className="[&_tr]:border-y [&_td]:border-x [&_tr]:border-border">
-                {segment.content.rows.map((row, rowIndex) => (
+                {segment.data?.content.rows.map((row, rowIndex) => (
                   <tr key={rowIndex}>
                     {row.map((cell, cellIndex) => (
                       <td key={cellIndex}>{cell}</td>

@@ -17,17 +17,19 @@ export function EditorContextProvider({
   children,
   existingSegments = [],
   id,
+  mode = "edit",
 }: {
   children: React.ReactNode;
   existingSegments?: NoteSegment[];
   id: string;
+  mode?: "edit" | "preview";
 }) {
   const [segments, setSegments] = useState<NoteSegment[]>(existingSegments);
-  const [mode, setMode] = useState<"edit" | "preview">("edit");
+  const [currentMode, setMode] = useState<"edit" | "preview">(mode);
 
   return (
     <EditorContext.Provider
-      value={{ segments, setSegments, mode, id, setMode }}>
+      value={{ segments, setSegments, mode: currentMode, id, setMode }}>
       {children}
     </EditorContext.Provider>
   );
