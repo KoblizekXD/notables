@@ -12,6 +12,7 @@ import {
   user,
   work,
 } from "@/db/schema";
+import type { Author, Note, User, Work } from "@/db/types";
 import { auth } from "@/lib/auth";
 import {
   createBucketIfNotExists,
@@ -139,7 +140,36 @@ export const updateUsername = async (userId: string, name: string) => {
   }
 };
 
-export async function updateDescription(
+export const getNote = async (
+  id: string,
+): Promise<{
+  note: Note;
+  user: User;
+  work?: Work | null;
+  author?: Author | null;
+} | null> => {
+  if (!id) return null;
+
+  const result = await db
+    .select()
+    .from(note)
+    .where(eq(note.id, id))
+    .innerJoin(user, eq(note.userId, user.id))
+    .leftJoin(
+      work,
+      and(eq(note.entityType, "work"), eq(note.entityId, work.id)),
+    )
+    .leftJoin(
+      author,
+      and(eq(note.entityType, "author"), eq(note.entityId, author.id)),
+    )
+    .limit(1);
+
+  if (result.length === 0) return null;
+  return result[0];
+};
+
+export async function uploadDescription(
   user_id: string,
   description: string,
 ): Promise<string | undefined> {
