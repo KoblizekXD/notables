@@ -5,7 +5,6 @@ import YearBadge from "@/components/year-badge";
 // import Link from "next/link";
 import SuspenseProfile from "./suspense";
 import { getUser, getUserNotes } from "@/lib/actions";
-import { Toaster } from "@/components/ui/sonner";
 
 export default async function Profile({
   params,
@@ -45,11 +44,6 @@ export default async function Profile({
         <UserDescription user_id={user.id} description={user.description} />
       </div>
       <SuspenseProfile notes={Promise.resolve(notes)} />
-      <Toaster
-        richColors
-        position="top-center"
-        swipeDirections={["top"]}
-      />
     </div>
   );
 }

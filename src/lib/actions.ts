@@ -144,12 +144,10 @@ export async function uploadDescription(
   description: string,
 ): Promise<string | undefined> {
   if (!description) return "Description cannot be empty";
-  if (description.length > 200)
-    return "Description cannot be longer than 200 characters";
-  if (description.length < 3)
-    return "Description cannot be shorter than 3 characters";
-  if (description.includes("script"))
-    return "Description cannot contain the word 'script'";
+  if (description.length > 500)
+    return "Description cannot be longer than 500 characters";
+  if (description.length < 2)
+    return "Description cannot be shorter than 2 characters";
   const result = await db
     .update(user)
     .set({

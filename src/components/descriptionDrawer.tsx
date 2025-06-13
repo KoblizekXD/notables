@@ -11,9 +11,11 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+import { Toaster } from "@/components/ui/sonner";
 import { uploadDescription } from "@/lib/actions";
 import { LoaderCircle, Upload } from "lucide-react";
 import { useState } from "react";
+
 
 interface DescriptionDrawerProps {
   user_id: string | undefined;
@@ -28,6 +30,11 @@ export default function DescriptionDrawer({
 }: DescriptionDrawerProps) {
   const [description, setDescription] = useState("");
   const [error, setError] = useState("");
+
+  if (description.length > 500) {
+    setError("Text is too long");
+
+  }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -110,7 +117,8 @@ export default function DescriptionDrawer({
                     rows={10}
                     onChange={(e) => setDescription(e.target.value)}
                   />
-                  <p className="flex justify-end pr-2 text-xs text-gray-500 dark:text-gray-400">{description.length} / 500</p>
+                  <p className="flex justify-end pr-2 text-xs text-gray-500 dark:text-gray-400">
+                    {description.length > 0 ? (description.length) : descriptionText?.length} / 500</p>
                 </div>
                 <div className="flex md:flex-col flex-row items-center justify-center">
                   <DrawerHeader>
@@ -139,6 +147,11 @@ export default function DescriptionDrawer({
           </div>
         </Drawer>
       )}
+      <Toaster
+        richColors
+        position="top-center"
+        swipeDirections={["top"]}
+      />
     </>
   );
 }
