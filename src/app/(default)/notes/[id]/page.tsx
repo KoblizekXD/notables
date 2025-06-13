@@ -1,5 +1,5 @@
-import { EditorContextProvider } from "@/components/editor-context";
-import SegmentPreviewer from "@/components/segment-previewer";
+import { EditorContextProvider } from "@/components/note/editor-context";
+import SegmentPreviewer from "@/components/note/segment-previewer";
 import { getNote } from "@/lib/actions";
 import "katex/dist/katex.min.css";
 import { ExternalLink } from "lucide-react";

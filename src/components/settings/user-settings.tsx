@@ -14,8 +14,8 @@ import { useRef, useState } from "react";
 import Cropper, { type Area } from "react-easy-crop";
 import { toast } from "sonner";
 
+import { ChangeUsernameDialog } from "../profile/change-username-dialog";
 import { ChangeEmailDialog } from "./change-email-dialog";
-import { ChangeUsernameDialog } from "./change-username-dialog";
 
 async function getCroppedImg(
   imageSrc: string,

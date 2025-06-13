@@ -1,6 +1,6 @@
 "use client";
 
-import { useAppSettings } from "@/components/sidebar-provider";
+import { useAppSettings } from "@/components/layout/sidebar-provider";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,

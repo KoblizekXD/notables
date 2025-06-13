@@ -10,10 +10,8 @@ import { useState } from "react";
 import { BlockMath } from "react-katex";
 import { type BundledLanguage, bundledLanguages } from "shiki";
 import { toast } from "sonner";
-import { CodeBlock } from "./codeblock";
-import { useEditorContext } from "./editor-context";
-import TooltipWrapper from "./tooltip-wrapper";
-import { Button } from "./ui/button";
+import TooltipWrapper from "../tooltip-wrapper";
+import { Button } from "../ui/button";
 import {
   Dialog,
   DialogClose,
@@ -23,16 +21,18 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "./ui/dialog";
-import { Input } from "./ui/input";
+} from "../ui/dialog";
+import { Input } from "../ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./ui/select";
-import { Textarea } from "./ui/textarea";
+} from "../ui/select";
+import { Textarea } from "../ui/textarea";
+import { CodeBlock } from "./codeblock";
+import { useEditorContext } from "./editor-context";
 
 interface GenericSegmentProps {
   segment: NoteSegment;

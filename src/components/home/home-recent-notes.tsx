@@ -3,8 +3,8 @@ import { getMostLikedNotes } from "@/lib/actions";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import Link from "next/link";
+import { Carousel, CarouselContent, CarouselItem } from "../ui/carousel";
 import { CreateNoteButton } from "./create-note-button";
-import { Carousel, CarouselContent, CarouselItem } from "./ui/carousel";
 
 export default async function RecentNotes() {
   const session = await auth.api.getSession({

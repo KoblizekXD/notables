@@ -1,7 +1,7 @@
 "use client";
 
 import { PanelRightOpen } from "lucide-react";
-import { useSidebar } from "./ui/sidebar";
+import { useSidebar } from "../ui/sidebar";
 
 export default function SidebarToggle() {
   const { toggleSidebar, open, sidebarPosition, sidebarType } = useSidebar();

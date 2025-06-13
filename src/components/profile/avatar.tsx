@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AvatarFallback, AvatarImage, Avatar as UIAvatar } from "./ui/avatar";
+import { AvatarFallback, AvatarImage, Avatar as UIAvatar } from "../ui/avatar";
 
 interface AvatarProps {
   userId: string;

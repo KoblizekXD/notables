@@ -4,13 +4,17 @@ import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import ThemeBasedRenderer from "./theme-based-renderer";
+import ThemeBasedRenderer from "../theme/theme-based-renderer";
 
 export default function Logo({
   animate = true,
   destination = "/",
   className,
-}: { animate?: boolean; className?: string; destination?: string }) {
+}: {
+  animate?: boolean;
+  className?: string;
+  destination?: string;
+}) {
   return (
     <motion.div
       initial={animate ? { opacity: 0, x: "calc(var(--spacing) * -2)" } : {}}

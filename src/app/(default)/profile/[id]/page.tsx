@@ -1,6 +1,6 @@
+import UserDescription from "@/components/profile/user-description";
+import YearBadge from "@/components/profile/year-badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import UserDescription from "@/components/user-description";
-import YearBadge from "@/components/year-badge";
 import { getUser, getUserNotes } from "@/lib/actions";
 // import { UserPen } from "lucide-react";
 // import Link from "next/link";

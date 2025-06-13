@@ -15,7 +15,7 @@ import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "./ui/collapsible";
+} from "../ui/collapsible";
 import {
   Sidebar as Sbar,
   SidebarContent,
@@ -29,7 +29,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "./ui/sidebar";
+} from "../ui/sidebar";
 
 interface SidebarItemType {
   title: string;

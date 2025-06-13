@@ -5,7 +5,7 @@ import {
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { useSidebar } from "./ui/sidebar";
+import { useSidebar } from "../ui/sidebar";
 
 export function SidebarStateToggler() {
   const {

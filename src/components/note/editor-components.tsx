@@ -12,11 +12,11 @@ import {
 } from "lucide-react";
 import { useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";
+import TooltipWrapper from "../tooltip-wrapper";
+import { Button } from "../ui/button";
 import { useEditorContext } from "./editor-context";
 import SegmentEditor from "./segment-editor";
 import SegmentPreviewer from "./segment-previewer";
-import TooltipWrapper from "./tooltip-wrapper";
-import { Button } from "./ui/button";
 
 export function FloatingEditorMenu() {
   return (

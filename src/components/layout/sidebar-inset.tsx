@@ -1,6 +1,6 @@
 "use client";
+import { SidebarInset, useSidebar } from "../ui/sidebar";
 import Sidebar from "./sidebar";
-import { SidebarInset, useSidebar } from "./ui/sidebar";
 
 export default function SidebarExec({
   children,

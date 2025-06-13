@@ -1,10 +1,10 @@
-import DashFooter from "@/components/dashboard-footer";
-import NavMenu from "@/components/landing-page-nav";
+import DashFooter from "@/components/layout/dashboard-footer";
+import NavMenu from "@/components/layout/landing-page-nav";
+import Logo from "@/components/layout/logo";
 import LinkingButton from "@/components/linking-button";
-import Logo from "@/components/logo";
-import ThemeBasedRenderer from "@/components/theme-based-renderer";
-import { ThemeToggle } from "@/components/theme-toggle";
-import WhyUsCards from "@/components/why-us-cards";
+import WhyUsCards from "@/components/profile/why-us-cards";
+import ThemeBasedRenderer from "@/components/theme/theme-based-renderer";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { ArrowRight, ChevronRight, CornerLeftDown } from "lucide-react";
 import Link from "next/link";
 

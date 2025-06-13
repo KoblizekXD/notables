@@ -1,5 +1,5 @@
-import RecentNotes from "@/components/home-recent-notes";
-import PopularCollections from "@/components/popular-collections";
+import RecentNotes from "@/components/home/home-recent-notes";
+import PopularCollections from "@/components/home/popular-collections";
 import Link from "next/link";
 
 export default function Home() {

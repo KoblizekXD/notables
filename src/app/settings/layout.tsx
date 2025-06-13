@@ -1,13 +1,14 @@
-import Commander from "@/components/commander";
-import DynamicCommand from "@/components/dynamic-command";
-import Logo from "@/components/logo";
-import SidebarExec from "@/components/sidebar-inset";
-import { SidebarProvider } from "@/components/sidebar-provider";
-import { SidebarStateToggler } from "@/components/sidebar-state-toggler";
-import SidebarToggle from "@/components/sidebar-trigger";
-import { SignOutButton } from "@/components/sign-out-button";
+import Logo from "@/components/layout/logo";
+import SidebarExec from "@/components/layout/sidebar-inset";
+import { SidebarProvider } from "@/components/layout/sidebar-provider";
+import { SidebarStateToggler } from "@/components/layout/sidebar-state-toggler";
+import SidebarToggle from "@/components/layout/sidebar-trigger";
+import { SignOutButton } from "@/components/layout/sign-out-button";
+import Commander from "@/components/search/commander";
+import DynamicCommand from "@/components/search/dynamic-command";
 
-import { Avatar } from "@/components/avatar";
+import { Avatar } from "@/components/profile/avatar";
+import { DropdownThemeToggle } from "@/components/theme/dropdown-theme-toggle";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,7 +17,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { DropdownThemeToggle } from "@/components/ui/dropdown-theme-toggle";
 import { auth } from "@/lib/auth";
 
 import { Cloud, ExternalLink, Settings } from "lucide-react";

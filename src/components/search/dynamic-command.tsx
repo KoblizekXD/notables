@@ -7,7 +7,7 @@ import {
   CommandEmpty,
   CommandInput,
   CommandList,
-} from "./ui/command";
+} from "../ui/command";
 
 interface DynamicCommandProps {
   key?: string;

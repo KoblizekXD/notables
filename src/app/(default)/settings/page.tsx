@@ -1,12 +1,12 @@
-import { SidebarSettingsForm } from "@/components/sidebar-settings-form";
-import { ThemeSettingsForm } from "@/components/theme-settings-form";
+import { SidebarSettingsForm } from "@/components/layout/sidebar-settings-form";
+import { UserSettings } from "@/components/settings/user-settings";
+import { ThemeSettingsForm } from "@/components/theme/theme-settings-form";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { UserSettings } from "@/components/user-settings";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useAppSettings } from "@/components/sidebar-provider";
+import { useAppSettings } from "@/components/layout/sidebar-provider";
 import { DropdownMenuCheckboxItem } from "@/components/ui/dropdown-menu";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";

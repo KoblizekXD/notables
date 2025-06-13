@@ -1,6 +1,6 @@
 "use server";
 
-import type { NoteSegment } from "@/components/segment-editor";
+import type { NoteSegment } from "@/components/note/segment-editor";
 import db from "@/db/db";
 import {
   author,
