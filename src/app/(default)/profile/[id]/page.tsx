@@ -32,7 +32,7 @@ export default async function Profile({
                   <Link href={`./account/${user.id}`} className="p-2 border-2 border-solid border-transparent hover:border-accent transition-colors duration-150 rounded-xl" >
                     <UserPen />
                   </Link>
-                  */}
+                */}
               </div>
               <p className="text-sm text-gray-500">{user.email}</p>
             </div>
