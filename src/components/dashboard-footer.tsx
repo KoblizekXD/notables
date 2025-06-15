@@ -5,7 +5,7 @@ import { FaGithub, FaInstagram } from "react-icons/fa";
 
 export default function DashFooter() {
   return (
-    <div className="w-full flex bg-[#e5e7eb] dark:bg-[#141414] items-center justify-center p-2 pt-6 pl-5">
+    <div className="w-full flex border-t border-solid dark:border-neutral-800 border-neutral-200 items-center justify-center p-2 pt-6 pl-5">
       <footer className="relative flex flex-col md:px-12 px-2 w-[88%] items-center justify-between md:gap-6 gap-10 mb-5">
         <div className="flex items-center justify-center flex-wrap gap-x-3 gap-y-4 lg:gap-x-7">
           <Link href="./about-us" className="hover:underline whitespace-nowrap">
