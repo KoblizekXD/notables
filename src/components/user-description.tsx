@@ -37,14 +37,14 @@ export default function UserDescription({
             />
           )}
           <div className="rounded-md overflow-hidden border-2 border-solid border-gray-300 dark:border-neutral-900 hover:dark:border-accent hover:border-gray-200 transition-colors duration-150 ">
-            <p className="scrollbar-custom mr-0.5 max-h-95 min-h-40 min-w-70 rounded-xl overflow-y-auto p-2 py-1.5 text-gray-500 dark:text-gray-400">
+            <p className="mr-0.5 max-h-95 min-h-40 min-w-50 md:min-w-70 rounded-xl overflow-y-auto p-2 py-1.5 text-gray-500 dark:text-gray-400 break-all">
               {currentDescription}
             </p>
           </div>
         </div>
       ) : (
         <div className="flex opacity-[0.8] flex-col gap-y-6 py-4 items-center justify-center border-2 border-dashed border-red-500 rounded-lg w-full h-full">
-          <p className="lg:text-xl md:text-lg text-md text-red-600">
+          <p className="lg:text-xl md:text-lg text-md text-red-600 flex items-center justify-center px-1">
             User has no description
           </p>
           <DescriptionDrawer user_id={user_id} variant="upload" />
