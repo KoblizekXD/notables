@@ -12,9 +12,10 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { toast } from "sonner";
-import { updateDescription } from "@/lib/actions";
+import { uploadDescription } from "@/lib/actions";
 import { LoaderCircle, Upload } from "lucide-react";
 import { type Dispatch, type SetStateAction, useState, useTransition } from "react";
+import { cn } from "@/lib/utils";
 
 export default function DescriptionDrawer({
   user_id,
@@ -32,6 +33,8 @@ export default function DescriptionDrawer({
   const [isPending, startTransition] = useTransition();
   const [isOpen, setIsOpen] = useState(false);
 
+  const [textareaErr, setTextareaErr] = useState<boolean>();
+
   if (description.length > 500) {
     setError("Text is too long");
   }
@@ -40,7 +43,7 @@ export default function DescriptionDrawer({
     e.preventDefault();
 
     startTransition(async () => {
-      const res = await updateDescription(user_id as string, description as string);
+      const res = await uploadDescription(user_id as string, description as string);
       setDescriptionText?.(description);
 
       if (res !== undefined) {
@@ -123,13 +126,20 @@ export default function DescriptionDrawer({
               <form
                 onSubmit={handleSubmit}
                 className="flex mt-2 w-full lg:max-w-3xl p-2 md:flex-row flex-col">
-                <div className="flex flex-col items-end border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg w-full h-full p-1">
+                <div 
+                  className={cn("flex flex-col items-end border-2 border-dashed  rounded-lg w-full h-full p-1",
+                  !textareaErr ? "border-gray-300 dark:border-gray-600" : "border-red-400 dark:border-red-700")}>
                   <textarea
                     className="w-full h-full p-2 resize-none outline-none bg-transparent text-gray-800 dark:text-gray-200"
                     defaultValue={descriptionText}
                     disabled={isPending}
                     rows={10}
-                    onChange={(e) => setDescription(e.target.value)}
+                    onChange={(e) => {
+                      setDescription(e.target.value);
+                      () => {
+                        if (description.length >= 500) setTextareaErr(true);
+                      }
+                    }}
                   />
                   <p className="flex justify-end pr-2 text-xs text-gray-500 dark:text-gray-400">
                     {description.length > 0 ? (description.length) : descriptionText?.length} / 500</p>
