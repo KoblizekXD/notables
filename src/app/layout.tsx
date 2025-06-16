@@ -1,5 +1,5 @@
 import QueryClientContextProvider from "@/components/query-client-context-provider";
-import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeProvider } from "@/components/theme/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { WaitForMount } from "@/components/wait-for-mount";
 import { SpeedInsights } from "@vercel/speed-insights/next";

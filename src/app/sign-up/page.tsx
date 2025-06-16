@@ -1,6 +1,6 @@
-import Logo from "@/components/logo";
-import ThemeBasedRenderer from "@/components/theme-based-renderer";
-import { ThemeToggle } from "@/components/theme-toggle";
+import Logo from "@/components/layout/logo";
+import ThemeBasedRenderer from "@/components/theme/theme-based-renderer";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 import SignupForm from "./signup-form";
 
 export default function SignUpPageWrapper() {

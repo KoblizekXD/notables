@@ -1,53 +1,66 @@
-import RecentNotes from "@/components/home-recent-notes";
-import PopularCollections from "@/components/popular-collections";
+import CollectionsDashboard from "@/components/collections/collections-dashboard-unified";
+import CreateCollectionButton from "@/components/collections/create-collection-button";
+import RecentNotes from "@/components/home/home-recent-notes";
+import PopularCollections from "@/components/home/popular-collections";
+import type { user } from "@/db/schema";
+import {
+  getMostLikedNotes,
+  getPublicNewestCollections,
+  getUserCollections,
+} from "@/lib/actions";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 import Link from "next/link";
 
-export default function Home() {
+export default async function Home() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  const recentNotes = session?.user.id
+    ? await getMostLikedNotes(session.user.id as unknown as typeof user.id, 10)
+    : [];
+
+  const popularCollections = await getPublicNewestCollections(4);
+
+  const userCollections = session?.user.id
+    ? await getUserCollections(session.user.id)
+    : [];
+
   return (
     <div className="m-3 sm:m-4 md:m-5">
       <div className="flex flex-col w-full lg:max-w-4xl xl:max-w-7xl mx-auto gap-8">
         <div>
           <h1 className="mb-4 text-3xl font-bold text-left">Recent notes</h1>
           <div className="flex gap-4 overflow-x-auto p-1">
-            <RecentNotes />
+            <RecentNotes notes={recentNotes} />
           </div>
         </div>
 
-        <div>
-          <h1 className="mb-4 text-3xl font-bold text-left">
-            Interesting discussions
-          </h1>
-          <div className="flex gap-4 p-1">
-            <div className="h-36 w-full flex flex-row justify-center items-center border border-destructive rounded-xl">
-              <p className="text-center -mt-2 text-lg text-destructive">
-                Under construction
-              </p>
-            </div>
+        {session?.user.id && (
+          <div>
+            <CollectionsDashboard
+              userId={session.user.id}
+              initialCollections={userCollections}
+            />
           </div>
-        </div>
-
-        <Link href="/profile/tTqy381POeN9DxRFI63VbEclTzAlO242">test desc</Link>
+        )}
 
         <div>
-          <h1 className="mb-4 text-3xl font-bold text-left">
-            Popular collections
-          </h1>
+          <div className="flex justify-between items-center mb-4">
+            <h1 className="text-3xl font-bold text-left">
+              Public newest collections
+            </h1>
+            <Link
+              href="/collections"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors underline underline-offset-4">
+              View all collections
+            </Link>
+          </div>
           <div className="p-1">
             <div className="w-full flex flex-col md:flex-row gap-4 p-4 rounded-xl border border-border shadow-sm">
-              <div className="group relative shadow-md hover:shadow-lg select-none hidden md:flex flex-col w-full h-84 bg-gradient-to-t from-green-800/90 via-green-400 to-purple-600 bg-[length:100%_200%] bg-[position:0%_10%] hover:bg-[position:0%_90%] transition-all duration-1000 ease-out rounded-lg max-w-[256px] p-4">
-                <div className="absolute top-4 left-4 w-4 h-4 bg-background rounded-full border border-border group-hover:shadow-[inset_0_1px_2px_rgba(0,0,0,0.1)] " />
-                <div className="mt-auto transform transition-transform duration-[1200ms] group-hover:-translate-y-48 ease-out h-auto overflow-hidden">
-                  <h1 className="text-2xl text-white font-bold">
-                    Create collection
-                  </h1>
-                  <div className="my-2 flex flex-col">
-                    <p className="text-white leading-tight">
-                      Want to make your own? Let's get right to it
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <PopularCollections />
+              <CreateCollectionButton />
+              <PopularCollections collections={popularCollections} />
             </div>
           </div>
         </div>
