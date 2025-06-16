@@ -15,7 +15,7 @@ export default async function YearBadge({ createdAt }: YearBadgeProps) {
       {(() => {
         return createdAt ? (
           new Date().getFullYear() - createdAt.getFullYear() > 0 ? (
-            <div className="flex items-center justify-between gap-2 px-4 py-5">
+            <div className="flex max-h-24 my-auto items-center justify-between gap-2 py-5">
               <HoverCard>
                 <HoverCardTrigger>
                   <div className="rounded-full relative flex w-12 h-12 dark:bg-white bg-black text-accent font-bold text-2xl select-none cursor-pointer z-10 items-center justify-center">
@@ -34,12 +34,13 @@ export default async function YearBadge({ createdAt }: YearBadgeProps) {
                   <Crown className="text-amber-500" />
                 </HoverCardContent>
               </HoverCard>
-              <p className="flex flex-col items-center whitespace-nowrap">
-                Account created <br /> {createdAt.toString().substring(4, 15)}
-              </p>
+              <div className="flex h-auto gap-1 flex-col items-center justify-center">
+                <p className="whitespace-nowrap">Account created</p>
+                <p className="whitespace-nowrap">{createdAt.toString().substring(4, 15)}</p>
+              </div>
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-baseline gap-3 px-4 py-5">
+            <div className="flex flex-col items-center justify-baseline gap-3 py-5">
               <div className="flex flex-col items-center justify-baseline">
                 <p>Account created:</p>
                 <p>{createdAt.toString().substring(4, 15)}</p>

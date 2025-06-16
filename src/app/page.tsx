@@ -46,19 +46,19 @@ export default function Home() {
             </LinkingButton>
             <Link
               className=" underline font-semibold hover:text-[#a086e7] duration-250 text-accent-foreground"
-              href={"/#more"}
+              href={"#more"}
               passHref>
               Learn more
             </Link>
           </div>
         </div>
-        <div className="flex flex-col items-center justify-center gap-32">
+        <section id="more" className="flex flex-col items-center justify-center gap-32 pt-3">
           <h1 className="font-extrabold text-4xl flex gap-4 relative">
             <CornerLeftDown size={50} className="absolute top-2 -left-15" />
             Why us?
           </h1>
           <WhyUsCards />
-        </div>
+        </section>
       </main>
       <DashFooter />
     </div>
