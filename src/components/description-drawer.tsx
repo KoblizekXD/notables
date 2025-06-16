@@ -126,18 +126,21 @@ export default function DescriptionDrawer({
               <form
                 onSubmit={handleSubmit}
                 className="flex mt-2 w-full lg:max-w-3xl p-2 md:flex-row flex-col">
-                <div 
+                <div
                   className={cn("flex flex-col items-end border-2 border-dashed  rounded-lg w-full h-full p-1",
-                  !textareaErr ? "border-gray-300 dark:border-gray-600" : "border-red-400 dark:border-red-700")}>
+                    !textareaErr ? "border-gray-300 dark:border-gray-600" : "border-red-400 dark:border-red-700")}>
                   <textarea
                     className="w-full h-full p-2 resize-none outline-none bg-transparent text-gray-800 dark:text-gray-200"
                     defaultValue={descriptionText}
                     disabled={isPending}
                     rows={10}
+                    maxLength={500}
                     onChange={(e) => {
-                      setDescription(e.target.value);
-                      () => {
-                        if (description.length >= 500) setTextareaErr(true);
+                      if (e.target.value.length <= 500) {
+                        setDescription(e.target.value);
+                      }
+                      else{
+                        toast.error("Your text is too long");
                       }
                     }}
                   />
