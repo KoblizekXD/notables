@@ -5,6 +5,7 @@ import db from "@/db/db";
 import {
   author,
   collection,
+  collectionNote,
   note,
   settings,
   tag,
@@ -28,7 +29,7 @@ import {
   sidebarTypeToBoolean,
   themeToNumber,
 } from "@/lib/schemas";
-import { and, desc, eq, isNull } from "drizzle-orm";
+import { and, desc, eq, isNull, or, sql } from "drizzle-orm";
 import { headers } from "next/headers";
 
 export async function saveNote(
@@ -57,13 +58,79 @@ export const getMostLikedNotes = async (
     .orderBy(note.updatedAt)
     .limit(limit);
 
-export const getPopularCollections = async (limit: number) =>
+export const getPublicNewestCollections = async (limit: number) =>
   await db
     .select()
     .from(collection)
     .innerJoin(user, eq(collection.authorId, user.id))
-    .orderBy(desc(collection.likes))
+    .where(eq(collection.public, true))
+    .orderBy(desc(collection.createdAt))
     .limit(limit);
+
+type SortOption = "newest" | "oldest" | "name-asc" | "name-desc";
+
+export async function getAllPublicCollections(
+  searchQuery?: string,
+  sortBy: SortOption = "newest",
+): Promise<
+  {
+    id: string;
+    name: string;
+    description: string | null;
+    public: boolean;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+    author: {
+      id: string;
+      name: string;
+      image: string | null;
+    };
+  }[]
+> {
+  try {
+    const whereConditions = [eq(collection.public, true)];
+
+    if (searchQuery?.trim()) {
+      const searchTerm = `%${searchQuery.trim().toLowerCase()}%`;
+      const condition = or(
+        sql`LOWER(${collection.name}) LIKE ${searchTerm}`,
+        sql`LOWER(${collection.description}) LIKE ${searchTerm}`,
+        sql`LOWER(${user.name}) LIKE ${searchTerm}`,
+      );
+      if (condition) whereConditions.push(condition);
+    }
+    const baseQuery = db
+      .select({
+        id: collection.id,
+        name: collection.name,
+        description: collection.description,
+        public: collection.public,
+        createdAt: collection.createdAt,
+        updatedAt: collection.updatedAt,
+        author: {
+          id: user.id,
+          name: user.name,
+          image: user.image,
+        },
+      })
+      .from(collection)
+      .innerJoin(user, eq(collection.authorId, user.id))
+      .where(and(...whereConditions));
+    const result =
+      sortBy === "oldest"
+        ? await baseQuery.orderBy(collection.createdAt)
+        : sortBy === "name-asc"
+          ? await baseQuery.orderBy(collection.name)
+          : sortBy === "name-desc"
+            ? await baseQuery.orderBy(desc(collection.name))
+            : await baseQuery.orderBy(desc(collection.createdAt)); // default: "newest"
+
+    return result;
+  } catch (error) {
+    console.error("Error fetching public collections:", error);
+    return [];
+  }
+}
 
 export const getUser = async (userId: string) =>
   (await db.select().from(user).where(eq(user.id, userId)).limit(1))[0];
@@ -571,28 +638,18 @@ export async function createWork(
     const session = await auth.api.getSession({
       headers: await headers(),
     });
-
-    if (!session?.user.id) {
-      return { success: false, error: "Unauthorized" };
-    }
-
-    if (!title.trim()) {
+    if (!session?.user.id) return { success: false, error: "Unauthorized" };
+    if (!title.trim())
       return { success: false, error: "Work title is required" };
-    }
-
-    // If authorId is provided, verify the author exists
     if (authorId) {
       const authorExists = await db
         .select({ id: author.id })
         .from(author)
         .where(eq(author.id, authorId))
         .limit(1);
-
-      if (authorExists.length === 0) {
+      if (authorExists.length === 0)
         return { success: false, error: "Author not found" };
-      }
     }
-
     const result = await db
       .insert(work)
       .values({
@@ -600,11 +657,8 @@ export async function createWork(
         authorId: authorId || null,
       })
       .returning({ id: work.id });
-
-    if (result.length === 0) {
+    if (result.length === 0)
       return { success: false, error: "Failed to create work" };
-    }
-
     return { success: true, workId: result[0].id };
   } catch (error) {
     console.error("Error creating work:", error);
@@ -626,44 +680,27 @@ export async function createAuthorAndWork(
       headers: await headers(),
     });
 
-    if (!session?.user.id) {
-      return { success: false, error: "Unauthorized" };
-    }
-
-    if (!authorName.trim()) {
+    if (!session?.user.id) return { success: false, error: "Unauthorized" };
+    if (!authorName.trim())
       return { success: false, error: "Author name is required" };
-    }
-
-    if (!workTitle.trim()) {
+    if (!workTitle.trim())
       return { success: false, error: "Work title is required" };
-    }
-
-    // Check if author already exists
     const existingAuthor = await db
       .select({ id: author.id })
       .from(author)
       .where(eq(author.name, authorName.trim()))
       .limit(1);
-
-    if (existingAuthor.length > 0) {
+    if (existingAuthor.length > 0)
       return { success: false, error: "Author with this name already exists" };
-    }
-
-    // Create author first
     const authorResult = await db
       .insert(author)
       .values({
         name: authorName.trim(),
       })
       .returning({ id: author.id });
-
-    if (authorResult.length === 0) {
+    if (authorResult.length === 0)
       return { success: false, error: "Failed to create author" };
-    }
-
     const newAuthorId = authorResult[0].id;
-
-    // Create work with the new author
     const workResult = await db
       .insert(work)
       .values({
@@ -671,13 +708,8 @@ export async function createAuthorAndWork(
         authorId: newAuthorId,
       })
       .returning({ id: work.id });
-
-    if (workResult.length === 0) {
-      // If work creation fails, we should ideally rollback the author creation
-      // For now, we'll just return an error
+    if (workResult.length === 0)
       return { success: false, error: "Failed to create work" };
-    }
-
     return {
       success: true,
       authorId: newAuthorId,
@@ -699,16 +731,8 @@ export async function createNote(
     const session = await auth.api.getSession({
       headers: await headers(),
     });
-
-    if (!session?.user.id) {
-      return { success: false, error: "Unauthorized" };
-    }
-
-    if (!title.trim()) {
-      return { success: false, error: "Title is required" };
-    }
-
-    // Verify the entity exists
+    if (!session?.user.id) return { success: false, error: "Unauthorized" };
+    if (!title.trim()) return { success: false, error: "Title is required" };
     if (entityType === "author") {
       const authorExists = await db
         .select({ id: author.id })
@@ -716,9 +740,8 @@ export async function createNote(
         .where(eq(author.id, entityId))
         .limit(1);
 
-      if (authorExists.length === 0) {
+      if (authorExists.length === 0)
         return { success: false, error: "Author not found" };
-      }
     } else if (entityType === "work") {
       const workExists = await db
         .select({ id: work.id })
@@ -726,12 +749,9 @@ export async function createNote(
         .where(eq(work.id, entityId))
         .limit(1);
 
-      if (workExists.length === 0) {
+      if (workExists.length === 0)
         return { success: false, error: "Work not found" };
-      }
     }
-
-    // Create empty content structure for the editor
     const emptyContent = content.trim()
       ? JSON.stringify([{ type: "text", content: { text: content.trim() } }])
       : JSON.stringify([]);
@@ -746,11 +766,8 @@ export async function createNote(
         userId: session.user.id,
       })
       .returning({ id: note.id });
-
-    if (result.length === 0) {
+    if (result.length === 0)
       return { success: false, error: "Failed to create note" };
-    }
-
     return { success: true, noteId: result[0].id };
   } catch (error) {
     console.error("Error creating note:", error);
@@ -794,5 +811,394 @@ export async function signOutAction(): Promise<{
   } catch (error) {
     console.error("Sign out error:", error);
     return { success: false, error: "Failed to sign out" };
+  }
+}
+
+export async function createCollection(
+  name: string,
+  description?: string,
+  isPublic = false,
+): Promise<{ success: boolean; collectionId?: string; error?: string }> {
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+
+    if (!session?.user.id) return { success: false, error: "Unauthorized" };
+    if (!name.trim())
+      return { success: false, error: "Collection name is required" };
+
+    if (name.trim().length > 100)
+      return {
+        success: false,
+        error: "Collection name cannot exceed 100 characters",
+      };
+    if (description && description.length > 500)
+      return {
+        success: false,
+        error: "Description cannot exceed 500 characters",
+      };
+
+    const result = await db
+      .insert(collection)
+      .values({
+        name: name.trim(),
+        description: description?.trim() || null,
+        public: isPublic,
+        authorId: session.user.id,
+      })
+      .returning({ id: collection.id });
+
+    if (result.length === 0)
+      return { success: false, error: "Failed to create collection" };
+    return {
+      success: true,
+      collectionId: result[0].id,
+    };
+  } catch (error) {
+    console.error("Error creating collection:", error);
+    return { success: false, error: "An unexpected error occurred" };
+  }
+}
+
+export async function getCollection(collectionId: string): Promise<{
+  id: string;
+  name: string;
+  description: string | null;
+  public: boolean;
+  authorId: string;
+  createdAt: Date | null;
+  updatedAt: Date | null;
+  author: {
+    id: string;
+    name: string;
+    image: string | null;
+  };
+  collectionNotes: Array<{
+    note: {
+      id: string;
+      title: string | null;
+      content: string;
+      entityType: "author" | "work" | "note";
+      entityId: string;
+      createdAt: Date | null;
+      updatedAt: Date | null;
+      user: {
+        id: string;
+        name: string;
+        image: string | null;
+      };
+    };
+  }>;
+} | null> {
+  try {
+    const result = await db
+      .select({
+        id: collection.id,
+        name: collection.name,
+        description: collection.description,
+        public: collection.public,
+        authorId: collection.authorId,
+        createdAt: collection.createdAt,
+        updatedAt: collection.updatedAt,
+        author: {
+          id: user.id,
+          name: user.name,
+          image: user.image,
+        },
+      })
+      .from(collection)
+      .innerJoin(user, eq(collection.authorId, user.id))
+      .where(eq(collection.id, collectionId))
+      .limit(1);
+    if (result.length === 0) return null;
+    const collectionNotesRaw = await db
+      .select({
+        noteId: note.id,
+        noteTitle: note.title,
+        noteContent: note.content,
+        noteEntityType: note.entityType,
+        noteEntityId: note.entityId,
+        noteCreatedAt: note.createdAt,
+        noteUpdatedAt: note.updatedAt,
+        userId: user.id,
+        userName: user.name,
+        userImage: user.image,
+      })
+      .from(collectionNote)
+      .innerJoin(note, eq(collectionNote.noteId, note.id))
+      .innerJoin(user, eq(note.userId, user.id))
+      .where(eq(collectionNote.collectionId, collectionId))
+      .orderBy(desc(note.updatedAt));
+    const collectionNotes = collectionNotesRaw.map((row) => ({
+      note: {
+        id: row.noteId,
+        title: row.noteTitle,
+        content: row.noteContent,
+        entityType: row.noteEntityType,
+        entityId: row.noteEntityId,
+        createdAt: row.noteCreatedAt,
+        updatedAt: row.noteUpdatedAt,
+        user: {
+          id: row.userId,
+          name: row.userName,
+          image: row.userImage,
+        },
+      },
+    }));
+
+    return {
+      ...result[0],
+      collectionNotes,
+    };
+  } catch (error) {
+    console.error("Error fetching collection:", error);
+    return null;
+  }
+}
+
+export async function getUserCollections(userId?: string) {
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+    const targetUserId = userId || session?.user.id;
+    if (!targetUserId) return [];
+    const result = await db
+      .select({
+        id: collection.id,
+        name: collection.name,
+        description: collection.description,
+        public: collection.public,
+        createdAt: collection.createdAt,
+        updatedAt: collection.updatedAt,
+      })
+      .from(collection)
+      .where(eq(collection.authorId, targetUserId))
+      .orderBy(desc(collection.updatedAt));
+    return result;
+  } catch (error) {
+    console.error("Error fetching user collections:", error);
+    return [];
+  }
+}
+
+export async function updateCollection(
+  collectionId: string,
+  name: string,
+  description?: string,
+  isPublic?: boolean,
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+    if (!session?.user.id) return { success: false, error: "Unauthorized" };
+    if (!name.trim())
+      return { success: false, error: "Collection name is required" };
+    if (name.trim().length > 100)
+      return {
+        success: false,
+        error: "Collection name cannot exceed 100 characters",
+      };
+
+    if (description && description.length > 500)
+      return {
+        success: false,
+        error: "Description cannot exceed 500 characters",
+      };
+    const existingCollection = await db
+      .select({ authorId: collection.authorId })
+      .from(collection)
+      .where(eq(collection.id, collectionId))
+      .limit(1);
+
+    if (existingCollection.length === 0)
+      return { success: false, error: "Collection not found" };
+    if (existingCollection[0].authorId !== session.user.id)
+      return {
+        success: false,
+        error: "You don't have permission to edit this collection",
+      };
+    const updateData: {
+      name: string;
+      description: string | null;
+      updatedAt: Date;
+      public?: boolean;
+    } = {
+      name: name.trim(),
+      description: description?.trim() || null,
+      updatedAt: new Date(),
+    };
+    if (isPublic !== undefined) updateData.public = isPublic;
+    const result = await db
+      .update(collection)
+      .set(updateData)
+      .where(eq(collection.id, collectionId))
+      .execute();
+    if (result.rowCount === 0)
+      return { success: false, error: "Failed to update collection" };
+    return { success: true };
+  } catch (error) {
+    console.error("Error updating collection:", error);
+    return { success: false, error: "An unexpected error occurred" };
+  }
+}
+
+export async function deleteCollection(
+  collectionId: string,
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+    if (!session?.user.id) return { success: false, error: "Unauthorized" };
+    const existingCollection = await db
+      .select({ authorId: collection.authorId })
+      .from(collection)
+      .where(eq(collection.id, collectionId))
+      .limit(1);
+    if (existingCollection.length === 0)
+      return { success: false, error: "Collection not found" };
+
+    if (existingCollection[0].authorId !== session.user.id)
+      return {
+        success: false,
+        error: "You don't have permission to delete this collection",
+      };
+    const result = await db
+      .delete(collection)
+      .where(eq(collection.id, collectionId))
+      .execute();
+    if (result.rowCount === 0)
+      return { success: false, error: "Failed to delete collection" };
+    return { success: true };
+  } catch (error) {
+    console.error("Error deleting collection:", error);
+    return { success: false, error: "An unexpected error occurred" };
+  }
+}
+
+export async function addNoteToCollection(
+  collectionId: string,
+  noteId: string,
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+    if (!session?.user.id) return { success: false, error: "Unauthorized" };
+    const existingCollection = await db
+      .select({ authorId: collection.authorId })
+      .from(collection)
+      .where(eq(collection.id, collectionId))
+      .limit(1);
+    if (existingCollection.length === 0)
+      return { success: false, error: "Collection not found" };
+    if (existingCollection[0].authorId !== session.user.id)
+      return {
+        success: false,
+        error: "You don't have permission to modify this collection",
+      };
+    const existingNote = await db
+      .select({ id: note.id })
+      .from(note)
+      .where(eq(note.id, noteId))
+      .limit(1);
+    if (existingNote.length === 0)
+      return { success: false, error: "Note not found" };
+    const existingRelation = await db
+      .select()
+      .from(collectionNote)
+      .where(
+        and(
+          eq(collectionNote.collectionId, collectionId),
+          eq(collectionNote.noteId, noteId),
+        ),
+      )
+      .limit(1);
+    if (existingRelation.length > 0)
+      return { success: false, error: "Note is already in this collection" };
+    await db.insert(collectionNote).values({
+      collectionId,
+      noteId,
+    });
+    return { success: true };
+  } catch (error) {
+    console.error("Error adding note to collection:", error);
+    return { success: false, error: "An unexpected error occurred" };
+  }
+}
+
+export async function removeNoteFromCollection(
+  collectionId: string,
+  noteId: string,
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+    if (!session?.user.id) return { success: false, error: "Unauthorized" };
+    const existingCollection = await db
+      .select({ authorId: collection.authorId })
+      .from(collection)
+      .where(eq(collection.id, collectionId))
+      .limit(1);
+    if (existingCollection.length === 0)
+      return { success: false, error: "Collection not found" };
+    if (existingCollection[0].authorId !== session.user.id)
+      return {
+        success: false,
+        error: "You don't have permission to modify this collection",
+      };
+    const result = await db
+      .delete(collectionNote)
+      .where(
+        and(
+          eq(collectionNote.collectionId, collectionId),
+          eq(collectionNote.noteId, noteId),
+        ),
+      )
+      .execute();
+    if (result.rowCount === 0)
+      return { success: false, error: "Note was not in this collection" };
+    return { success: true };
+  } catch (error) {
+    console.error("Error removing note from collection:", error);
+    return { success: false, error: "An unexpected error occurred" };
+  }
+}
+
+export async function getCollectionNotes(collectionId: string) {
+  try {
+    const result = await db
+      .select({
+        id: note.id,
+        title: note.title,
+        content: note.content,
+        entityType: note.entityType,
+        entityId: note.entityId,
+        createdAt: note.createdAt,
+        updatedAt: note.updatedAt,
+        userId: user.id,
+        userName: user.name,
+        userImage: user.image,
+      })
+      .from(collectionNote)
+      .innerJoin(note, eq(collectionNote.noteId, note.id))
+      .innerJoin(user, eq(note.userId, user.id))
+      .where(eq(collectionNote.collectionId, collectionId))
+      .orderBy(desc(note.updatedAt));
+    return result.map((row) => ({
+      ...row,
+      user: {
+        id: row.userId,
+        name: row.userName,
+        image: row.userImage,
+      },
+    }));
+  } catch (error) {
+    console.error("Error fetching collection notes:", error);
+    return [];
   }
 }

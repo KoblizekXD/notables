@@ -24,10 +24,14 @@ export function CreationModeSelector({
       newOptions.selectWork = option === "selectWork";
       newOptions.createAuthor = false;
       newOptions.createWork = false;
-    } else if (option === "createAuthor" && newOptions.createAuthor)
+    } else if (option === "createAuthor" && newOptions.createAuthor) {
       newOptions.selectAuthor = false;
-    else if (option === "createWork" && newOptions.createWork)
+      newOptions.selectWork = false; // Prevent selectWork + createAuthor combination
+    } else if (option === "createWork" && newOptions.createWork) {
       newOptions.selectWork = false;
+    } else if (option === "selectWork" && newOptions.selectWork) {
+      newOptions.createAuthor = false; // Prevent selectWork + createAuthor combination
+    }
     onSelectionOptionsChange(newOptions);
   };
 

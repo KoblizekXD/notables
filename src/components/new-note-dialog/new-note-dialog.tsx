@@ -325,35 +325,20 @@ export function NewNoteDialog({ open, onOpenChange }: NewNoteDialogProps) {
             disabled={isPending}>
             Cancel
           </Button>
-          <div
-            className={`${
-              isFormValid() ? "group" : ""
-            } relative overflow-hidden rounded-md`}>
-            {isFormValid() && (
-              <div className="absolute inset-0 bg-primary w-0 transition-[width] duration-400 group-hover:w-full rounded-md" />
+          <Button
+            onClick={handleSubmit}
+            type="submit"
+            disabled={!isFormValid() || isPending}
+            className="min-w-[120px]">
+            {isPending ? (
+              <>
+                <LoaderCircle className="w-4 h-4 mr-2 animate-spin" />
+                Creating...
+              </>
+            ) : (
+              "Create Note"
             )}
-
-            <Button
-              onClick={handleSubmit}
-              disabled={isPending}
-              className={`relative z-10 bg-transparent hover:bg-transparent border-2 transition-colors ${
-                isFormValid()
-                  ? "text-white border-primary/30"
-                  : "text-red-500 border-red-500/50"
-              }`}>
-              <span className="relative">
-                <span className="flex items-center gap-2">
-                  {isPending && (
-                    <LoaderCircle className="w-4 h-4 animate-spin" />
-                  )}
-                  Create Note
-                </span>
-                {isFormValid() && (
-                  <span className="absolute -bottom-0.5 left-0 h-0.5 bg-white w-0 transition-[width] duration-400 group-hover:w-full rounded-xl" />
-                )}
-              </span>
-            </Button>
-          </div>
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

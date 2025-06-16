@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1742629498766,
-      "tag": "0000_dry_venom",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1746600290261,
-      "tag": "0001_tiny_cable",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1747390307650,
-      "tag": "0002_parallel_pestilence",
+      "when": 1749845144283,
+      "tag": "0000_green_arclight",
       "breakpoints": true
     }
   ]

@@ -35,7 +35,7 @@ export function CodeBlock({ children, lang }: Props) {
 
   useEffect(() => {
     const worker = new Worker(
-      new URL("./highlight-worker.ts", import.meta.url),
+      new URL("../../lib/highlight-worker.ts", import.meta.url),
     );
 
     worker.onmessage = (e) => {
