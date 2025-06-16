@@ -1,9 +1,9 @@
 "use client";
 
-import DescriptionDrawer from "./description-drawer";
 import { useEffect, useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import type { Session, User } from "better-auth";
+import DescriptionDrawer from "./description-drawer";
 
 interface UserDescriptionProps {
   user_id: string;
