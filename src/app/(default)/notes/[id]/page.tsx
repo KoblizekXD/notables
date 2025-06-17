@@ -1,5 +1,5 @@
-import { EditorContextProvider } from "@/components/editor-context";
-import SegmentPreviewer from "@/components/segment-previewer";
+import { EditorContextProvider } from "@/components/note/editor-context";
+import SegmentPreviewer from "@/components/note/segment-previewer";
 import { getNote } from "@/lib/actions";
 import "katex/dist/katex.min.css";
 import { ExternalLink } from "lucide-react";
@@ -10,12 +10,9 @@ export default async function NotePage(props: {
   params: Promise<{ id: string }>;
 }) {
   const { id } = await props.params;
-
+  if (id === "new") redirect("/home");
   const note = await getNote(id);
-  if (!note) {
-    redirect("/home");
-  }
-
+  if (!note) redirect("/home");
   const description =
     note.note.entityType === "author" ? note.author?.name : note.work?.title;
   const href =

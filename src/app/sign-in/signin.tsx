@@ -1,9 +1,9 @@
 "use client";
 
 import "@/app/globals.css";
-import Logo from "@/components/logo";
-import ThemeBasedRenderer from "@/components/theme-based-renderer";
-import { ThemeToggle } from "@/components/theme-toggle";
+import Logo from "@/components/layout/logo";
+import ThemeBasedRenderer from "@/components/theme/theme-based-renderer";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { Button } from "@/components/ui/button";
 import {
   Form,

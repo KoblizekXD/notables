@@ -1,7 +1,6 @@
 import { relations } from "drizzle-orm";
 import {
   boolean,
-  integer,
   pgEnum,
   pgTable,
   primaryKey,
@@ -211,14 +210,18 @@ export const favorite = pgTable(
   ],
 );
 
-export const collectionNote = pgTable("collection_note", {
-  collectionId: uuid("collection_id")
-    .notNull()
-    .references(() => collection.id, { onDelete: "cascade" }),
-  noteId: uuid("note_id")
-    .notNull()
-    .references(() => note.id, { onDelete: "cascade" }),
-});
+export const collectionNote = pgTable(
+  "collection_note",
+  {
+    collectionId: uuid("collection_id")
+      .notNull()
+      .references(() => collection.id, { onDelete: "cascade" }),
+    noteId: uuid("note_id")
+      .notNull()
+      .references(() => note.id, { onDelete: "cascade" }),
+  },
+  (table) => [primaryKey({ columns: [table.collectionId, table.noteId] })],
+);
 
 export const collection = pgTable("collection", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -228,10 +231,40 @@ export const collection = pgTable("collection", {
   public: boolean("public").notNull().default(false),
   name: text("name").notNull(),
   description: text("description"),
-  likes: integer("likes").notNull().default(0),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
+
+export const collectionRelations = relations(collection, ({ one, many }) => ({
+  author: one(user, {
+    fields: [collection.authorId],
+    references: [user.id],
+  }),
+  collectionNotes: many(collectionNote),
+}));
+
+export const collectionNoteRelations = relations(collectionNote, ({ one }) => ({
+  collection: one(collection, {
+    fields: [collectionNote.collectionId],
+    references: [collection.id],
+  }),
+  note: one(note, {
+    fields: [collectionNote.noteId],
+    references: [note.id],
+  }),
+}));
+
+export const noteRelations = relations(note, ({ one, many }) => ({
+  user: one(user, {
+    fields: [note.userId],
+    references: [user.id],
+  }),
+  collectionNotes: many(collectionNote),
+}));
+
+export const userRelations = relations(user, ({ many }) => ({
+  collections: many(collection),
+}));
 
 export const settings = pgTable("settings", {
   id: uuid("id").primaryKey().defaultRandom(),

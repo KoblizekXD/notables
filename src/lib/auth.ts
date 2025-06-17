@@ -37,19 +37,19 @@ export const auth = betterAuth({
   databaseHooks: {
     session: {
       create: {
-        after: async (session) => {
+        after: async (session: { userId: string }) => {
           logger.info(`User ${session.userId} signed in`);
         },
       },
       delete: {
-        after: async (session) => {
+        after: async (session: { userId: string }) => {
           logger.info(`User ${session.userId} signed out`);
         },
       },
     },
     user: {
       create: {
-        after: async (user) => {
+        after: async (user: { id: string }) => {
           logger.info(`User ${user.id} signed up`);
         },
       },

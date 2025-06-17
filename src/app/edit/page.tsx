@@ -2,9 +2,9 @@ import {
   BottomFloatingButtons,
   DecisionBasedSegmentRenderer,
   FloatingEditorMenu,
-} from "@/components/editor-components";
-import { EditorContextProvider } from "@/components/editor-context";
-import { ThemeToggle } from "@/components/theme-toggle";
+} from "@/components/note/editor-components";
+import { EditorContextProvider } from "@/components/note/editor-context";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import db from "@/db/db";
 import { author, note, work } from "@/db/schema";
