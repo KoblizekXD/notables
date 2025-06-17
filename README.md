@@ -59,6 +59,11 @@ then after consideration submitted to our system. Creating PR directly **does no
 <td><strong>vojtiikxdd</strong></td>
 <td><strong>razimav.06@spst.eu</strong></td>
 </tr>
+<tr>
+<td><img width=40 src="https://github.com/KebabObama.png?size=40"></td>
+<td><strong>KebabObama</strong></td>
+<td><strong>chybal.06@spst.eu</strong></td>
+</tr>
 </table>
 
 ## Licensing
