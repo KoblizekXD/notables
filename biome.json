@@ -12,9 +12,12 @@
       "recommended": true,
       "correctness": {
         "noUnusedImports": "error"
+      },
+      "suspicious": {
+        "noArrayIndexKey": "off"
       }
     },
-    "ignore": [".next/**"]
+    "ignore": [".next/**", "src/components/ui/**"]
   },
   "organizeImports": {
     "enabled": true
