@@ -1,7 +1,7 @@
 import { Copyright } from "lucide-react";
 import Link from "next/link";
-import { FaInstagram, FaGithub } from "react-icons/fa";
-//import { DiGithubBadge } from "react-icons/di";
+import { FaInstagram } from "react-icons/fa";
+import { LuGithub } from "react-icons/lu";
 
 export default function DashFooter() {
   return (
@@ -39,7 +39,7 @@ export default function DashFooter() {
               <Link
                 href={"https://github.com/KoblizekXD/notables"}
                 className="w-12 h-12 flex items-center justify-center rounded-full  transition-color duration-200">
-                <FaGithub className="dark:text-white text-black" size={32} />
+                <LuGithub className="dark:text-white text-black" size={32} />
               </Link>
             </div>
           </div>

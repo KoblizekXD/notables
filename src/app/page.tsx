@@ -14,7 +14,7 @@ export default function Home() {
       <main className="min-h-screen w-screen max-w-[100vw] self-center items-center flex flex-col lg:gap-28 md:gap-38 gap-60">
         <ThemeBasedRenderer
           light={
-            <div className="absolute inset-0 -z-10 h-full w-full bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]" />
+            <div className="absolute inset-0 -z-10 h-[120%] w-full bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]" />
           }
         />
         <Logo destination="/" />
