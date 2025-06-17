@@ -1,6 +1,7 @@
 "use server";
 
 import type { NoteSegment } from "@/components/note/segment-editor";
+import type { Result } from "@/components/search/dynamic-command";
 import db from "@/db/db";
 import {
   author,
@@ -29,12 +30,12 @@ import {
   sidebarTypeToBoolean,
   themeToNumber,
 } from "@/lib/schemas";
-import { and, desc, eq, isNull, or, sql } from "drizzle-orm";
+import { and, desc, eq, ilike, isNull, or, sql } from "drizzle-orm";
 import { headers } from "next/headers";
 
 export async function saveNote(
   id: string,
-  segments: NoteSegment[],
+  segments: NoteSegment[]
 ): Promise<string | undefined> {
   const result = await db
     .update(note)
@@ -49,7 +50,7 @@ export async function saveNote(
 }
 export const getMostLikedNotes = async (
   userId: typeof user.id,
-  limit: number,
+  limit: number
 ) =>
   await db
     .select()
@@ -71,7 +72,7 @@ type SortOption = "newest" | "oldest" | "name-asc" | "name-desc";
 
 export async function getAllPublicCollections(
   searchQuery?: string,
-  sortBy: SortOption = "newest",
+  sortBy: SortOption = "newest"
 ): Promise<
   {
     id: string;
@@ -95,7 +96,7 @@ export async function getAllPublicCollections(
       const condition = or(
         sql`LOWER(${collection.name}) LIKE ${searchTerm}`,
         sql`LOWER(${collection.description}) LIKE ${searchTerm}`,
-        sql`LOWER(${user.name}) LIKE ${searchTerm}`,
+        sql`LOWER(${user.name}) LIKE ${searchTerm}`
       );
       if (condition) whereConditions.push(condition);
     }
@@ -120,10 +121,10 @@ export async function getAllPublicCollections(
       sortBy === "oldest"
         ? await baseQuery.orderBy(collection.createdAt)
         : sortBy === "name-asc"
-          ? await baseQuery.orderBy(collection.name)
-          : sortBy === "name-desc"
-            ? await baseQuery.orderBy(desc(collection.name))
-            : await baseQuery.orderBy(desc(collection.createdAt)); // default: "newest"
+        ? await baseQuery.orderBy(collection.name)
+        : sortBy === "name-desc"
+        ? await baseQuery.orderBy(desc(collection.name))
+        : await baseQuery.orderBy(desc(collection.createdAt)); // default: "newest"
 
     return result;
   } catch (error) {
@@ -144,7 +145,7 @@ export const getUserNotes = async (userId: string, limit: number) =>
     .limit(limit);
 
 export async function uploadAvatar(
-  formData: FormData,
+  formData: FormData
 ): Promise<{ success: boolean; imagePath?: string }> {
   const file = formData.get("file") as File;
   const userId = formData.get("userId") as string;
@@ -169,7 +170,7 @@ export async function uploadAvatar(
 
 export async function uploadImage(
   file: File,
-  name: string,
+  name: string
 ): Promise<{ success: boolean; imagePath?: string; error?: string }> {
   if (!file) return { success: false, error: "No file provided" };
   const ext = file.name.split(".").findLast(() => true);
@@ -208,7 +209,7 @@ export const updateUsername = async (userId: string, name: string) => {
 };
 
 export const getNote = async (
-  id: string,
+  id: string
 ): Promise<{
   note: Note;
   user: User;
@@ -224,11 +225,11 @@ export const getNote = async (
     .innerJoin(user, eq(note.userId, user.id))
     .leftJoin(
       work,
-      and(eq(note.entityType, "work"), eq(note.entityId, work.id)),
+      and(eq(note.entityType, "work"), eq(note.entityId, work.id))
     )
     .leftJoin(
       author,
-      and(eq(note.entityType, "author"), eq(note.entityId, author.id)),
+      and(eq(note.entityType, "author"), eq(note.entityId, author.id))
     )
     .limit(1);
 
@@ -238,12 +239,11 @@ export const getNote = async (
 
 export async function uploadDescription(
   user_id: string,
-  description: string,
+  description: string
 ): Promise<string | undefined> {
   const descriptionTrimmed = description.trim();
 
-  if (descriptionTrimmed.length === 0) 
-    return "Description cannot be empty";
+  if (descriptionTrimmed.length === 0) return "Description cannot be empty";
   if (descriptionTrimmed.length > 500)
     return "Description cannot be longer than 500 characters";
   if (descriptionTrimmed.length < 2)
@@ -303,7 +303,7 @@ export async function getSettings(): Promise<{
       });
       userSettings = {
         sidebarPosition: booleanToSidebarPosition(
-          defaultSettings.sidebarPosition,
+          defaultSettings.sidebarPosition
         ),
         sidebarType: booleanToSidebarType(defaultSettings.sidebarType),
         theme: numberToTheme(defaultSettings.theme),
@@ -328,7 +328,7 @@ export async function getSettings(): Promise<{
 }
 
 export async function updateSettings(
-  newSettings: Partial<UISettings>,
+  newSettings: Partial<UISettings>
 ): Promise<{ settings: UISettings; success: boolean; error?: string }> {
   try {
     const session = await auth.api.getSession({
@@ -347,7 +347,7 @@ export async function updateSettings(
     }> = {};
     if (newSettings.sidebarPosition !== undefined)
       dbSettings.sidebarPosition = sidebarPositionToBoolean(
-        newSettings.sidebarPosition,
+        newSettings.sidebarPosition
       );
     if (newSettings.sidebarType !== undefined)
       dbSettings.sidebarType = sidebarTypeToBoolean(newSettings.sidebarType);
@@ -381,7 +381,7 @@ export async function updateSettings(
     const updatedSettings = updatedResult[0];
     const uiSettings: UISettings = {
       sidebarPosition: booleanToSidebarPosition(
-        updatedSettings.sidebarPosition,
+        updatedSettings.sidebarPosition
       ),
       sidebarType: booleanToSidebarType(updatedSettings.sidebarType),
       theme: numberToTheme(updatedSettings.theme),
@@ -517,7 +517,7 @@ export async function getEntitiesByTagIdWithDetails({
         default:
           return ref;
       }
-    }),
+    })
   );
 
   return results;
@@ -526,7 +526,7 @@ export async function getEntitiesByTagIdWithDetails({
 export async function getAuthorNotes(
   authorId: string,
   limit: number,
-  offset: number,
+  offset: number
 ) {
   return await db
     .select({
@@ -588,7 +588,7 @@ export async function getWorksWithoutAuthor() {
 }
 
 export async function createAuthor(
-  name: string,
+  name: string
 ): Promise<{ success: boolean; authorId?: string; error?: string }> {
   try {
     const session = await auth.api.getSession({
@@ -634,7 +634,7 @@ export async function createAuthor(
 
 export async function createWork(
   title: string,
-  authorId?: string,
+  authorId?: string
 ): Promise<{ success: boolean; workId?: string; error?: string }> {
   try {
     const session = await auth.api.getSession({
@@ -670,7 +670,7 @@ export async function createWork(
 
 export async function createAuthorAndWork(
   authorName: string,
-  workTitle: string,
+  workTitle: string
 ): Promise<{
   success: boolean;
   authorId?: string;
@@ -727,7 +727,7 @@ export async function createNote(
   title: string,
   content: string,
   entityType: "author" | "work",
-  entityId: string,
+  entityId: string
 ): Promise<{ success: boolean; noteId?: string; error?: string }> {
   try {
     const session = await auth.api.getSession({
@@ -778,7 +778,7 @@ export async function createNote(
 }
 
 export async function getSignedImageUrl(
-  objectName: string,
+  objectName: string
 ): Promise<string | null> {
   if (!objectName) return null;
   const bucketName = "images";
@@ -788,7 +788,7 @@ export async function getSignedImageUrl(
     const url = await s3Client.presignedGetObject(
       bucketName,
       objectName,
-      expirySeconds,
+      expirySeconds
     );
     return url;
   } catch (err) {
@@ -819,7 +819,7 @@ export async function signOutAction(): Promise<{
 export async function createCollection(
   name: string,
   description?: string,
-  isPublic = false,
+  isPublic = false
 ): Promise<{ success: boolean; collectionId?: string; error?: string }> {
   try {
     const session = await auth.api.getSession({
@@ -989,7 +989,7 @@ export async function updateCollection(
   collectionId: string,
   name: string,
   description?: string,
-  isPublic?: boolean,
+  isPublic?: boolean
 ): Promise<{ success: boolean; error?: string }> {
   try {
     const session = await auth.api.getSession({
@@ -1048,7 +1048,7 @@ export async function updateCollection(
 }
 
 export async function deleteCollection(
-  collectionId: string,
+  collectionId: string
 ): Promise<{ success: boolean; error?: string }> {
   try {
     const session = await auth.api.getSession({
@@ -1083,7 +1083,7 @@ export async function deleteCollection(
 
 export async function addNoteToCollection(
   collectionId: string,
-  noteId: string,
+  noteId: string
 ): Promise<{ success: boolean; error?: string }> {
   try {
     const session = await auth.api.getSession({
@@ -1115,8 +1115,8 @@ export async function addNoteToCollection(
       .where(
         and(
           eq(collectionNote.collectionId, collectionId),
-          eq(collectionNote.noteId, noteId),
-        ),
+          eq(collectionNote.noteId, noteId)
+        )
       )
       .limit(1);
     if (existingRelation.length > 0)
@@ -1134,7 +1134,7 @@ export async function addNoteToCollection(
 
 export async function removeNoteFromCollection(
   collectionId: string,
-  noteId: string,
+  noteId: string
 ): Promise<{ success: boolean; error?: string }> {
   try {
     const session = await auth.api.getSession({
@@ -1158,8 +1158,8 @@ export async function removeNoteFromCollection(
       .where(
         and(
           eq(collectionNote.collectionId, collectionId),
-          eq(collectionNote.noteId, noteId),
-        ),
+          eq(collectionNote.noteId, noteId)
+        )
       )
       .execute();
     if (result.rowCount === 0)
@@ -1203,4 +1203,71 @@ export async function getCollectionNotes(collectionId: string) {
     console.error("Error fetching collection notes:", error);
     return [];
   }
+}
+
+export async function searchQuery(query: string): Promise<{
+  notes: Result[];
+  works: Result[];
+  authors: Result[];
+}> {
+  if (!query || query.trim().length === 0) return { notes: [], works: [], authors: [] };
+  const searchTerm = `%${query.trim()}%`;
+
+  return {
+    works: (
+      await db
+        .select({
+          id: work.id,
+          title: work.title,
+          description: author.name,
+        })
+        .from(work)
+        .where(ilike(work.title, searchTerm))
+        .innerJoin(author, eq(work.authorId, author.id))
+    ).map(
+      (row) =>
+        ({
+          id: row.id,
+          name: row.title,
+          description: row.description || "No author",
+          type: "work",
+        } satisfies Result)
+    ),
+    notes: (
+      await db
+        .select({
+          id: note.id,
+          title: note.title,
+          description: user.name,
+        })
+        .from(note)
+        .where(ilike(note.title, searchTerm))
+        .innerJoin(user, eq(note.userId, user.id))
+    ).map(
+      (row) =>
+        ({
+          id: row.id,
+          name: row.title || "Untitled Note",
+          description: `By ${row.description}`,
+          type: "note",
+        } satisfies Result)
+    ),
+    authors: (
+      await db
+        .select({
+          id: author.id,
+          title: author.name,
+        })
+        .from(author)
+        .where(ilike(author.name, searchTerm))
+    ).map(
+      (row) =>
+        ({
+          id: row.id,
+          name: row.title,
+          description: "",
+          type: "author",
+        } satisfies Result)
+    ),
+  };
 }
