@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" 
+    width="24" 
+    height="24" 
+    viewBox="0 0 24 48" 
+    fill="none" 
+    stroke="currentColor" 
+    stroke-width="2" 
+    stroke-linecap="round" 
+    stroke-linejoin="round" 
+    class="lucide lucide-corner-left-down-icon lucide-corner-left-down"
+>
+    <g transform="scale(-1,1) translate(-24, 0)">
+        <path d="m14 33-5 5-5-5"/>
+        <path d="M20 4h-7a4 4 0 0 0-4 4v30"/>
+    </g>
+</svg>

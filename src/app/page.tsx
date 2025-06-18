@@ -1,20 +1,20 @@
 import DashFooter from "@/components/layout/dashboard-footer";
+import Filler from "@/components/layout/filler-content";
 import NavMenu from "@/components/layout/landing-page-nav";
 import Logo from "@/components/layout/logo";
 import LinkingButton from "@/components/linking-button";
-import WhyUsCards from "@/components/profile/why-us-cards";
 import ThemeBasedRenderer from "@/components/theme/theme-based-renderer";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
-import { ArrowRight, ChevronRight, CornerLeftDown } from "lucide-react";
+import { ArrowRight, ChevronRight } from "lucide-react";
 import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="flex flex-col items-center justify-center gap-20">
+    <div className="flex flex-col items-center justify-center">
       <main className="min-h-screen w-screen max-w-[100vw] self-center items-center flex flex-col lg:gap-28 md:gap-38 gap-60">
         <ThemeBasedRenderer
           light={
-            <div className="absolute inset-0 -z-10 h-full w-full bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]" />
+            <div className="absolute inset-0 -z-10 h-[120%] w-full bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]" />
           }
         />
         <Logo destination="/" />
@@ -52,12 +52,8 @@ export default function Home() {
             </Link>
           </div>
         </div>
-        <section id="more" className="flex flex-col items-center justify-center gap-32 pt-3">
-          <h1 className="font-extrabold text-4xl flex gap-4 relative">
-            <CornerLeftDown size={50} className="absolute top-2 -left-15" />
-            Why us?
-          </h1>
-          <WhyUsCards />
+        <section id="more" className="flex flex-col items-center justify-center gap-32 pt-3 w-full">
+          <Filler />
         </section>
       </main>
       <DashFooter />

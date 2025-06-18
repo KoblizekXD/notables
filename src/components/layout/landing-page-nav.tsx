@@ -96,7 +96,7 @@ export default function NavMenu(props: props) {
                 Learn while playing games! We have a lot of them for you.
               </ListItem>
               <ListItem href="#" title="Profile introduction">
-                Configure your profile ot impress others.
+                Configure your profile to impress others.
               </ListItem>
             </ul>
           </NavigationMenuContent>
