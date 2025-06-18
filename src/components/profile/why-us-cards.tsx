@@ -4,7 +4,7 @@ import { ArrowUpRight, CalendarDays, Check, TextCursor } from "lucide-react";
 export default function WhyUsCards() {
   return (
     <div className="flex lg:flex-row flex-col md:px-6 max-w-[90%] gap-4 md:gap-6 lg:gap-12">
-      <div className="flex flex-col justify-between px-4 py-6 border-2 border-solid border-[#d7d7da] bg-white dark:border-zinc-800 dark:bg-[#0c0a09] rounded-xl gap-6 md:max-w-84 min-w-[18.79rem]">
+      <div className="flex flex-col justify-between px-4 py-6 border-2 border-solid border-[#d7d7da] bg-white dark:border-zinc-800 dark:bg-[#0c0a09] rounded-xl gap-6 md:max-w-84 min-w-[18.79rem] shadow-xl">
         <h1 className="text-4xl font-bold pl-2">1.</h1>
         <h4 className="flex justify-center items-center text-xl font-bold">
           Create your own notes and games
@@ -32,15 +32,15 @@ export default function WhyUsCards() {
           <div className="flex flex-col w-full h-full relative items-start min-h-30">
             <div className="flex items-start pr-2 pb-2 ">
               <p className="select-none md:text-lg p-2 pt-0 md:pt-5 flex">
-                Lorem ipsum dolor sit amet cons |{" "}
-                {/* <span className="animate-pulse">|</span> */}
+                The future of note-taking is just beginning |
+                {/* <span className="animate-pulse ml-1">|</span> */}
               </p>
             </div>
-            <TextCursor className="absolute right-40 top-10" />
+            <TextCursor className="absolute min-md:right-20 right-40 min-md:top-20 top-10" />
           </div>
         </div>
       </div>
-      <div className="flex flex-col justify-between px-4 py-6 border-2 border-solid border-[#d7d7da] dark:border-zinc-800 bg-white dark:bg-[#0c0a09] rounded-xl md:max-w-84 gap-6 min-w-[18.79rem]">
+      <div className="flex flex-col justify-between px-4 py-6 border-2 border-solid border-[#d7d7da] dark:border-zinc-800 bg-white dark:bg-[#0c0a09] rounded-xl md:max-w-84 gap-6 min-w-[18.79rem] shadow-xl">
         <div className="flex flex-col gap-6">
           <h1 className="text-4xl font-bold pl-2">2.</h1>
           <h4 className="flex justify-center items-center text-xl font-bold">
@@ -50,13 +50,13 @@ export default function WhyUsCards() {
         <div className="border-2 border-solid border-gray-200 dark:border-zinc-800 rounded-xl flex flex-row items-start shadow-md lg:p-5 p-3 gap-x-3 min-w-[265px]">
           <Avatar>
             <AvatarImage src="./pfp.png" alt="@shadcn" />
-            <AvatarFallback>idk</AvatarFallback>
+            <AvatarFallback>pfp</AvatarFallback>
           </Avatar>
           <div className="flex flex-col gap-y-3">
             <div className="flex flex-col gap-y-1 items-start">
               <h1 className="font-bold text-xl">Random user</h1>
               <p className="leading-4">
-                Munich Agreement - Lorem ipsum dolor sit amet
+                Munich Agreement - All details you'll ever need
               </p>
             </div>
             <div className="flex flex-row gap-x-2 items-center">
@@ -66,7 +66,7 @@ export default function WhyUsCards() {
           </div>
         </div>
       </div>
-      <div className="flex flex-col justify-between px-4 py-6 border-2 border-solid border-[#d7d7da] dark:border-zinc-800  bg-white dark:bg-[#0c0a09] rounded-xl gap-6 md:max-w-84 min-w-[18.79rem]">
+      <div className="flex flex-col justify-between px-4 py-6 border-2 border-solid border-[#d7d7da] dark:border-zinc-800  bg-white dark:bg-[#0c0a09] rounded-xl gap-6 md:max-w-84 min-w-[18.79rem] shadow-xl">
         <h1 className="text-4xl font-bold pl-2">3.</h1>
         <h4 className="flex justify-center items-center text-xl font-bold">
           Play games and learn efficiently
